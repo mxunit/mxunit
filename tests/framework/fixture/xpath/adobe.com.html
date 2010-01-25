@@ -1,0 +1,634 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Language" content="en-us" />
+<meta name="robots" content="noodp" />
+<title>Adobe</title>
+<script type="text/javascript" src="http://wwwimages.adobe.com/www.adobe.com/lib/com.adobe/_all.js"></script>
+<link type="text/css" rel="stylesheet" href="http://wwwimages.adobe.com/www.adobe.com/lib/com.adobe/template/home/screen.css" media="screen" charset="utf-8" />
+<link type="text/css" rel="stylesheet" href="http://wwwimages.adobe.com/www.adobe.com/lib/com.adobe/template/print.css" media="print" charset="utf-8" />
+<script type="text/javascript" src="http://wwwimages.adobe.com/www.adobe.com/lib/spry_p1.6/widgets/accordion/SpryAccordion.compressed.js"></script>
+<link href="http://wwwimages.adobe.com/www.adobe.com/lib/com.adobe/template/home/SpryAccordion.css" rel="stylesheet" type="text/css" charset="utf-8" />
+<script type="text/javascript" src="http://wwwimages.adobe.com/www.adobe.com/lib/com.adobe/template/gnavOverflowFix.js"></script>
+<script type="text/javascript">adobe.Dwt.require("user","swf","dropdown","tooltip","fma");</script>
+<script type="text/javascript">
+// <![CDATA[
+var FMARotator = {
+
+	"fma0" : [ {
+		CSS:	"body { background: #fff url(/homepage/en_us/fma_rotation/fma0/cs3_body_background.jpg) top left } #user-menu a, #site-menu-dropdown .dropdown-tab { color: #000 } #site-menu-dropdown .dropdown-tab:hover { color: #fff; } #globalnav .cart { background-image: url(/lib/com.adobe/template/gnav/cart_dark.gif); } #home-fma { min-height: 430px; _height: 430px; }",
+		SWFURI: "http://wwwimages.adobe.com/www.adobe.com/homepage/en_us/fma_rotation/fma0/cs3_fma_12_21.swf",
+		SWFIMG: "http://wwwimages.adobe.com/www.adobe.com/homepage/en_us/fma_rotation/fma0/cs3_fma_static.jpg",
+		SWFPROP: [ {
+			ID:			"home-fma",
+			WIDTH:		"1000",
+			HEIGHT:		"430",
+			VERSION:	"9",
+			WMODE:		"transparent"
+		}]		
+		
+	}],
+	
+	"fma1" : [ {	
+		CSS:	"body { background: #fff url(/homepage/en_us/fma_rotation/fma1/amp_fma_background.jpg) top left } #user-menu a, #site-menu-dropdown .dropdown-tab { color: #000 } #site-menu-dropdown .dropdown-tab:hover { color: #fff; } #globalnav .cart { background-image: url(/lib/com.adobe/template/gnav/cart_dark.gif); } #home-fma { min-height: 300px; _height: 300px; height: 300px; }",
+		SWFURI: "http://wwwimages.adobe.com/www.adobe.com/homepage/en_us/fma_rotation/fma1/amp_fma_video.swf",
+		SWFIMG: "http://wwwimages.adobe.com/www.adobe.com/homepage/en_us/fma_rotation/fma1/amp_fma_background.jpg",
+		SWFPROP: [ {
+			ID:			"home-fma",
+			WIDTH:		"1000",
+			HEIGHT:		"300",
+			VERSION:	"9",
+			WMODE:		"transparent"
+		}]
+		
+	}],
+	
+	"fma2" : [ {
+		CSS:	"body { background: #fff url(/homepage/en_us/fma_rotation/fma2/acrobat_fma_background.jpg) top left } #user-menu a, #site-menu-dropdown .dropdown-tab { color: #000 } #site-menu-dropdown .dropdown-tab:hover { color: #fff; } #globalnav .cart { background-image: url(/lib/com.adobe/template/gnav/cart_dark.gif); } #home-fma { min-height: 430px; _height: 430px; }",
+		SWFURI:	"http://wwwimages.adobe.com/www.adobe.com/homepage/en_us/fma_rotation/fma2/acrobat_fma_12_21.swf",
+		SWFIMG: "http://wwwimages.adobe.com/www.adobe.com/homepage/en_us/fma_rotation/fma2/acrobat_fma_background.jpg",
+		SWFPROP: [ {
+			ID:			"home-fma",
+			WIDTH:		"1000",
+			HEIGHT:		"430",
+			VERSION:	"9",
+			WMODE:		"transparent"
+		}]	
+		
+	}]
+	
+};
+// set up # of FMA's to randomize 
+var HOMEFMA = adobe.Fma.defineArea("");
+HOMEFMA.provideMessage("TXT", "", 30,true);	// fma0 is 30% of the time
+HOMEFMA.provideMessage("TXT", "", 40,true);	// fma1 is 40% of the time
+HOMEFMA.provideMessage("TXT", "", 30,true);	// fma2 is 30% of the time
+
+// To add fma to rotation, uncomment below  // percentage should add up to 100%
+//HOMEFMA.provideMessage("TXT", "", {number}, true); // fma2
+// ]]>	
+</script>
+<script type="text/javascript">
+// <![CDATA[
+var installedVer = deconcept.SWFObjectUtil.getPlayerVersion();
+var results = HOMEFMA.setCurrentMessageID();																					// get generate ID called: "fma"+ #  given by FMA.JS
+var noLowFlash = ( getQueryParamValue( "m" ) || (installedVer.major < 9) );						//no flash
+var showImgCSS = '.swfcontent img, #home-fma img {visibility: visible !important;}';	//add in noflash css
+var FMA = ( noLowFlash ) ? FMARotator["fma0"][0] : FMARotator[results][0];						// use generated ID to choose FMA obj
+var SWF = FMA.SWFPROP[0];
+FMA.CSS = (noLowFlash) ? (FMA.CSS + showImgCSS): FMA.CSS;															//CSS STYLES specific for FMA
+document.write('<style type="text/css">'+ FMA.CSS +'</style>');
+// ]]>	
+</script>
+<noscript><style type="text/css">body { background: #fff url(/homepage/en_us/fma_rotation/fma0/cs3_body_background.jpg) top left } #user-menu a, #site-menu-dropdown .dropdown-tab { color: #000 } #site-menu-dropdown .dropdown-tab:hover { color: #fff; } #globalnav .cart { background-image: url(/lib/com.adobe/template/gnav/cart_dark.gif); } #home-fma { min-height: 430px; _height: 430px; } #home-fma img { visibility: visible; } #site-menu-dropdown .dropdown-tab:hover { _color: #000; }</style></noscript>
+</head>
+<body>
+<!--googleoff: index--><a href="/help/accessibility.html" tabindex="1" id="accesslink">Accessibility</a><!--googleon: index-->
+<!--googleoff: index-->
+<!--$Revision: 1.72.2.2 $-->
+<form id="globalnav-search" class="en" name="globalnav-search" method="get" action="/go/gnav_search" accept-charset="utf-8">
+	<dl id="globalnav" class="clear-after">
+		<dt id="adobe-logo"><a href="/go/gn_home_logo"><img src="/lib/com.adobe/template/gnav/adobe-hq.png" alt="Adobe" /></a></dt>
+		<dd id="site-search">
+			<input type="hidden" name="loc" value="en_us" />
+			<input title="Search for..." type="text" id="search-input" name="term" />
+			<button type="submit" class="icon-replace search">Search</button>
+			<script type="text/javascript">
+				// <![CDATA[
+				adobe.InputTitleOverlay.init("search-input");
+				// ]]>
+			</script>
+		</dd>
+		<dd id="user-menu">
+			<ul id="user-menu-list" class="pipe compact">
+				<li id="greeting" style="display:none"><a>Welcome <span id="screenName"></span></a></li>
+				<li id="account" style="background-image: none"><a href="/cfusion/membership/index.cfm?loc=en_us&nl=1&ogn=EN_US-gn_your_account">Your account</a></li>
+				<li id="signout" style="display:none"><a href="/cfusion/membership/logout.cfm?ogn=EN_US-gn_signout">Sign out</a></li>
+				<li id="globalnav-cart"><a href="/go/gn_cart" class="icon-replace cart">Your cart</a></li>
+				<li id="help"><a href="/go/gn_contact">Contact</a></li>
+				<li id="international"><a href="/go/gn_intl">United States (Change)</a></li>
+			</ul>
+			<script type="text/javascript">
+				// <![CDATA[
+				var greeting = document.getElementById('greeting'),
+screenName = document.getElementById('screenName'),
+accountLink = document.getElementById('account'),
+signout = document.getElementById('signout');
+
+if(greeting && signout && screenName) {					
+	var screenNameValue = adobe.Cookie.get("SCREENNAME"),
+	rememberMe = adobe.Cookie.get('RMID'),
+	authenticAdobeId = adobe.Cookie.get('AUID');
+	
+	if(screenNameValue) {
+		registerOnReady(function() {
+			screenName.innerHTML = screenNameValue;
+		});
+	}
+	
+	if(rememberMe) {
+		greeting.style.display="";
+		accountLink.style.backgroundImage = "";
+	}
+	
+	if(authenticAdobeId) {
+		greeting.style.display="";
+		signout.style.display="";
+		accountLink.style.backgroundImage = "";
+	}
+}
+				// ]]>
+			</script>
+		</dd>
+		<dd id="site-menu">
+			<ul id="site-menu-dropdown" class="d-dropdown compact">
+				<li><a class="dropdown-tab" href="/go/gn_home">Home</a></li>
+				<li><a class="dropdown-tab" href="/go/gn_sol">Solutions</a>
+					<dl class="dropdown-pane">
+						<dt>Industries</dt>
+                        <dd><a href="/go/gntray_ind_broadcast_media">Broadcast and media</a></dd>
+						<dd><a href="/go/gntray_ind_education">Education</a></dd>
+						<dd><a href="/go/gntray_ind_finance">Financial services</a></dd>
+						<dd><a href="/go/gntray_ind_govt">Government</a></dd>
+						<dd><a href="/go/gntray_ind_lifesciences">Life sciences</a></dd>
+						<dd><a href="/go/gntray_ind_manufacturing">Manufacturing</a></dd>
+						<dt class="divide">Solutions</dt>
+						<dd><a href="/go/gntray_sol_consumer_photo_video">Consumer photo and video</a></dd>
+						<dd><a href="/go/gntray_sol_mobile">Mobile</a></dd>
+						<dd><a href="/go/gntray_sol_print_publishing">Print publishing</a></dd>
+						<dd><a href="/go/gntray_sol_pro_photography">Pro photography</a></dd>
+                        <dd><a href="/go/gntray_sol_professionalvideo">Professional video</a></dd>
+						<dd><a href="/go/gntray_sol_ria">Rich Internet applications</a></dd>
+						<dd><a href="/go/gntray_sol_technical_comm">Technical communication</a></dd>
+						<dd><a href="/go/gntray_sol_elearning">Training and eLearning</a></dd>
+						<dd><a href="/go/gntray_sol_web_conferencing">Web conferencing</a></dd>
+						<dd><a href="/go/gntray_sol_web_publishing">Web publishing</a></dd>
+						<dt class="divide last-title"><a href="/go/gntray_sol_more">All industries and solutions &#8250;</a></dt>
+					</dl>
+				</li>
+				<li><a class="dropdown-tab" href="/go/gn_prod">Products</a>
+					<ul class="dropdown-pane">
+						<li><a href="/go/gntray_prod_acrobat_connect_pro_home">Acrobat Connect Pro</a></li>
+						<li><a href="/go/gntray_prod_acrobat_family_home">Acrobat family</a></li>
+						<li><a href="/go/gntray_prod_air_home">Adobe AIR</a></li>
+						<li><a href="/go/gntray_prod_after_effects_home">After Effects</a></li>
+						<li><a href="/go/gntray_prod_coldfusion_home">ColdFusion</a></li>
+						<li><a href="/go/gntray_prod_creative_suite_family_home">Creative Suite family</a></li>
+						<li><a href="/go/gntray_prod_dreamweaver_home">Dreamweaver</a></li>
+						<li><a href="/go/gntray_prod_flash_home">Flash</a></li>
+						<li><a href="/go/gntray_prod_flex_home">Flex</a></li>
+						<li><a href="/go/gntray_prod_illustrator_home">Illustrator</a></li>
+						<li><a href="/go/gntray_prod_indesign_home">InDesign</a></li>
+						<li><a href="/go/gntray_prod_livecycle_home">LiveCycle Enterprise Suite</a></li>
+						<li><a href="/go/gntray_prod_mobile_devices_home">Mobile products</a></li>
+						<li><a href="/go/gntray_prod_photoshop_family_home">Photoshop family</a></li>
+						<li><a href="/go/gntray_prod_premiere_home">Adobe Premiere Pro</a></li>
+						<li><a href="/go/gntray_prod_scene7_ondemand_home" target="mm_window">Scene7 OnDemand</a></li>
+						<li class="divide"><a href="/go/gntray_prod_products">All products &#8250;</a></li>
+					</ul>
+				</li>
+				<li><a class="dropdown-tab" href="/go/gn_supp">Support</a>
+					<ul class="dropdown-pane">
+						<li><a href="/go/gn_supp_support">Support home</a></li>
+						<li><a href="/go/gntray_supp_cs_home">Customer Service</a></li>
+						<li><a href="/go/gntray_supp_kb">Knowledgebase</a></li>
+						<li><a href="/go/gntray_supp_books">Books</a></li>
+						<li><a href="/go/gntray_supp_train_home">Training and certification</a></li>
+						<li><a href="/go/gntray_supp_programs">Support programs</a></li>
+						<li><a href="/go/gntray_supp_forums_home">Forums</a></li>
+						<li><a href="/go/gntray_supp_documentation">Documentation</a></li>
+						<li><a href="/go/gntray_supp_updates">Updates</a></li>
+						<li class="divide"><a href="/go/gntray_supp_more">More &#8250;</a></li>
+					</ul>
+				</li>
+				<li><a class="dropdown-tab" href="/go/gn_comm">Communities</a>
+					<dl class="dropdown-pane">
+						<dt>By user</dt>
+						<dd><a href="/go/gntray_comm_designers">Designers</a></dd>
+						<dd><a href="/go/gntray_comm_devnet">Developers</a></dd>
+						<dd><a href="/go/gntray_comm_educators_students">Educators and students</a></dd>
+						<dd><a href="/go/gntray_comm_partners">Partners</a></dd>
+						<dt class="divide">By resource</dt>
+						<dd><a href="/go/gntray_comm_labs" target="mm_window">Adobe Labs</a></dd>
+						<dd><a href="/go/gntray_comm_adobetv" target="_blank">Adobe TV</a></dd>
+                        <dd><a href="/go/gntray_comm_forums">Forums</a></dd>
+						<dd><a href="/go/gntray_comm_exchange_home">Exchange</a></dd>
+						<dd><a href="/go/gntray_comm_blogs" target="mm_window">Blogs</a></dd>
+						<dd><a href="/go/gntray_comm_xd" target="mm_window">Experience Design</a></dd>
+
+					</dl>
+				</li>
+				<li><a class="dropdown-tab" href="/go/gn_comp">Company</a>
+					<ul class="dropdown-pane">
+						<li><a href="/go/gntray_comp_aboutadobe">About Adobe</a></li>
+						<li><a href="/go/gntray_comp_press">Press</a></li>
+						<li><a href="/go/gntray_comp_investor_relations">Investor Relations</a></li>
+						<li><a href="/go/gntray_comp_community_affairs">Corporate Affairs</a></li>
+						<li><a href="/go/gntray_comp_careers">Careers</a></li>
+						<li><a href="/go/gntray_comp_showcase">Showcase</a></li>
+						<li><a href="/go/gntray_comp_events">Events</a></li>
+						<li><a href="/go/gntray_comp_contact_adobe">Contact Adobe</a></li>
+						<li><a href="/go/gntray_comp_become_affiliate">Become an affiliate</a></li>
+						<li class="divide"><a href="/go/gntray_comp_company_more">More &#8250;</a></li>
+					</ul>
+				</li>
+				<li><a class="dropdown-tab" href="/go/gn_dl">Downloads</a>
+					<dl class="dropdown-pane">
+						<dd><a href="/go/gntray_dl_downloads">Downloads home</a></dd>
+						<dd><a href="/go/gntray_dl_trialdownloads">Trial downloads</a></dd>
+						<dd><a href="/go/gntray_dl_updates">Updates</a></dd>
+						<dd><a href="/go/gntray_dl_exchange">Exchange</a></dd>
+
+                        <dt class="divide">Readers and Players</dt>
+						<dd><a href="/go/gntray_dl_get_reader">Get Adobe Reader</a></dd>
+						<dd><a href="/go/gntray_dl_getflashplayer">Get Flash Player</a></dd>
+						<dd><a href="/go/gntray_dl_getair">Get Adobe AIR</a></dd>
+                        <dd><a href="/go/gntray_dl_getshockwaveplayer">Get Shockwave Player</a></dd>
+						<dd><a href="/go/gntray_dl_getmediaplayer">Get Media Player</a></dd>
+						<dt class="divide last-title"><a href="/go/gntray_dl_more">More &#8250;</a></dt>
+					</dl>
+				</li>
+				<li><a href="/go/gn_store" class="dropdown-tab">Store</a>
+					<ul class="dropdown-pane">
+						<li><a href="/go/gntray_store">Store home</a></li>
+						<li><a href="/go/gntray_store_software">Software</a></li>
+						<li><a href="/go/gntray_store_fonts">Fonts</a></li>
+						<li><a href="/go/gntray_store_books">Books</a></li>
+						<li><a href="/go/gntray_store_programs">Support programs</a></li>
+						<li><a href="/go/gntray_store_your_hist">Your account</a></li>
+						<li><a href="/go/gntray_store_mvlp">Volume licensing</a></li>
+                        <li><a href="/go/gntray_store_offers">Store offers</a></li>
+						<li class="divide"><a href="/go/gntray_store_purchase_options">Other ways to buy &#8250;</a></li>
+					</ul>
+				</li>
+			</ul>
+		</dd>
+	</dl>
+<noscript>
+<div id="globalnav-noscript">You may not have everything you need to view certain sections of Adobe.com. Please see our <a href="/go/gn_sitereqs">site requirements</a>.</div>
+</noscript>
+</form>
+<!--googleon: index-->
+
+<div id="home-fma">
+	<img src="/homepage/en_us/fma_rotation/fma0/cs3_fma_static.jpg"  alt="Adobe&reg; Creative Suite 3. For web, design and video" width="1000" height="430" border="0" usemap="#cs3_static_fma" />
+<map name="cs3_static_fma" id="cs3_static_fma">
+    <area shape="rect" coords="582,377,829,398" href="/go/120607_fma_cs3_findaproduct_en" alt="Find out what product is right for you" />
+    <area shape="rect" coords="831,377,913,398" href="/go/120607_fma_cs3_learn_en" target="_blank" alt="Learn more" />
+</map>
+</div>
+<script type="text/javascript">
+// <![CDATA[
+	var props = new Object();
+		props.swf =    FMA.SWFURI;
+		props.id =     SWF.ID;
+		props.w =      SWF.WIDTH;
+		props.h =      SWF.HEIGHT;
+		props.ver =    SWF.VERSION;
+		props.wmode =  SWF.WMODE
+	var swfo = new SWFObject( props );
+	swfo.addParam("allowScriptAccess", "always");
+	registerSWFObject( swfo, "home-fma" );
+// ]]>	
+</script>
+<div id="layoutLogic" class="home">	
+	<div id="contentLayout" class="clear-after">		
+		<div id="contentBody">
+			<div class="columns-2-AB-A">
+				<h2>Products and solutions</h2>        
+        <div class="Accordion" id="Home-Accordion" tabindex="0">
+          <div id="Products-Accordion" class="AccordionPanel">
+            <h3 class="AccordionPanelTab">Products</h3>
+            <div class="AccordionPanelContent">
+              <div class="columns-2-AB-A">
+            	<ul class="link-list">
+              	<li><a class="icon acrobat" href="/go/BPDDU">Acrobat</a></li> 
+				<li><a class="icon acrobatconnectpro" href="/go/BPDEA">Acrobat Connect Pro</a></li>
+				<li><a class="icon aftereffects" href="/go/BPDDW">After Effects</a></li>
+				<li><a class="icon coldfusion" href="/go/BQSVB">ColdFusion</a></li>
+              	<li><a class="icon designpremium" href="/go/BPDDY">Design Premium</a></li>
+				<li><a class="icon dreamweaver" href="/go/BPDEC">Dreamweaver</a></li>
+				<li><a class="icon flash" href="/go/BPDEE">Flash</a></li>
+              </ul>
+            </div>
+            <div class="columns-2-AB-B">
+            	<ul class="link-list">
+				<li><a class="icon flex" href="/go/BPDEQ">Flex</a></li>
+				<li><a class="icon illustrator" href="/go/BPDEG">Illustrator</a></li>
+				<li><a class="icon indesign" href="/go/BPDEI">InDesign</a></li> 
+              	<li><a class="icon livecycle" href="/go/BPDEO">LiveCycle Enterprise Suite</a></li>
+				<li><a class="icon photoshop" href="/go/BPDEK">Photoshop</a></li>
+				<li><a class="icon photoshopelements" href="/go/BPDEM">Photoshop Elements</a></li>
+              </ul>
+            </div>
+            <br class="clear-both" />
+            <p class="call-action"><a href="/products/" class="link-more">See all products</a></p>
+            </div>
+          </div>
+          <div id="Solutions-Accoridon" class="AccordionPanel">
+            <h3 class="AccordionPanelTab">Solutions</h3>
+            <div class="AccordionPanelContent">
+                          <div class="columns-2-AB-A">
+            	<ul class="link-list">               
+                <li><a href="/digitalimag/consumer/">Consumer photo and video</a></li>
+                <li><a href="/mobile/">Mobile and devices</a></li>
+                <li><a href="/print/">Print publishing</a></li>      
+                <li><a href="/products/photoshop/family/prosolutions/">Pro photography</a></li>
+				<li><a href="/resources/business/rich_internet_apps/">Rich Internet applications</a></li>
+              </ul>
+            </div>
+            <div class="columns-2-AB-B">
+            	<ul class="link-list">
+				<li><a href="/solutions/professionalvideo/">Professional video</a></li>       
+				<li><a href="/solutions/technicalcommunication/">Technical communication</a></li>                 
+                <li><a href="/resources/elearning/">Training and eLearning</a></li>
+				<li><a href="/products/acrobatconnectpro/">Web conferencing</a></li>          
+                <li><a href="/web/">Web publishing</a></li>      
+              </ul>
+            </div>
+            <br class="clear-both" />
+            <p class="call-action"><a href="/solutions/" class="link-more">See more solutions</a></p>
+            </div>
+          </div>
+          <div id="Industries-Accoridon" class="AccordionPanel">
+            <h3 class="AccordionPanelTab">Industries</h3>
+            <div class="AccordionPanelContent">
+                          <div class="columns-2-AB-A">              
+              <ul class="link-list">                
+                <li><a href="/solutions/broadcast/">Broadcast and media</a></li>
+                <li><a href="/education/">Education</a></li>
+                <li><a href="/financial/">Financial services</a></li>	
+                <li><a href="/government/">Government</a></li>
+              </ul>
+            </div>
+            <div class="columns-2-AB-B">
+              <ul class="link-list">
+                <li><a href="/lifesciences/">Life sciences</a></li>
+                <li><a href="/manufacturing/">Manufacturing</a></li>                
+                <li><a href="/resources/telecom/">Telecommunications</a></li>
+              </ul>
+            </div>
+            <br class="clear-both" />
+			<p class="call-action"><a href="/solutions/" class="link-more">See more industries</a></p>
+
+            </div>
+          </div>
+        </div>
+        <script language="JavaScript" type="text/javascript">
+        var homeAccordion = new Spry.Widget.Accordion("Home-Accordion", { fixedPanelHeight: 240 });
+        </script>
+			</div>
+			<div class="columns-2-AB-B">
+				<h2>News</h2>
+
+
+<p><a href="/products/acrobatconnectpro/" class="dyn-tooltip panePos-r" id="news-tip-1">High-impact web conferencing with Adobe Acrobat Connect Pro 7</a></p>
+
+
+<p><a href="/openscreenproject/" class="dyn-tooltip panePos-r" id="news-tip-2">Adobe leads Open Screen Project to deliver rich Internet experiences across multiple screens</a></p>
+
+<p><a href="/go/adobetv" class="dyn-tooltip panePos-r" id="news-tip-3">Tune in to Adobe TV for expert instruction and inspiration on all things Adobe</a></p>
+
+<p><a href="/products/mediaplayer/" class="dyn-tooltip panePos-r" id="news-tip-4">Introducing Adobe Media Player, the next generation of Internet video delivery</a></p>
+        
+<p><a href="/special/sweepstakes/" class="dyn-tooltip panePos-r" id="news-tip-5">Buy any Creative Suite 3 Premium edition by May 26 and you could win Master Collection</a></p>
+
+
+<p><a href="/education/products/fontfolioeducationessentials/" class="dyn-tooltip panePos-r" id="news-tip-6">Build a solid foundation in fine typography with Adobe Font Folio Education Essentials </a></p>
+        
+				<script type="text/javascript">
+          /*** TOOL TIP DATA ***/
+          var tooltips_data = {
+		  
+		  
+		  
+		  	"news-tip-1": {	
+              "TOOLTIP_DESC": adobe.Idiom.Localize("See what's new in the latest version and find out why Acrobat Connect Pro is a leading solution for web conferencing and eLearning.")
+			     },
+				 
+				 
+				"news-tip-2": {	
+              "TOOLTIP_DESC": adobe.Idiom.Localize("Learn how Adobe and industry leaders are working to provide rich, interactive experiences across PCs, mobile devices, and consumer electronics.")
+            },
+            			
+			"news-tip-3": {	
+              "TOOLTIP_DESC": adobe.Idiom.Localize("Feed your passion for Adobe products with insider tips, innovative techniques, and behind-the-scenes tours delivered on video, on demand.")
+            },	
+			
+			
+				"news-tip-4": {	
+              "TOOLTIP_DESC": adobe.Idiom.Localize("Users: Watch what you want, when you want, online and off. Content providers: Create, deliver, and monetize your high-quality entertainment.")
+            },
+						
+            "news-tip-5": {	
+              "TOOLTIP_DESC": adobe.Idiom.Localize("You could be one of 100 lucky customers to receive a free copy of Master Collection. See Official Rules for details.")
+            },
+		
+						
+			"news-tip-6": {	
+              "TOOLTIP_DESC": adobe.Idiom.Localize("Enrich your curriculum and enhance creative projects with 500 fonts in OpenType format for true cross-platform compatibility.")
+            }
+          };
+          /*** TOOL TIP DATA ***/
+        </script>
+			</div>
+			<br class="clear-both" />
+		</div>
+		<div id="contentPocket">				
+			<div id="promoButtons" class="clear-after">
+				<div class="columns-2-AB-A">
+					<p><a href="/go/EN_US-H-GET-READER"><img src="/images/shared/download_buttons/get_adobe_reader.png" alt="Get Adobe Reader" /></a></p>
+					<p><a href="/go/EN_US-H-GET-FLASH"><img src="/images/shared/download_buttons/get_adobe_flash_player.png" alt="Get Adobe Flash Player" /></a></p>
+				</div>
+				<div class="columns-2-AB-B">
+					<p><a href="/go/EN_US-H-GET-AIR"><img src="/images/shared/download_buttons/get_adobe_air.png" alt="Get Adobe Air" /></a></p>
+					<p><a class="icon adobemediaplayer" href="http://get.adobe.com/amp/">Get Adobe Media Player</a></p>
+					<p><a class="icon shockwave" href="/go/EN_US-H-GET-SHOCKWAVE">Get Shockwave Player</a></p>
+				</div>
+				<br class="clear-both" />				
+			</div>
+				<div class="columns-2-AB-A">
+	<a href="/go/EN_US-H-M-A"><img src="/images/shared/promo/182x135/182x135_Design_Premium_sweeps_Buy.jpg" id="home-promo-1" alt="Design Premium Creative Suite 3 - Buy now for your chance to win CS3 Master Collection. Buy now >" width="182" height="135" /></a>
+	<a href="/go/EN_US-H-M-C"><img src="/images/shared/promo/182x135/182x135_master_collection_sweepstakes.jpg" style="margin-bottom: 12px" id="home-promo-2" alt="We are giving away 100 copies of CS3 Master Collection. See how >" /></a></div>
+<div class="columns-2-AB-B">
+	<a href="/go/EN_US-H-M-B"><img src="/images/shared/promo/182x135/182x135_acrobat8_buy_home.jpg" id="home-promo-3" alt="Commnunicate and collaborate with PDF. Buy now >" /></a>
+	<a href="/go/EN_US-H-M-D"><img src="/images/shared/promo/182x135/182x135_ACR_CONN_PRO_learn.jpg" id="home-promo-4" alt="High-impact web conferencing and eLearning. Learn more >" /></a>
+	</div>
+	<br class="clear-both" />
+		</div>
+	</div>
+</div>
+<!--googleoff: index--><!-- global footer $Revision: 1.49 $ -->
+<div id="globalfooter">
+	<ul class="pipe menu">
+		<li><a href="/go/gftray_foot_aboutadobe">Company</a></li>
+		<li><a href="/go/gftray_foot_privacy_security">Online Privacy Policy</a></li>
+		<li><a href="/go/gftray_foot_terms">Terms of Use</a></li>
+		<li><a href="/go/gftray_foot_contact_adobe">Contact us</a></li>
+		<li><a href="/go/gftray_foot_accessibility">Accessibility</a></li>
+		<li><a href="/go/gftray_foot_report_piracy">Report piracy</a></li>
+		<li><a href="/go/gftray_foot_permissions_trademarks">Permissions and trademarks</a></li>
+		<li><a href="/go/gftray_foot_product_license_agreements">Product license agreements</a></li>
+		<li>
+		<script language="javascript" type="text/javascript" charset="windows-1252" src="/ubi/feedback/oo_engine.js"></script>
+		<script language="javascript" type="text/javascript" charset="windows-1252">
+			O_GoT('Send feedback');
+		</script>
+		<noscript><a href="/go/gftray_foot_feedback">Send feedback</a></noscript></li>
+	</ul>
+	<div class="pullout-right right-125"> 
+		<p id="privacy" class="pullout-item"><a href="/go/gftray_foot_truste" target="_blank"><img src="/images/globalnav/eufinalmark.gif" alt="Reviewed by TRUSTe: site privacy statement" width="116" height="41" id="trustelogo" /></a></p>		
+		<p id="copyright">Copyright &#169; 2008 Adobe Systems Incorporated. <a href="/go/gftray_all_rights_reserved">All rights reserved</a>.</p>
+		<p id="terms">Use of this website signifies your agreement to the <a href="/go/gftray_foot_terms">Terms of Use</a> and <a href="/go/gftray_foot_privacy_security">Online Privacy Policy (updated 03-30-2007)</a>.</p>
+		<p id="searchengine">Search powered by <a href="http://www.google.com/" target="new" class="icon-replace googlelogo">Powered by Google</a></p>
+	</div>
+</div>
+
+<script type="text/javascript" src="/js/fsrscripts/oeTriggerParams.js"></script>
+
+<script type="text/javascript" src="/js/fsrscripts/oeLauncher.js"></script>
+
+<script type="text/javascript">
+if (triggerParms["oeMode"] == 1) {
+
+            ForeCStdSetCookie('currentURL', window.location.href, null,'/',triggerParms["domain"]);
+
+}
+
+var FSRcurrentURL = "";
+//var FSRreferrerURL = "";
+
+FSRcurrentURL = (window.location.href).toLowerCase();
+FSRreferrerURL = (document.referrer).toLowerCase();
+
+ try { 
+FSRcurrentURL = (window.location.href).toLowerCase();
+FSRreferrerURL = (document.referrer).toLowerCase();
+
+
+
+if (FSRcurrentURL.indexOf("adobe.com/products/acrobat/readstep2.html") > -1  ||
+FSRcurrentURL.indexOf("adobe.com/products/acrobat/readstep3.html") > -1  ||
+FSRcurrentURL.indexOf("adobe.com/downloads") > -1 ||
+FSRcurrentURL.indexOf("adobe.com/shockwave/download") > -1)
+{
+
+            if (FSRreferrerURL.indexOf("adobe.com") > -1) {
+                        openFSRTracker(1);
+            }
+
+} else {
+           openFSRTracker(1);
+}                                                              
+} catch (err) {}
+    
+</script>
+
+<!--googleon: index-->
+
+<!--- $Id: analytics_home_ssi.html,v 1.5 2008/03/20 23:19:41 btapley Exp $ --->
+<script language="JavaScript" type="text/javascript"><!-- 
+var s_channel="Adobe Homepages"; //--></script>
+<div style="display: none;"><!-- SiteCatalyst code version: G.9.
+Copyright 2002 Omniture, Inc. More info available at
+http://www.omniture.com -->
+<script language="JavaScript" type="text/javascript"><!--
+var s_code=' '//--></script>
+<script language="JavaScript" src="/uber/js/omniture_s_code.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript"><!--
+var s_accountName;
+var s_docHost = window.location.hostname.toLowerCase();
+var s_docURL = window.location.pathname.toLowerCase();
+
+if (!!window.adobe) {
+  var sc_iFrame=adobe.Cookie.get("adobe.omniture.save");
+}
+if (!!sc_iFrame && (sc_iFrame.indexOf("initialLoad") != -1) && (s_docURL.indexOf("/ssi/iframe/") != -1))  {
+}
+else {
+if ((s_docHost.indexOf(".dev.adobe.") != -1) || (s_docHost.indexOf("stage.") != -1) || (s_docHost.indexOf("staging.") != -1) || (s_docHost.indexOf(".sea.adobe") != -1) || (s_docHost.indexOf(".corp.adobe") != -1)) {  s_accountName="mxadobetest";
+}
+else {
+  s_accountName="mxmacromedia";
+}
+if (s_docURL.indexOf("/devnet/") != -1) {
+  s_channel="DevNet";
+  // Track Tabs as Pages when targeted directly
+  if (document.URL.indexOf("navID=") != -1) {
+    var s_pairs = window.location.search.substring(1).split("&");
+	for (i=0;i<s_pairs.length;i++) {
+	  if (s_pairs[i].indexOf("navID=") != -1)
+  		s_pageName=document.URL.substring(0, document.URL.indexOf("?")+1) + s_pairs[i];
+		s_pageName=s_pageName.toLowerCase();
+	}
+  }
+}
+else if (s_docHost.indexOf("help.adobe.com") != -1) {
+  s_channel="Support Help.adobe.com";
+  s_prop23=document.URL.toLowerCase();
+  var s_title=document.title;
+  if (s_title.indexOf("*") != -1) { 
+    s_title=document.title.substring(0,document.title.indexOf("*"));
+  }
+  s_pageName="Support help.adobe.com: " + s_title;
+}
+else if (s_docHost.indexOf("kb.adobe.com") != -1) {
+  s_channel="Support Knowledgebase";
+  if (s_docURL.indexOf("searchentry.do") != -1) {
+  	try {
+		var SearchStringValue = adobe.Element.getElementsByClassName($("simple-options"),"input","textfield")[0].value;
+		var s_prop11=SearchStringValue.toLowerCase();
+		var s_eVar21=s_prop11;
+	} catch (ex) { 
+	}
+  }
+  else if (s_docURL.indexOf("microsite.do") != -1) {
+     var s_pageName = document.URL.toLowerCase();
+     if (s_pageName.indexOf(';') != -1) {
+       s_pageName=s_pageName.substring(0,s_pageName.indexOf(';'));
+     }
+  }
+}
+else if (s_docURL.indexOf("/designcenter/") != -1) {
+  s_channel="Adobe Design Center";
+  if (s_docURL.indexOf("/articles/") != -1) {
+    mymetatags = document.getElementsByTagName("meta");
+	var adc_Title=s_docURL;
+	var adc_Products="";
+	var adc_Topics="";
+	var adc_Type="";
+	for (i=0;i < mymetatags.length;i++)  {
+		if (mymetatags[i].getAttribute("name") == "product") {
+		   if (mymetatags[i].getAttribute("content").indexOf("[product") == -1)
+		     adc_Products=(adc_Products=="")?';'+mymetatags[i].getAttribute("content"):adc_Products+',;'+mymetatags[i].getAttribute("content"); 
+		}
+		else if (mymetatags[i].getAttribute("name") == "topic") {
+			adc_Topics=(adc_Topics=="")?mymetatags[i].getAttribute("content"):adc_Topics+','+mymetatags[i].getAttribute("content");
+		}
+		else if (mymetatags[i].getAttribute("name") == "columntype") {
+			adc_Type=mymetatags[i].getAttribute("content");
+		}
+	}
+	var s_eVar22=adc_Title;
+	if (adc_Type != "") var s_eVar23=adc_Type;
+	if (adc_Topics != "") var s_eVar24=adc_Topics;
+	if (adc_Products != "") {
+	  var s_products=adc_Products;
+	  var s_events="event12";
+	}
+   }    
+}
+var s_wd=window,s_tm=new Date;if(s_code!=' '){s_code=s_dc(
+s_accountName);if(s_code)document.write(s_code)}
+}
+function sendAnalyticsEvent(str){var ns=s_accountName;if(str!=null)ns+=","+str;void(s_gs(ns));}
+function sendLinkEvent(accnt,lnkname,type){
+accnt=s_accountName;s_linkType=type;s_lnk=true;s_linkName=lnkname;void(s_gs(accnt));}
+//--></script><noscript><img
+src="http://stats.adobe.com/b/ss/mxmacromedia/1/G.9-XELvs" height="1" width="1" border="0" alt="" /></noscript><!--/DO NOT REMOVE/-->
+<!-- End SiteCatalyst code version: G.6. -->
+</div>
+<img id="flash_pixel" name="flash_pixel" src="/images/pixel.gif" width="1" height="1" alt="" />
+</body>
+</html>

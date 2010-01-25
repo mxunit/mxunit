@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>injectMethod</name>
+<help></help>
+<starttext><![CDATA[<cfset injectMethod($${Object receiving the method}, $${Object with method to inject}, "$${function to inject}", "$${function name in receiver}"]]></starttext>
+<endtext><![CDATA[)>]]></endtext>
+</snippet>

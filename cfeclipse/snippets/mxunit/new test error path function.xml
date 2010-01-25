@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>new test error path function</name>
+<help></help>
+<starttext><![CDATA[<cffunction name="xxx_shouldThrowErrorBecause_xxx" returntype="void" hint="tests error path" mxunit:expectedException="$${What exception type(s) are you expecting?}">			
+	<!--- do something here to cause an error --->
+		
+</cffunction>]]></starttext>
+<endtext><![CDATA[]]></endtext>
+</snippet>

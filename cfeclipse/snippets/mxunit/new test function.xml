@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>new test function</name>
+<help></help>
+<starttext><![CDATA[<cffunction name="$${Name your test:}" returntype="void">
+	<cfset var XX = "">
+	<cfset fail("$${Name your test:} not yet implemented")>
+	]]></starttext>
+<endtext><![CDATA[	
+</cffunction>]]></endtext>
+</snippet>

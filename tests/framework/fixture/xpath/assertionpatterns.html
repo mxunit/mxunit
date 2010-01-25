@@ -1,0 +1,235 @@
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+		
+			
+		
+		
+		
+		
+	
+
+
+
+
+		
+	
+
+
+<html>
+<head>
+    <title>MXUnit - Unit Test Framework and Eclipse Plugin for Adobe ColdFusion</title>
+    <meta name="keywords" value="coldfusion unit testing test cfmx xunit developer framework quality assurance open source community free" />
+
+	
+	<link href="/stylesheets/mxunit.css" type="text/css" rel="stylesheet" />
+	<link href='/doc/tutorial/dp.SyntaxHighlighter/styles/SyntaxHighlighter.css' rel='stylesheet' type='text/css'/>
+	<!-- Include the SyntaxHighlighter stylesheet -->
+	<style type="<a class="jigluLink" onclick="return(Jiglu.overlayOpen(this))" href="http://boyan-tagging.jiglu.com/tags/topics/textcss%21overlay" title="Jiglu topic tag: text/css">text/css</a>">
+	.dp-highlighter ol li, .dp-highlighter .columns div { padding: 0px 3px 0px 0px  !important; font-size: 12px !important; font-family: 'Lucida Console', 'Bitstream Vera Sans Mono', 'Courier New', Monaco, Courier, monospace; }
+	.dp-highlighter .tools { padding-left: 0px; }
+	.dp-highlighter .tools a { color: #000; text-decoration: underline; }
+	.dp-highlighter .tools a:hover { margin-right: 10px; }
+	</style>
+	<!-- Include the core SyntaxHighlighter library -->
+	<script language="javascript" src="/doc/tutorial/dp.SyntaxHighlighter/scripts/shCore.js"></script>
+	<!-- Include the <a class="jigluLink" onclick="return(Jiglu.overlayOpen(this))" href="http://boyan-tagging.jiglu.com/tags/topics/coldfusion%21overlay" title="Jiglu topic tag: ColdFusion">ColdFusion</a> brush -->
+	<script language="javascript" src="/doc/tutorial/dp.SyntaxHighlighter/scripts/shBrushColdFusion.js"></script>
+	<script language="javascript" src="/doc/tutorial/dp.SyntaxHighlighter/scripts/shBrushXML.js"></script>
+  <script language="javascript">
+	window.onload = function () {
+	 // Set the path to the flash component to enable 'copy to clipboard' in <a class="jigluLink" onclick="return(Jiglu.overlayOpen(this))" href="http://boyan-tagging.jiglu.com/tags/topics/firefox%21overlay" title="Jiglu topic tag: Firefox">firefox</a>
+	 dp.SyntaxHighlighter.ClipboardSwf = '/doc/tutorial/dp.SyntaxHighlighter/scripts/clipboard.swf';
+	 //dp.SyntaxHighlighter\Scripts
+	 // Enable blogger mode (if using Blogger)
+	 dp.SyntaxHighlighter.BloggerMode();
+	 // Highlight page elements with the name "code"
+	 // For configuration options see http://code.google.com/p/syntaxhighlighter/wiki/HighlightAll
+	 //function dp.SyntaxHighlighter.HighlightAll(name, [showGutter], [showControls], [collapseAll], [firstLine], [showColumns])
+	 dp.SyntaxHighlighter.HighlightAll('code', false, true, false, 1, false);
+	 //alert(dp)
+	}
+	</script>
+	
+	
+	
+	<style type='text/css'>
+	  .post div { line-height: 1.3em; margin: 0; }
+	  .dp-highlighter { font: 13px "Courier New", Courier, monospace; }
+	  .dp-highlighter ol li, .dp-highlighter .columns div { padding: 0px 3px 0px 0px  !important; font-size: 12px !important; font-family: 'Lucida Console', 'Bitstream Vera Sans Mono', 'Courier New', Monaco, Courier, monospace; }
+	  .dp-highlighter .tools { padding-left: 0px; }
+	  .dp-highlighter .tools a { color: #000; text-decoration: underline; }
+	  .dp-highlighter .tools a:hover { margin-right: 10px; }
+	</style>
+
+
+
+
+
+</head>
+<body>
+  <h1 style="height:76;padding-bottom:12">
+ 
+ <img style="font-size:11px;position:absolute;left:0;top:0;" src="/images/no-bugs.gif" border="0" alt="Download to get rid of those pesky bugs." align="absmiddle">
+ 
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+  MXUnit <span style="font-size:11px;position:absolute;left:82;top:40;color:gray;font-family:serif"> Unit Testing framework for ColdFusion developers</span>
+
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	
+  <a href="/download.cfm" style="font-size:12pt" title="Download the latest version"> Download </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="/doc/index.cfm" style="font-size:12pt;" title="Documentation, Tutorials, etc ..."> Details </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="/index.cfm" style="font-size:12pt;"> Home </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="http://groups.google.com/group/mxunit/topics" style="font-size:12pt"> Support </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="/blog" style="font-size:12pt"> Blog </a>
+  
+  </h1>
+
+    <div id="doccontent">
+		
+		
+		
+			<h2>What to put in your tests -- or, patterns for your assertions</h2>
+
+<p>Components are a mix of state and behavior. Thus, when we test, we typically want to know:
+<ul>
+		<li>Did the state of the object change as expected?</li>
+		<li>Did the behavior occur that I expected?</li>
+</ul>
+<p>Sometimes we want to know one or the other; sometimes we want to know both.</p>
+<p>Here are some &quot;assertion patterns&quot;* to help you get started. </p>
+<h3>Resulting-State Assertion</h3>
+<p>The resulting-state assertion tests data. It says &quot;I'm doing something to my object that will change that object's data, or 'state'. I'm going to test that the resulting state of my object is as I expect&quot;. A simple example is the common &quot;bank account&quot; or &quot;transaction&quot; example: You have two accounts, you transfer $20 from one account to another, and you test that the first account is 20 bucks shorter and the second account has that 20 bucks. Here's a different example, using a typical &quot;User&quot; object: 
+<pre class="cf" name="code">
+&lt;cffunction name="testAddPrivilegeGroup"&gt;
+	&lt;cfset user.addPrivilegeGroup("admin")&gt;
+	&lt;!--- verify the internal state of the user ---&gt;
+	&lt;cfset assertTrue(user.belongsToGroup("admin"))&gt;
+&lt;/cffunction&gt;
+
+&lt;cffunction name="testAddPrivilege"&gt;
+	&lt;cfset user.addPrivilege("DeleteOtherUsers")&gt;
+	&lt;!--- verify the internal state of the user ---&gt;
+	&lt;cfset assertTrue(user.hasPrivilegeTo("DeleteOtherUsers"))&gt;
+&lt;/cffunction&gt;
+</pre>
+</p>
+<h3>Guard Assertion</h3>
+<p>The guard assertion is simply a slight variant on the resulting state assertion; typically, the difference is that toward the top of the test, before you get into the &quot;guts&quot; of your assertion(s), you check the object for some condition that you want to ensure exists before proceeding with the meat of your tests. Think of it as &quot;If this condition isn't true, I want to fail right now because the rest of the tests don't matter&quot;. Usually the &quot;guard&quot; is just a simple assertion for equality, often to check that a &quot;default&quot; condition exists. In our example here, we're simply checking that our user object always starts without the privileges we're adding. IF the user object already had those privileges, then that means something tinkered with our object (perhaps indicating a problem in our setup function) and we got a problem here, Houston, and we want to fail right now. 
+<pre class="cf" name="code">
+&lt;cffunction name="testAddPrivilegeGroup"&gt;
+	&lt;!--- our  'guard': ensure we are starting fresh ---&gt;
+	&lt;cfset assertFalse(user.belongsToGroup("admin"))&gt;
+	&lt;cfset user.addPrivilegeGroup("admin")&gt;
+	&lt;!--- verify the internal state of the user ---&gt;
+	&lt;cfset assertTrue(user.belongsToGroup("admin"))&gt;
+&lt;/cffunction&gt;
+
+&lt;cffunction name="testAddPrivilege"&gt;
+	&lt;!--- our  'guard': ensure we are starting fresh ---&gt;
+	&lt;cfset assertFalse(user.hasPrivilegeTo("DeleteOtherUsers"))&gt;	
+	&lt;cfset user.addPrivilege("DeleteOtherUsers")&gt;
+	&lt;!--- verify the internal state of the user ---&gt;
+	&lt;cfset assertTrue(user.hasPrivilegeTo("DeleteOtherUsers"))&gt;
+&lt;/cffunction&gt;
+</pre>
+</p>
+
+<h3>Different instances, same data
+</h3>
+<p>The different-instances, same-data pattern is common in DAO testing. Essentially, we're asserting that two objects are different instances but contain the same data. In MXUnit, you can test for &quot;different instance&quot; by using the assertNotSame() assertion. 
+<pre class="cf" name="code">
+&lt;cffunction name="testSaveWithRead"&gt;
+	&lt;cfset dao.save(user)&gt;		
+	&lt;cfset user2 = dao.read(user.getUserID())&gt;
+	&lt;!--- assert they're not the same instance ---&gt;
+	&lt;cfset assertNotSame(user,user2)&gt;
+	&lt;!--- one final check... assert the UUIDs aren't the same ---&gt;
+	&lt;cfset assertTrue( user.getUUID() neq user2.getUUID(), "user UUID and user2 UUID should not be the same but are")&gt;
+			
+	&lt;cfset assertEquals(user.getUserID(),user2.getUserID())&gt;
+	&lt;cfset assertEquals(user.getCreateTS(),user2.getCreateTS())&gt;
+			
+	&lt;!--- is there an easier way? could we use any of the functions in the baseobject for comparisons so we don't have to test all these fields? ---&gt;
+	&lt;cfset assertEquals(user.XXXXX,user2.XXXXX)&gt;
+&lt;/cffunction&gt;
+</pre>
+</p> 
+<h3>&quot;Delta&quot; Assertion</h3>
+<p>Sometimes you can't assert an absolute equality (like &quot;My list is now 5 elements long&quot;). Sometimes, you have to assert equality relative to some previous state. In the example below, imagine you're hooking into some scheduling mechanism (this would be for an integration test, for example). We don't know exactly what getTotalScheduled() will return at any given test run. Maybe it's 1. Maybe it's 30. Who knows. What we want to test is that when we schedule one additional thing, our scheduler's &quot;totalScheduled&quot; count increases by 1. Again, the result could be 2 or it could be 31. We don't know. This type of assertion, where we compare the state right before and right after performing some task, is called &quot;delta&quot;, or difference, assertion. 
+<pre class="cf" name="code">
+&lt;cffunction name="testScheduleSomething"&gt;
+	&lt;cfset obj = createObject("component","SchedulableObject")&gt;
+	&lt;cfset currentlyScheduled = scheduler.getTotalScheduled()&gt;
+	&lt;cfset scheduler.scheduleSomething(obj)&gt;
+	&lt;cfset assertEquals(currentlyScheduled+1, scheduler.getTotalScheduled())&gt;
+&lt;/cffunction&gt;
+</pre>
+
+And here's what it might look like for our User object:
+<pre class="cf" name="code">
+&lt;cffunction name="testPrivilegeCount"&gt;
+	&lt;cfset currentPrivilegeCount = user.getPrivilegeCount()&gt;
+	&lt;cfset user.addPrivilege("ChangeOwnPassword")&gt;
+	&lt;cfset assertEquals(currentPrivilegeCount+1, user.getPrivilegeCount())&gt;
+&lt;/cffunction&gt;
+</pre>
+</p> 
+<h3>Interaction Assertion</h3>
+<p>With interaction assertions, we're testing to make sure an object and a collaborator worked together as we expected. A great example of an interaction is a &quot;bean&quot; style object, like perhaps a &quot;User&quot;, and the DAO for that object, like a UserDAO: 
+<pre class="cf" name="code">
+&lt;cffunction name="testSave"
+	&lt;cfset origUUID = user.getUUID()&gt;
+	&lt;cfset dao.save(user)&gt; 
+	&lt;cfset newUserID = user.getUserID()&gt;
+	&lt;!---  Assert that our DAO updated our user object with its ID after saving  ---&gt;
+	&lt;cfset assertTrue(newUserID GT 0)&gt;   
+	&lt;cfset user.setEmail("somethingnew@somethingnew.com")&gt;
+	&lt;cfset dao.save(user)&gt;
+	&lt;!--- We don't care about testing the update here... just that the insert didn't change the user object's key ---&gt;
+	&lt;cfset assertEquals(newUserID,user.getUserID())&gt;
+	&lt;cfset assertEquals(origUUID,user.getUUID())&gt;
+&lt;/cffunction&gt;
+</pre>
+
+</p>
+<p>&nbsp;</p>
+<hr>
+<p>* The terms here are taken from the outstanding book "Test-Driven" by Lasse Koskela</p>
+
+		
+	</div>
+
+
+
+
+  <div align="center">
+  <hr size="1"  style="width:98%" />
+   <a href="../license.txt" title="Copyleft - GNU 3.0 Public License"><img border="0" src="../images/copyleft.png" align="absmiddle" title="Copyleft - GNU 3.0 Public License"> 2008 MXUnit.org</a>
+  </div>
+</body>
+</html>

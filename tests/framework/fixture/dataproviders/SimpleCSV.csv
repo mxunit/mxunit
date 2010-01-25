@@ -1,0 +1,5 @@
+TaxRate,ItemCost,ExpectedResult
+0,1,1
+1,5000,5050
+2,5000,5100
+3,5000,5150

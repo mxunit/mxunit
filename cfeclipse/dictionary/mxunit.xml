@@ -1,0 +1,425 @@
+<?xml version="1.0" ?>
+<dictionary xmlns="http://www.cfeclipse.org/version1/dictionary"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.cfeclipse.org/version1/dictionary http://cfeclipse.tigris.org/version1/dictionary/dictionary.xsd"
+><tags>
+		
+	</tags><functions>
+		<function creator="8" name="throwWrapper" returns="void">
+			<parameter name="type" type="string" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter> <parameter name="detail" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="addAssertDecorator" returns="void">
+
+			<help><![CDATA[
+				Method used to dynamically add additional custom assertions at runtime. 
+			]]></help> <parameter name="decoratorName" type="string" required="false">
+				<help><![CDATA[
+					The fully qualied name of the assertion component to add; e.g., org.mycompany.MyAssertionComponent
+				]]></help>
+			</parameter> <parameter name="overrideBehaviors" type="string" required="true">
+				<help><![CDATA[
+					Tells the framework whether or not to override any existing behaviors. For example, if your org.mycompany.MyAssertionComponent component has an assertTrue() and overridBehaviors is set to TRUE, the mxunit framework will use the new assertTrue() method and not it's own.
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="getStringValue" returns="string">
+			<help><![CDATA[
+				Attempts to return string representation of OBJ. Tests to see if object has toString or stringValue methods to be used for comparison and returns that string if present
+			]]></help> <parameter name="obj" type="any" required="true">
+
+				<help><![CDATA[
+					Any object
+				]]></help>
+			</parameter> <parameter name="caseSensitive" type="boolean" required="true">
+				<help><![CDATA[
+					If set to TRUE returns the original string unaltered. Default is to return the string in lowercase
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="init" returns="Assert">
+			<help><![CDATA[
+				Constructor
+			]]></help> </function>
+		<function creator="8" name="assertNotEquals" returns="void">
+			<help><![CDATA[
+				Core assertion that compares the values the EXPECTED and ACTUAL
+parameters. Throws mxunit.exception.AssertionFailedError.
+			]]></help> <parameter name="expected" type="any" required="true">
+
+				<help><![CDATA[
+					The
+expected object to compare.
+				]]></help>
+			</parameter> <parameter name="actual" type="any" required="true">
+				<help><![CDATA[
+					The
+actual object to compare.
+				]]></help>
+			</parameter> <parameter name="message" type="string" required="true">
+				<help><![CDATA[
+					Optional custom message to display if comparison fails.
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="getHashCode" returns="string">
+			<help><![CDATA[
+				Attempts to return hashCode representation of OBJ. Returns 0 for deep structs and component name or, if defined, the stringValue() representation of the component.
+			]]></help> <parameter name="obj" type="any" required="true">
+
+				<help><![CDATA[
+					Any object
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="assertFalse" >
+			<parameter name="condition" type="string" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="assertSame" >
+			<parameter name="expected" type="any" required="true">
+
+				
+			</parameter> <parameter name="actual" type="any" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="setTestStyle" >
+			<help><![CDATA[
+				Sets the current test style.
+			]]></help> <parameter name="TestStyle" type="string" required="true">
+				<help><![CDATA[
+					Use 'default' to have the framework behave like cfcunit with respect to arguments; otherwise, pass 'cfunit' to behave like cfunit (i.e. for certain assertions, the message is the first arg). This only affects assertEquals and assertTrue
+				]]></help>
+			</parameter></function>
+
+		<function creator="8" name="addAssertDecorators" returns="void">
+			<help><![CDATA[
+				Loads any assertions defined in mxunt-config.xml at runtime.
+			]]></help> </function>
+		<function creator="8" name="assertTrue" returns="boolean">
+			<help><![CDATA[
+				Core assertion that tests the CONDITION and throws mxunit.exception.AssertionFailedError on failure
+			]]></help> <parameter name="condition" type="string" required="true">
+				<help><![CDATA[
+					The condition to test. Note that expressions containing CFCs may likely fail
+				]]></help>
+			</parameter> <parameter name="message" type="string" required="true">
+				<help><![CDATA[
+					Optional custom message to display if comparison fails.
+				]]></help>
+
+			</parameter></function>
+		<function creator="8" name="fail" returns="void">
+			<help><![CDATA[
+				Fails a test with the given MESSAGE.
+			]]></help> <parameter name="message" type="string" required="true">
+				<help><![CDATA[
+					Custom message to print in the failure.
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="assertNotSame" >
+			<parameter name="expected" type="any" required="true">
+				
+			</parameter> <parameter name="actual" type="any" required="true">
+
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="assertEquals" returns="void">
+			<help><![CDATA[
+				Core assertion that compares the values the EXPECTED and ACTUAL parameters. Throws mxunit.exception.AssertionFailedError.
+			]]></help> <parameter name="expected" type="any" required="true">
+				<help><![CDATA[
+					The expected object to compare.
+				]]></help>
+			</parameter> <parameter name="actual" type="any" required="true">
+				<help><![CDATA[
+					The actual object to compare.
+				]]></help>
+
+			</parameter> <parameter name="message" type="string" required="true">
+				<help><![CDATA[
+					Optional custom message to display if comparison fails.
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="getTestStyle" >
+			<help><![CDATA[
+				returns the current test style
+			]]></help> </function>
+		<function creator="8" name="assertThat" returns="void">
+			<parameter name="obj1" type="any" required="true">
+				
+			</parameter> <parameter name="obj2" type="any" required="true">
+
+				
+			</parameter></function>
+		<function creator="8" name="doContains" >
+			</function>
+		<function creator="8" name="HamcrestAssert" >
+			<help><![CDATA[
+				Constructor
+			]]></help> <parameter name="whatever" type="any" required="false">
+				
+			</parameter></function>
+		<function creator="8" name="assertThis" returns="Any">
+			</function>
+
+		<function creator="8" name="assertIsEmptyStruct" returns="boolean">
+			<parameter name="struct" type="any" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="assertIsStruct" returns="boolean">
+			<parameter name="struct" type="any" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+
+		<function creator="8" name="assertIsEmpty" returns="boolean">
+			<parameter name="o" type="String" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="assertIsDefined" returns="boolean">
+			<parameter name="o" type="any" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+
+		<function creator="8" name="buildInheritanceTree" returns="string">
+			<parameter name="metaData" type="struct" required="false">
+				
+			</parameter></function>
+		<function creator="8" name="assertIsArray" returns="boolean">
+			<parameter name="a" type="any" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="assertIsEmptyArray" returns="boolean">
+
+			<parameter name="a" type="any" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="assertIsQuery" returns="boolean">
+			<parameter name="q" type="any" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="assertIsTypeOf" returns="boolean">
+
+			<parameter name="o" type="WEB-INF.cftags.component" required="true">
+				
+			</parameter> <parameter name="type" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="assertIsEmptyQuery" returns="boolean">
+			<parameter name="q" type="any" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="assertIsXMLDoc" returns="boolean">
+
+			<parameter name="xml" type="any" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="getTrace" returns="string">
+			</function>
+		<function creator="8" name="addTrace" returns="void">
+			<help><![CDATA[
+				Adds a single string to the test result. Consider using debug() instead, especially for complex objects.
+			]]></help> <parameter name="message" type="string" required="true">
+				
+			</parameter></function>
+
+		<function creator="8" name="injectMethod" returns="void">
+			<help><![CDATA[
+				injects the method from giver into receiver. This is helpful for quick and dirty mocking
+			]]></help> <parameter name="Receiver" type="any" required="true">
+				<help><![CDATA[
+					the object receiving the method
+				]]></help>
+			</parameter> <parameter name="Giver" type="any" required="true">
+				<help><![CDATA[
+					the object giving the method
+				]]></help>
+			</parameter> <parameter name="functionName" type="string" required="true">
+				<help><![CDATA[
+					the function to be injected from the giver into the receiver
+				]]></help>
+
+			</parameter> <parameter name="functionNameInReceiver" type="string" required="true">
+				<help><![CDATA[
+					the function name that you will call. this is useful when you want to inject giver.someFunctionXXX but have it be called as someFunction in your receiver object
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="TestCase" returns="any">
+			<parameter name="aTestCase" type="TestCase" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="debug" returns="void">
+			<help><![CDATA[
+				Use in your tests to add simple or complex debug data to test results. Used by Eclpise plugin heavily.
+			]]></help> <parameter name="debugData" type="any" required="true">
+
+				
+			</parameter></function>
+		<function creator="8" name="setUp" returns="void">
+			<help><![CDATA[
+				Override in your testcase
+			]]></help> </function>
+		<function creator="8" name="runTest" returns="TestResult">
+			<parameter name="suite" type="any" required="true">
+				
+			</parameter></function>
+		<function creator="8" name="toStringValue" returns="string">
+			<help><![CDATA[
+				Returns the name of this TestCase
+			]]></help> </function>
+
+		<function creator="8" name="runBare" returns="void">
+			<help><![CDATA[
+				Not really used
+			]]></help> </function>
+		<function creator="8" name="testIsAcceptable" returns="boolean">
+			<help><![CDATA[
+				contains the logic for whether a test is a valid runnable method
+			]]></help> <parameter name="TestStruct" type="struct" required="true">
+				<help><![CDATA[
+					Structure for a function coming from getmetadata
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="run" returns="any">
+			<help><![CDATA[
+				Main run method used by the Eclipse Plugin
+			]]></help> <parameter name="testResult" type="any" required="true">
+
+				
+			</parameter></function>
+		<function creator="8" name="tearDown" returns="void">
+			<help><![CDATA[
+				Override in your testcase
+			]]></help> </function>
+		<function creator="8" name="dump" >
+			<parameter name="obj" type="any" required="true">
+				
+			</parameter> <parameter name="label"  required="true">
+				
+			</parameter></function>
+		<function creator="8" name="makePublic" returns="WEB-INF.cftags.component">
+
+			<help><![CDATA[
+				makes a testable version of a private method for a given object. This is a convenience pass-through to PublicProxyMaker.makePublic. See documentation on 'testing private methods' at mxunit.org/doc. Or open mxunit/tests/framework/PublicProxyMakerTest.cfc f
+			]]></help> <parameter name="ObjectUnderTest" type="WEB-INF.cftags.component" required="true">
+				<help><![CDATA[
+					an instance of the object with a private method to be proxied
+				]]></help>
+			</parameter> <parameter name="privateMethodName" type="string" required="true">
+				<help><![CDATA[
+					name of the private method to be proxied
+				]]></help>
+			</parameter> <parameter name="proxyMethodName" type="string" required="true">
+				<help><![CDATA[
+					name of the proxy method name to be used; if not passed, defaults to the name of the private method prefixed with an underscore
+				]]></help>
+			</parameter></function>
+
+		<function creator="8" name="getDebug" returns="array">
+			<help><![CDATA[
+				Returns the debug array
+			]]></help> </function>
+		<function creator="8" name="clearDebug" returns="void">
+			<help><![CDATA[
+				Clears the debug array
+			]]></help> </function>
+		<function creator="8" name="runTestRemote" returns="void">
+			<help><![CDATA[
+				Remote method for running tests quickly via Http.
+			]]></help> <parameter name="testMethod" type="string" required="true">
+				<help><![CDATA[
+					A single test to run. If not specified, all tests are run.
+				]]></help>
+
+			</parameter> <parameter name="debug" type="boolean" required="true">
+				<help><![CDATA[
+					Flag to indicate whether or not to dump the test results to the screen.
+				]]></help>
+			</parameter> <parameter name="output" type="string" required="true">
+				<help><![CDATA[
+					Output format: html,xml,junitxml,extjs 
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="getRunnableMethods" returns="array">
+			<help><![CDATA[
+				Gets an array of all runnable test methods for this test case. This includes anything in its inheritance hierarchy
+			]]></help> </function>
+
+		<function creator="8" name="assertXpath" returns="any">
+			<parameter name="xpath" type="String" required="true">
+				<help><![CDATA[
+					string representing an xpath expression
+				]]></help>
+			</parameter> <parameter name="data" type="any" required="true">
+				<help><![CDATA[
+					String or URL to search
+				]]></help>
+			</parameter> <parameter name="text" type="string" required="true">
+				<help><![CDATA[
+					The text to match against the xpath expression. If omitted, this assertion returns true if any elements of the xpath epxression are found.
+				]]></help>
+			</parameter> <parameter name="message" type="string" required="true">
+
+				<help><![CDATA[
+					The mssage to display when this assertion fails
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="wrapScriptTagInCDATA" returns="string">
+			<help><![CDATA[
+				Regular Expression util wrapper. Wraps script tag in CDATA section for xml parsing.
+			]]></help> <parameter name="html" type="string" required="true">
+				<help><![CDATA[
+					Wraps the internal contents of script tags with a CDATA section. Workaround for JTidy lack.
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="isWrapped" returns="boolean">
+			<parameter name="html" type="string" required="true">
+
+				<help><![CDATA[
+					Wraps the internal contents of script tags with a CDATA section. Workaround for JTidy lack.
+				]]></help>
+			</parameter></function>
+		<function creator="8" name="buildXmlDom" returns="any">
+			<help><![CDATA[
+				Experimental!
+			]]></help> <parameter name="data" type="any" required="true">
+				<help><![CDATA[
+					A string that needs to be parsed into an XML DOM Object.
+				]]></help>
+			</parameter> <parameter name="isUrl" type="boolean" required="true">
+				<help><![CDATA[
+					Flag that determines whether or not the data argument is a URL as opposed to a string.
+				]]></help>
+			</parameter></function>
+
+		<function creator="8" name="assertSomething" returns="boolean">
+			<parameter name="arg1" type="any" required="true">
+				
+			</parameter> <parameter name="message" type="string" required="true">
+				
+			</parameter></function></functions>
+		<scopes></scopes></dictionary>

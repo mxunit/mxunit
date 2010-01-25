@@ -1,0 +1,98 @@
+body {
+	color: #333;
+}
+
+a {
+	font-weight: normal;
+	color: #083772;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: #083772;
+}
+
+a img {
+	border: none;
+}
+
+p {
+	margin: .5em 0;
+	padding: .5em;
+}
+
+label {
+	margin: .5em; 
+	line-height: 2em;
+	font-weight: bold;
+}
+
+input {
+	margin: .5em 0;
+}
+
+.header {
+	padding: .5em 0;
+	background: #eeeeee;
+	-moz-border-radius-bottomleft: 1em;
+	-webkit-border-bottom-left-radius: 1em;
+	-moz-border-radius-bottomright: 1em;
+	-webkit-border-bottom-right-radius: 1em;
+}
+
+.header .nav {
+	margin-top: 1.5em;
+}
+
+.container_12 {
+	border-top: 5px solid #083772;
+}
+
+.desc {
+	font-size: .8em;
+	font-family: serif;
+}
+
+.footer {
+	margin: 1em;
+	padding-top: 1em;
+	border-top: 1px solid #333;
+	text-align: center;
+}
+
+.footer a:hover {
+	color: #DD3C10;
+	text-decoration: none;
+}
+
+.align-center {
+	text-align: center;
+}
+
+.float-left {
+	float: left;
+}
+
+.error {
+	font-weight: bold;
+	color: #DD3C10;
+}
+
+.success {
+	color: #006400;
+}
+
+.message {
+	color: #083772;
+}
+
+.nav.horizontal li {
+	float: left;
+	list-style: none;
+}
+
+.nav.horizontal a {
+	font-weight: bold;
+	display: block;
+	padding: .5em 1.5em;
+}

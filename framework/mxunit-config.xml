@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+ <mxunit-config>
+  <config-element type="meta" name="version" value="1.0.0" /> 
+  
+  <!-- 
+  Tells MXUnit how the framework should be mapped. MXUnit attempts to discover
+  this, but, in some configurations, this does not work. So, specify the
+  dotted notation where mxunit is installed. 
+  
+  *The "override" attribute tells mxunit to 
+  
+  Examples:
+  1. Mapped or installed directly under webroot: mxunit [Default]
+  2. Mapped or installed in a subdirectory under webroot: mysubdirectory.mxunit
+  --> 
+  <config-element type="userConfig" name="componentRoot" value="mxunit" override="false" /> 
+  
+  
+  <!-- 
+  Assertion extensions. Enable or disable auto-loading at runtime.
+  Alternatively, you can load Assertion extensions in your test case
+  setUp() method by invoking Assert.addAssertDecorator(MyCustomAssertion).
+  The override parameter tells the framework to override any duplicate assertions
+  with the ones in the custom assertion.
+   --> 
+  <config-element type="assertionExtension" path="MXUnitAssertionExtensions" autoload="true" override="false" /> 
+  <config-element type="assertionExtension" path="HamcrestAssert" autoload="true" override="false" />
+  <config-element type="assertionExtension" path="XPathAssert" autoload="true" override="false" />
+  
+  <!--
+  <config-element type="assertionExtension" path="org.cfcunit.framework.Assert" autoload="true" override="false" /> 
+  <config-element type="assertionExtension" path="net.sourceforge.cfunit.framework.Assert" autoload="false" override="false" />
+  -->
+    
+  
+  <!-- 
+  Tells the MXUnit Eclipse plug-in to automatically cache
+  test object to increase performance. Change element value to false
+  to override.
+  --> 
+  <config-element type="pluginControl" name="UseRemoteFacadeObjectCache" value="true" /> 
+
+
+  <!-- 
+   Tells the MXUnit framework how to execute assertions. If set to false, message parameter
+  in assertions is optional but should be last of used; E.g., assertEquals(expected, actual [,message]).
+  If set to true, follows the JUnit parameter syntax but the first parameter is REQUIRED; E.g., 
+  assertEquals(message, expected, actual). The default is false.
+   --> 
+  <config-element type="assertionMessageBehavior" name="MessageParameterFirst" value="false" /> 
+
+ </mxunit-config>
