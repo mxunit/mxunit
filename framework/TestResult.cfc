@@ -42,6 +42,11 @@
  </cffunction>
 
 
+ <cffunction name="getJSONResults" access="public" returntype="any" output="false">
+   <cfinvoke method="closeResults" />
+   <cfreturn serializeJSON(this.results)  />
+ </cffunction>
+
 
  <cffunction name="getResults" access="public" returntype="array" output="false">
    <cfinvoke method="closeResults" />
@@ -261,6 +266,9 @@
 		</cfcase>
 		<cfcase value="junitxml">
 			<cfreturn getJUnitXMLResults()>
+		</cfcase>
+		<cfcase value="json">
+			<cfreturn getJSONResults()>
 		</cfcase>
 	    <cfcase value="query">
 				<cfreturn getQueryResults()>

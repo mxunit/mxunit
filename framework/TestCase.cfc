@@ -142,6 +142,10 @@
     case 'junitxml':
     writeoutput(this.result.getJUnitXmlresults());
     break;
+    
+    case 'json':
+    writeoutput(this.result.getJSONResults());
+    break;
 
     case 'query':
     dump(this.result.getQueryresults());
