@@ -1,8 +1,7 @@
 <cfparam name="scripts" default="#arrayNew(1)#" />
 		<div class="grid_12">
 			<div class="footer">
-				<a href="http://mxunit.org/license.txt" title="Copyleft - GNU 3.0 Public License">
-					<img border="0" src="<cfoutput>#pathBase#</cfoutput>images/copyleft.png" align="absmiddle" title="Copyleft - GNU 3.0 Public License">
+				<a href="http://mxunit.org/MIT-license.txt" title="MIT License">
 					<cfoutput>#year(now())# MXUnit.org - v<cfoutput>#version#</cfoutput></cfoutput>
 				</a>
 			</div>

@@ -48,8 +48,6 @@
    <cfreturn this.results />
  </cffunction>
 
-
-
 <!---
   Initialize the test result item struct each time and populate it with meta data
  --->
@@ -252,11 +250,14 @@
 </cffunction>
 
 <cffunction name="getResultsOutput" returntype="any" hint="convenience for getting the various output modes" access="public" output="false">
-	<cfargument name="mode" required="true" hint="html,extjs,xml,junitxml,query,struct,text">
+	<cfargument name="mode" required="true" hint="html,jqgrid,xml,junitxml,query,struct,text">
 	<cfset arguments.mode = listLast(arguments.mode)>
 	<cfswitch expression="#arguments.mode#">
-		<cfcase value="extjs,ext" delimiters=",">
-			<cfreturn getEXTResults()>
+		<cfcase value="jqgrid" delimiters=",">
+			<cfreturn getjqgridResults()>
+		</cfcase>
+		<cfcase value="extjs" delimiters=",">
+			<cfreturn getjqgridResults()>
 		</cfcase>
 		<cfcase value="xml">
 			<cfreturn getXMLResults()>
@@ -289,11 +290,11 @@
   	<cfreturn htmlresult.getHtmlresults()>
 </cffunction>
 
-<cffunction name="getEXTResults" returntype="string" hint="returns the appropriate HTML for showing results in an EXT js Grid">
+<cffunction name="getjqgridResults" returntype="string" hint="returns the appropriate HTML for showing results in an jqgrid js Grid">
 	<cfargument name="DirName" type="string" required="false" default="" hint="Directory under test, if this TestResult is part of a directory test suite"/>
-	<cfargument name="EXTRoot" type="string" required="false" default="#getInstallRoot()#resources/ext2" hint="where EXT lives"/>
-	<cfset var extresult = createObject("component","EXTTestResult").EXTTestResult(this,ExtRoot)>
-	<cfreturn extresult.getHTMLResults(DirName)>
+	<cfargument name="jqgridRoot" type="string" required="false" default="#getInstallRoot()#resources/jquery/jqgrid" hint="where jqgrid lives"/>
+	<cfset var jqgridresult = createObject("component","JqgridTestResult").jqgridTestResult(this,jqgridRoot)>
+	<cfreturn jqgridresult.getHTMLResults(DirName)>
 </cffunction>
 
 <cffunction name="getXMLResults"  returnType="string" hint="Call this method to return raw XML. You can then apply your own xsl.">
@@ -315,7 +316,7 @@
 	<cfset var s_results = StructNew()>
 	<cfset var thisComponent = "">
 	<cfset var test = 1>
-
+	
 	<cfloop from="1" to="#ArrayLen(this.results)#" index="test">
 		<cfset thisComponent = this.results[test].Component>
 		<cfif not StructKeyExists(s_results,thisComponent)>
@@ -323,7 +324,6 @@
 		</cfif>
 		<cfset ArrayAppend(s_results[thisComponent],this.results[test])>
 	</cfloop>
-
 	<cfreturn s_results>
 </cffunction>
 

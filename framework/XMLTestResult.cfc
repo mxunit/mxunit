@@ -248,7 +248,7 @@ To Do: Add debug data [12.16.07::bill]
   </head>
   <body style="font-family: arial, helvetica, sans-serif;">
 	<div id="modelink">
-		(<a href="?#queryString#">view in extjs mode</a>)
+		(<a href="?#queryString#">view pretty html</a>)
 	</div>
    <H2 align="center">Test Results</H2>
    <xsl:call-template name="summary" />

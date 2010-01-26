@@ -126,7 +126,7 @@
 <cffunction name="runTestRemote" access="remote" returntype="void" hint="Remote method for running tests quickly via Http.">
   <cfargument name="testMethod" type="string" required="no" default="" hint="A single test to run. If not specified, all tests are run." />
   <cfargument name="debug" type="boolean" required="false" default="false" hint="Flag to indicate whether or not to dump the test results to the screen.">
-  <cfargument name="output" type="string" required="false" default="extjs" hint="Output format: html,xml,junitxml,extjs "><!--- html,xml,junitxml,extjs --->
+  <cfargument name="output" type="string" required="false" default="jqGrid" hint="Output format: html,xml,junitxml,jqGrid "><!--- html,xml,junitxml,jqGrid --->
   <cfscript>
    TestCase(this);
    this.result = runTest();
@@ -146,9 +146,13 @@
     case 'query':
     dump(this.result.getQueryresults());
     break;
-
+    
     case 'extjs':
-    writeoutput('<body>#this.result.getEXTresults(this.name)#<div id="testresultsgrid" class="bodypad"></div></body>');
+    writeoutput('<body>#this.result.getjqGridresults(this.name)#<div id="testresultsgrid" class="bodypad"></div></body>');
+    break;
+
+    case 'jqGrid':
+    writeoutput('<body>#this.result.getjqGridresults(this.name)#<div id="testresultsgrid" class="bodypad"></div></body>');
     break;
 
     case 'text':
