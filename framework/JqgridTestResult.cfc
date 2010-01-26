@@ -154,7 +154,7 @@
     <!--- begin body divs --->
     <cfoutput>
     <div id="modelink_#UUID#" class="modelink">
-      (<a href="?#normalizeQueryString(URL,'html')#">view in simple html</a>)
+      (<a href="?#normalizeQueryString(URL,'html')#">view simple html</a>)
     </div>
     
 	<script>

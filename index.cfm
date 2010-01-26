@@ -1,4 +1,4 @@
-<cfparam name="url.output" default="extjs" />
+<cfparam name="url.output" default="jqgrid" />
 
 <cfinclude template="resources/theme/header.cfm" />
 

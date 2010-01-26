@@ -22,7 +22,7 @@
 			
 			<cfif not listfind(excludes,name)>
 				<cfset isCfc = find(".cfc",name) />
-				<cfset u = iif(isCfc, de("#name#?method=runtestremote&output=extjs"),de("#name#")) />
+				<cfset u = iif(isCfc, de("#name#?method=runtestremote&output=jq"),de("#name#")) />
 				
 				<li><a href="#u#" target="_blank">#name#</li>
 			</cfif>

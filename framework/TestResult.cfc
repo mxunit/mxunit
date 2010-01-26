@@ -253,10 +253,7 @@
 	<cfargument name="mode" required="true" hint="html,jqgrid,xml,junitxml,query,struct,text">
 	<cfset arguments.mode = listLast(arguments.mode)>
 	<cfswitch expression="#arguments.mode#">
-		<cfcase value="jqgrid" delimiters=",">
-			<cfreturn getjqgridResults()>
-		</cfcase>
-		<cfcase value="extjs" delimiters=",">
+		<cfcase value="jqgrid,jq,extjs" delimiters=",">
 			<cfreturn getjqgridResults()>
 		</cfcase>
 		<cfcase value="xml">
@@ -265,13 +262,13 @@
 		<cfcase value="junitxml">
 			<cfreturn getJUnitXMLResults()>
 		</cfcase>
-    <cfcase value="query">
-			<cfreturn getQueryResults()>
-		</cfcase>
-    <cfcase value="array">
-			<cfreturn getResults()>
-		</cfcase>
-    <cfcase value="text">
+	    <cfcase value="query">
+				<cfreturn getQueryResults()>
+			</cfcase>
+	    <cfcase value="array">
+				<cfreturn getResults()>
+			</cfcase>
+	    <cfcase value="text">
 			<cfreturn getTextResults()>
 		</cfcase>
 		<cfdefaultcase>

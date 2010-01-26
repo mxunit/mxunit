@@ -32,7 +32,7 @@ input {
 }
 
 .header {
-	padding: .5em 0;
+	padding: .25em 0;
 	background: #eeeeee;
 	-moz-border-radius-bottomleft: 1em;
 	-webkit-border-bottom-left-radius: 1em;

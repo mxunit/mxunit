@@ -154,6 +154,10 @@
     case 'jqGrid':
     writeoutput('<body>#this.result.getjqGridresults(this.name)#<div id="testresultsgrid" class="bodypad"></div></body>');
     break;
+    
+    case 'jq':
+    writeoutput('<body>#this.result.getjqGridresults(this.name)#<div id="testresultsgrid" class="bodypad"></div></body>');
+    break;
 
     case 'text':
     writeoutput( trim(this.result.getTextresults(this.name)));

@@ -160,7 +160,7 @@ To Do: Add debug data [12.16.07::bill]
 
 
 <cffunction name="getXslt" access="public" hint="Basic XSL for outputting html" returntype="string">
- <cfset var querystring = normalizeQueryString(URL,"extjs")>
+ <cfset var querystring = normalizeQueryString(URL,"jq")>
  <cfset var xsl= "">
  <cfset querystring = XMLFormat(queryString)>
 <cfset  xsl =
