@@ -121,12 +121,12 @@
 		<cfset var j = "">
 		<cfset var methodName = "">
 		<cfset var exception = "" />
+		<cfset var dpName = "" />
 	  <cfset var components = structKeyArray(this.suites()) />
 	  <!---  //Returns a structure corresponding to the key/componentName --->
 	  <cfset var temp = this.suites() />
 		<!--- top-level exception is always event name / expression for Application.cfc (but not fusebox5.cfm) --->
 		<cfset var caughtException = "" />
-    <cfset var methodmetadata = "">
 
 	  <cfloop from="1" to="#arrayLen(components)#" index="i">
 		   <cfset this.suites = structFind(temp, components[i] ) />
@@ -154,14 +154,9 @@
 			<cfset this.c = "">
 			<cfset  start = getTickCount() />
 
-			<cfset methodmetadata = getMetadata(o[methodName])>
-
-			<cfif StructKeyExists(methodmetadata,"mxunit:expectedException")>
-				<cfset exception = methodmetadata["mxunit:expectedException"] />
-			<cfelse>
-				<cfset exception = "" />
-			</cfif>
-
+			
+			<cfset exception = o.getAnnotation(methodName,"expectedException") />
+			
 			<cftry>
 				<cfset  results.startTest(methodName,components[i]) />
 			   <!---  //Get start time    //Execute the test --->
@@ -174,10 +169,12 @@
 
 				 <cfsavecontent variable="this.c">
 
-					 <cfif StructKeyExists(methodmetadata,"mxunit:dataprovider")>
-             <cfset o._$snif = _$snif />
-             <cfset this.dataProviderHandler.init(o._$snif()) />
-             <cfset this.dataProviderHandler.runDataProvider(o,methodName,methodmetadata["mxunit:dataprovider"])>
+
+					<cfset dpName = o.getAnnotation(methodName,"dataprovider") />
+					<cfif len(dpName) gt 0>
+						<cfset o._$snif = _$snif />
+						<cfset this.dataProviderHandler.init(o._$snif()) />
+						<cfset this.dataProviderHandler.runDataProvider(o,methodName,dpName)>
 					 <cfelse>
 						 <cfinvoke component="#o#" method="#methodName#">
 					 </cfif>

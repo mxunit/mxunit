@@ -227,7 +227,30 @@
 	}
 	
 	</cfscript>
+
+	<!--- Testing getAnnotation with dataprovider --->
+	<cfset a = [1,2,3,4]>
+
+	<cffunction name="dataproviderShouldAllowNameOnlyAnnotation" dataprovider="a">
+	  <cfargument name="arrayItem" />
+	  <cfset assert(arrayItem gt 0 ) >
+	  <cfset assertEquals(arrayItem,arguments.index ) >
+	</cffunction>
 		
+	<cffunction name="dataproviderShouldAllowMXUnitNamespacedAnnotation" mxunit:dataprovider="a">
+	  <cfargument name="arrayItem" />
+	  <cfset assert(arrayItem gt 0 ) >
+	  <cfset assertEquals(arrayItem,arguments.index ) >
+	</cffunction>
+		
+	<cffunction name="expectedExceptionWithJustNameShouldWork" expectedException="testException">
+		<cfthrow type="testException" />
+	</cffunction>
+
+	<cffunction name="expectedExceptionWithMXUnitNamespaceShouldWork" mxunit:expectedException="testException">
+		<cfthrow type="testException" />
+	</cffunction>
+
 	<cffunction name="getAnnotationOnNonExistentMethodThrowsExectedException" mxunit:expectedException="mxunit.exception.methodNotFound">
 		<cfset getAnnotation("aBadMethodName","myAttribute","default") />
 	</cffunction>
