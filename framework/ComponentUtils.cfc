@@ -140,5 +140,24 @@
  </cfscript>
 </cffunction>
 
+	<cffunction name="getMockFactoryInfo" returnType="any" access="public">
+		<cfargument name="factoryName" required="false" default="" />
+	 	 <cfscript>
+		    // Using the mxunit-config.xml to store the mock factory config
+		    var cm = createObject("component","ConfigManager").ConfigManager();
+			var mockFactoryInfo = StructNew();
+			if (not Len(arguments.factoryName)) {
+			    arguments.factoryName = cm.getConfigElementValue("mockingFramework","name");
+			}
+		    mockFactoryInfo.factoryPath = cm.getConfigElementValue(arguments.factoryName,"factoryPath");
+		    mockFactoryInfo.createMockMethodName = cm.getConfigElementValue(arguments.factoryName,"createMockMethodName");
+		    mockFactoryInfo.createMockStringArgumentName = cm.getConfigElementValue(arguments.factoryName,"createMockStringArgumentName");
+		    mockFactoryInfo.createMockObjectArgumentName = cm.getConfigElementValue(arguments.factoryName,"createMockObjectArgumentName");
+		    mockFactoryInfo.constructorName = cm.getConfigElementValue(arguments.factoryName,"constructorName");
+		    mockFactoryInfo.constructorArgs = cm.getConfigElementAttributeCollection(arguments.factoryName,"constructorArgs");
+		    return mockFactoryInfo;
+		  </cfscript>
+	</cffunction>	
+
 </cfcomponent>
 

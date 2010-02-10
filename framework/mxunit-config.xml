@@ -14,8 +14,8 @@
   2. Mapped or installed in a subdirectory under webroot: mysubdirectory.mxunit
   --> 
   <config-element type="userConfig" name="componentRoot" value="mxunit" override="false" /> 
-  
-  
+
+
   <!-- 
   Assertion extensions. Enable or disable auto-loading at runtime.
   Alternatively, you can load Assertion extensions in your test case
@@ -48,5 +48,58 @@
   assertEquals(message, expected, actual). The default is false.
    --> 
   <config-element type="assertionMessageBehavior" name="MessageParameterFirst" value="false" /> 
+
+
+  <!-- 
+  Which mocking framework should be used?
+  -->
+  <config-element type="mockingFramework" name="name" value="MightyMock" /> 
+
+  <!-- 
+  Configuration for MightyMock
+  factoryPath: path to the MockFactory object
+  createMockMethodName: the name of the default method in the MockFactory to use for creating mocks
+  createMockStringArgumentName: the name of the string argument to the createMockMethod that holds the path of the object to be mocked
+  createMockObjectArgumentName: the name of the object argument to the createMockMethod that holds an actual object to be mocked
+  constructorName: the name of the constructor method on the MockFactory
+  constructorArgs: one attribute per argument expected by the MockFactory constructor
+  -->
+  <config-element type="MightyMock" name="factoryPath" value="mightymock.MockFactory" /> 
+  <config-element type="MightyMock" name="createMockMethodName" value="createMock" /> 
+  <config-element type="MightyMock" name="createMockStringArgumentName" value="mocked" /> 
+  <config-element type="MightyMock" name="createMockObjectArgumentName" value="mocked" /> 
+  <config-element type="MightyMock" name="constructorName" value="init" /> 
+  <config-element type="MightyMock" name="constructorArgs" /> 
+    
+  <!-- 
+  Configuration for MockBox
+  -->
+  <config-element type="MockBox" name="factoryPath" value="Coldbox.system.testing.MockBox" /> 
+  <config-element type="MockBox" name="createMockMethodName" value="createMock" /> 
+  <config-element type="MockBox" name="createMockStringArgumentName" value="className" /> 
+  <config-element type="MockBox" name="createMockObjectArgumentName" value="object" /> 
+  <config-element type="MockBox" name="constructorName" value="init" /> 
+  <config-element type="MockBox" name="constructorArgs" generationPath="/Coldbox/Temp/" /> 
+
+  <!-- 
+  Configuration for ColdMock
+  -->
+  <config-element type="ColdMock" name="factoryPath" value="coldmock.MockFactory" /> 
+  <config-element type="ColdMock" name="createMockMethodName" value="createMock" /> 
+  <config-element type="ColdMock" name="createMockStringArgumentName" value="objectToMock" /> 
+  <config-element type="ColdMock" name="createMockObjectArgumentName" value="notApplicable" /> 
+  <config-element type="ColdMock" name="constructorName" value="init" /> 
+  <config-element type="ColdMock" name="constructorArgs" /> 
+
+  <!-- 
+  Configuration for another framework - example of adding your own plugin
+  -->
+  <config-element type="newFramework" name="factoryPath" value="mxunit.tests.framework.fixture.MockFactory" /> 
+  <config-element type="newFramework" name="createMockMethodName" value="createMeAMock" /> 
+  <config-element type="newFramework" name="createMockStringArgumentName" value="componentName" /> 
+  <config-element type="newFramework" name="createMockObjectArgumentName" value="object" /> 
+  <config-element type="newFramework" name="constructorName" value="initMethod" /> 
+  <config-element type="newFramework" name="constructorArgs" arg1="constructorArg1" /> 
+
 
  </mxunit-config>

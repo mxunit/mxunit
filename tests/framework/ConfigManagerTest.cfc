@@ -43,6 +43,15 @@
  </cfscript>
 </cffunction>
 
+<cffunction name="testGetConfigElementAttributeCollection">
+ <cfscript>
+  val = cm.getConfigElementAttributeCollection("newFramework","constructorArgs");
+  debug(val);
+  assertEquals(1,StructCount(val));
+  assertEquals("constructorArg1",val.arg1);
+ </cfscript>
+</cffunction>
+
 <cffunction name="setUp">
    <cfset  variables.cm = createObject("component","mxunit.framework.ConfigManager").ConfigManager() />
 

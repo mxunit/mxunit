@@ -7,8 +7,8 @@
 	<cfparam name="this.tests" default="#arrayNew(1)#" />
 	<!--- Generated content from method --->
 	<cfparam name="this.c" default="Error occurred. See stack trace." />
-  <cfparam name="this.dataProviderHandler" default='#createObject("component","DataproviderHandler")#' />
-
+  	<cfparam name="this.dataProviderHandler" default='#createObject("component","DataproviderHandler")#' />
+  	<cfparam name="this.MockingFramework" default="" />
 
 	<cffunction name="TestSuite" access="public" returntype="TestSuite" hint="Constructor">
 	  <!--- redundant? --->
@@ -142,6 +142,11 @@
 			<cfset o = createObject("component", components[i]).TestCase(componentObject) />
 		<cfelse>
 			<cfset o = componentObject.TestCase(componentObject)>
+		</cfif>
+		
+		<!--- set the MockingFramework if one has been set for the TestSuite --->
+		<cfif len(this.MockingFramework)>
+			<cfset o.setMockingFramework(this.MockingFramework) />
 		</cfif>
 
 		<cfloop from="1" to="#arrayLen(methods)#" index="j">
@@ -347,6 +352,11 @@
    <cffunction name="_$snif" access="private" hint="Door into another component's variables scope">
       <cfreturn variables />
     </cffunction>
+
+	<cffunction name="setMockingFramework" hint="Allows a developer to set the default Mocking Framework for this test suite.">
+		<cfargument name="name" type="Any" required="true" hint="The name of the mocking framework to use" />
+		<cfset this.MockingFramework = arguments.name />
+	</cffunction>
 
 </cfcomponent>
 

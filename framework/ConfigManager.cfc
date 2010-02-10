@@ -54,4 +54,14 @@
     <cfreturn elements />
   </cffunction>
 
+  <cffunction name="getConfigElementAttributeCollection" access="remote" output="false" returntype="any" hint="Given a type and name, returns all of the attributes in a struct, omitting the type and name.">
+    <cfargument name="type" type="string" required="true" />
+    <cfargument name="name" type="string" required="true" />
+    <cfset var element = xmlSearch(this.configXml,"/mxunit-config/config-element[@type='#arguments.type#' and @name='#arguments.name#']") />
+	<cfset var attribs = element[1].xmlAttributes />
+	<cfset structDelete(attribs,"name") />
+	<cfset structDelete(attribs,"type") />
+    <cfreturn attribs />
+  </cffunction>
+
 </cfcomponent>

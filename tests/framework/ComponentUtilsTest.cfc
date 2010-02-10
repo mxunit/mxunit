@@ -233,7 +233,30 @@
 </cffunction>
 
 
+<cffunction name="getMockFactoryInfoReturnsMMInfoAsDefault">
+<cfscript>
+	info = cu.getMockFactoryInfo(); 
+	assertEquals("MightyMock.Mockfactory",info.factoryPath);
+	assertEquals("createMock",info.createMockMethodName);
+	assertEquals("mocked",info.createMockStringArgumentName);
+	assertEquals("mocked",info.createMockObjectArgumentName);
+	assertEquals("init",info.constructorName);
+	assertEquals(0,StructCount(info.constructorArgs));
+</cfscript>
+</cffunction>
 
+<cffunction name="getMockFactoryInfoReturnsExplicitFactorInfo">
+<cfscript>
+	info = cu.getMockFactoryInfo("newFramework"); 
+	assertEquals("mxunit.tests.framework.fixture.MockFactory",info.factoryPath);
+	assertEquals("createMeAMock",info.createMockMethodName);
+	assertEquals("componentName",info.createMockStringArgumentName);
+	assertEquals("object",info.createMockObjectArgumentName);
+	assertEquals("initMethod",info.constructorName);
+	assertEquals(1,StructCount(info.constructorArgs));
+	assertEquals("constructorArg1",info.constructorArgs.arg1);
+</cfscript>
+</cffunction>
 
 
 	<cffunction name="setUp">

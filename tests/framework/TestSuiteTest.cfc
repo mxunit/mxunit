@@ -33,6 +33,19 @@
 	</cfsilent>
       
 	</cffunction>
+
+	<cffunction name="settingMockingFrameworkInTestSuiteUsesThatFramework" access="public" returntype="void">
+  
+	  <cfscript>
+     testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
+     testSuite.addAll("mxunit.tests.framework.fixture.mocking");
+	 testSuite.setMockingFramework("ColdMock");
+	 testSuite.run();
+    </cfscript>
+      
+	</cffunction>
+
+
 	<cffunction name="setUp" access="public" returntype="void">
 
 	</cffunction>

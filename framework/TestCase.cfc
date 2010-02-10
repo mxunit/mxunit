@@ -17,6 +17,7 @@
 			<cfparam name="this.result" type="any" default="#createObject("component","TestResult")#" />
 			<cfparam name="this.metadata" type="struct" default="#getMetaData(this)#" />
 			<cfparam name="this.package" type="string" default="" />
+			<cfset setMockingFramework("") />
 			<cfset initDebug()>
 	</cffunction>
 
@@ -307,5 +308,51 @@
     <cfargument name="message" />
     <cfoutput>#arguments.message#<br /></cfoutput>
     </cffunction>
+
+	<!--- Mocking stuff --->
+	
+	<cffunction name="setMockingFramework" hint="Allows a developer to set the default Mocking Framework for this test case.">
+		<cfargument name="name" type="Any" required="true" hint="The name of the mocking framework to use" />
+		<cfset this.MockingFramework = arguments.name />
+	</cffunction>
+
+	<cffunction name="getMockFactory" hint="Returns the actual Mock factory of the framework">
+		<cfargument name="fw" type="Any" required="false" default="" hint="The name of the mocking framework to use" />
+		<cfif not len(arguments.fw)>
+			<cfset arguments.fw = getMockingFramework() />
+		</cfif>
+		<cfreturn getMockFactoryFactory(arguments.fw).getFactory() />
+	</cffunction>
+
+	<cffunction name="mock" output="false" access="public" returntype="any" hint="Returns a mock object via the configured Mock Factory">
+		<cfargument name="mocked" type="any" required="false" default="" hint="can be a component name or an actual component" />
+		<cfargument name="mockType" type="any" required="false" hint="the type of mock to create" />
+		<cfargument name="fw" type="Any" required="false" default="" hint="The name of the mocking framework to use" />
+		
+		<cfset var theMock = 0 />
+		<cfset var mff = 0 />
+		<cfset var mf = 0 />
+		<cfif not len(arguments.fw)>
+			<cfset arguments.fw = getMockingFramework() />
+		</cfif>
+		<cfset mff = getMockFactoryFactory(arguments.fw) />
+		<cfset mf = mff.getFactory() />
+		<cfif not IsObject(arguments.mocked)>
+			<cfset arguments[mff.getConfig("CreateMockStringArgumentName")] = arguments.mocked />
+		<cfelse>
+			<cfset arguments[mff.getConfig("CreateMockObjectArgumentName")] = arguments.mocked />
+		</cfif>
+		<cfinvoke component="#mf#" method="#mff.getConfig('CreateMockMethodName')#" argumentcollection="#arguments#" returnvariable="theMock" />
+		<cfreturn theMock />
+	</cffunction>
+
+	<cffunction name="getMockFactoryFactory" access="private" hint="Returns the MockFactoryFactory, configured for the specified framework">
+		<cfargument name="fw" type="Any" required="false" default="" hint="The name of the mocking framework to use" />
+		<cfreturn createObject("component","MockFactoryFactory").MockFactoryFactory(arguments.fw) />
+	</cffunction>
+
+	<cffunction name="getMockingFramework" access="private" hint="returns the configured Mocking Framework for this test case.">
+		<cfreturn this.MockingFramework />
+	</cffunction>
 
 </cfcomponent>
