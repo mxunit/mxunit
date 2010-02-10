@@ -210,9 +210,39 @@
 	<cffunction name="doSomethingPrivateABitDifferently" access="private">
 		<cfreturn "hidad">
 	</cffunction>
-
-	<!--- Mocking integration tests --->
+	
 	<cfscript>
+	// annotation tests
+	
+	function getAnnotationReturnsDefaultValueIfNoAnnotationFound() {
+		assertEquals("default",getAnnotation("testWithNoAnnotation","myAttribute","default"));
+	}
+
+	function getAnnotationReturnsValueUsingMxunitNamespace() {
+		assertEquals("mxunitNamespace",getAnnotation("testWithMxunitNamespaceAnnotation","myAttribute","default"));
+	}
+	
+	function getAnnotationReturnsValueUsingJustName() {
+		assertEquals("justName",getAnnotation("testWithJustNameAnnotation","myAttribute","default"));
+	}
+	
+	</cfscript>
+		
+	<cffunction name="getAnnotationOnNonExistentMethodThrowsExectedException" mxunit:expectedException="mxunit.exception.methodNotFound">
+		<cfset getAnnotation("aBadMethodName","myAttribute","default") />
+	</cffunction>
+
+	<cffunction name="testWithNoAnnotation" hint="a fixture test used for testing getAnnotation">
+	</cffunction>
+
+	<cffunction name="testWithMxunitNamespaceAnnotation" mxunit:myAttribute="mxunitNamespace" hint="a fixture test used for testing getAnnotation">
+	</cffunction>
+
+	<cffunction name="testWithJustNameAnnotation" myAttribute="justName" hint="a fixture test used for testing getAnnotation">
+	</cffunction>
+
+	<cfscript>
+	// Mocking integration tests
 	
 		// for mockFactory
 		

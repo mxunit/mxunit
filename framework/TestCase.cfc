@@ -354,5 +354,36 @@
 	<cffunction name="getMockingFramework" access="private" hint="returns the configured Mocking Framework for this test case.">
 		<cfreturn this.MockingFramework />
 	</cffunction>
+	
+	<!--- annotation stuff --->
+	
+	<cffunction name="getAnnotation" returntype="Any" hint="Returns the value for an annotation, allowing for an mxunit namespace or not">
+		<cfargument name="methodName" type="Any" required="true" hint="The name of the test method" />
+		<cfargument name="annotationName" type="Any" required="true" hint="The name of the annotation" />
+		<cfargument name="defaultValue" type="Any" required="false" default="" hint="The value to return if no annotation is found" />
+		
+		<cfset var returnVal = arguments.defaultValue />
+			<cfset var methodMetadata = "" />
+		<cfif structKeyExists(this,arguments.methodName)>
+			<cfset methodMetadata = getMetadata(this[arguments.methodName]) />
+			<cfif StructKeyExists(methodMetadata,arguments.annotationName)>
+				<cfset returnVal = methodmetadata[arguments.annotationName] />
+			<cfelseif StructKeyExists(methodMetadata,"mxunit:" & arguments.annotationName)>
+				<cfset returnVal = methodmetadata["mxunit:" & arguments.annotationName] />
+			</cfif>
+		<cfelse>
+	       <cfthrow type="mxunit.exception.methodNotFound"
+                message="An annotation of #arguments.annotationName# was requested for the #arguments.methodName# method, which does not exist."
+                detail="Check the name of the method." />
+		</cfif>
+			<!---
+			<cfif StructKeyExists(methodMetadata,"mxunit:expectedException")>
+				<cfset exception = methodmetadata["mxunit:expectedException"] />
+			<cfelse>
+				<cfset exception = "" />
+			</cfif>
+			--->
+		<cfreturn returnVal />
+	</cffunction>
 
 </cfcomponent>
