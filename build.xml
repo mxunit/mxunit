@@ -176,7 +176,7 @@
 		=================================
 	-->
 	<target name="incrementVersion" depends="init">
-		<svn username="${gc.username}" password="${gc.password}">
+		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
 			<update dir="buildprops" />
 		</svn>
 
@@ -190,7 +190,7 @@
 			<entry key="build.buildnum" type="int" operation="+" value="1" />
 		</propertyfile>
 
-		<svn username="${gc.username}" password="${gc.password}">
+		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
 			<commit dir="buildprops" message="" />
 		</svn>
 
@@ -257,7 +257,7 @@
 		=================================
 	-->
 	<target name="tagVersion" depends="init,version">
-		<svn username="${gc.username}" password="${gc.password}">
+		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
 			<copy srcURL="${svnserver}/mxunit/trunk" destURL="${svnserver}/mxunit/tags/${build.version}" message="autotagging version ${build.version}" />
 		</svn>
 	</target>
@@ -269,7 +269,7 @@
 		=================================
 	-->
 	<target name="update" depends="init" unless="nosvnupdate">
-		<svn username="${gc.username}" password="${gc.password}">
+		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
 			<update dir="." />
 		</svn>
 	</target>
@@ -280,7 +280,7 @@
 			Runs the MXUnit tests on MXUnit
 		=================================
 	-->
-	<target name="runTests" depends="init,update">
+	<target name="runTests" depends="init">
 		<!--
 			load the current version of the package-summary file; 
 			this way, we can put it at the end of the email we 
@@ -468,7 +468,7 @@
 		=================================
 	-->
 	<target name="testSVN" depends="init">
-		<svn username="${gc.username}" password="${gc.password}">
+		<svn username="${gc.username}" password="${gc.password}" svnkit="true" javahl="false">
 			<update dir="buildprops" />
 		</svn>
 	</target>
