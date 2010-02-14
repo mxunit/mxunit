@@ -116,9 +116,12 @@
  <cfreturn retVal />
 </cffunction>
 
-<cffunction name="setUp" returntype="void" access="public" hint="Override in your testcase"></cffunction>
 
-<cffunction name="tearDown" returntype="void" access="public" hint="Override in your testcase"></cffunction>
+<cffunction name="beforeTests" returntype="void" access="public" hint="Invoked prior to any test methods and run once per TestCase. @Override."></cffunction>
+<cffunction name="afterTests" returntype="void" access="public" hint="Invoked after all test methods and run once per TestCase. @Override."></cffunction>
+
+<cffunction name="setUp" returntype="void" access="public" hint="Invoked by MXUnit prior to any test method. Override in your testcase"></cffunction>
+<cffunction name="tearDown" returntype="void" access="public" hint="Invoked by MXUnit after to any test method. Override in your testcase"></cffunction>
 
 <!---
  Convenience method for running tests via URL/Web service invocation
@@ -220,7 +223,7 @@
 		<cfset var isAcceptable = true>
 
 		<cfif 	ListFindNoCase("package,private",TestStruct.access)
-			 OR ListFindNoCase("setUp,tearDown",TestStruct.name)
+			 OR ListFindNoCase("setUp,tearDown,beforeTests,afterTests",TestStruct.name)
 			 OR reFindNoCase("_cffunccfthread",TestStruct.Name)>
 
 			<cfset isAcceptable = false>

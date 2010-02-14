@@ -149,6 +149,9 @@
 			<cfset o.setMockingFramework(this.MockingFramework) />
 		</cfif>
 
+        <!--- Invoke prior to tests. Class-level setUp --->
+    	<cfinvoke component="#o#" method="beforeTests">
+
 		<cfloop from="1" to="#arrayLen(methods)#" index="j">
 			<cfset methodName = methods[j] />
 			<cfset this.c = "">
@@ -240,7 +243,12 @@
 			  <cfset results.endTest(methodName) />
 
 		    </cfloop> <!--- end methods loop --->
-	    </cfloop><!--- end components loop --->
+	    
+
+        <!--- Invoke prior to tests. Class-level setUp --->
+    	<cfinvoke component="#o#" method="afterTests">
+
+		</cfloop><!--- end components loop --->
 
 	   <cfset results.closeResults() /><!--- Get correct time run for suite --->
 	  <cfreturn results />

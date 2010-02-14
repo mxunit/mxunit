@@ -7,9 +7,9 @@
      ================================= -->
     
    <property name="mxunit.jar" value="../ant/lib/mxunit-ant.jar" />
-   <property name="server.name" value="dev" />
-   <property name="server.port" value="80" />
-	<property name="component.path" value="/home/billy/webapps" />
+   <property name="server.name" value="localhost" />
+   <property name="server.port" value="8888" />
+	<property name="component.path" value="/home/billy/software/railo/webroot" />
 
 	
 	<target name="main">
@@ -26,11 +26,6 @@
 	                   verbose="true"
 	                   haltonfailure="false"
 	                   haltonerror="false">
-	       	
-	        <directory path="${component.path}/mxunit/tests/runner"
-	       	           componentPath="mxunit.tests.runner"
-	       	           recurse="false"
-	       	            />
 	   	    
 	       	<directory   path="${component.path}/mxunit/tests/framework"
 	                     packageName="mxunit.tests.framework"
