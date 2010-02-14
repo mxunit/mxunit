@@ -33,7 +33,7 @@ Extension of TestResult
 			<cfoutput>
 				<html>
 					<head>
-						<title>#this.failures# Failures | #this.errors# Errors | #this.successes# Successes</title>
+						<title>MXUnit Test Results - #this.failures# Failures | #this.errors# Errors | #this.successes# Successes</title>
 						<style type="text/css"> 
 						body  {
 							font-family: verdana, arial, helvetica, sans-serif;

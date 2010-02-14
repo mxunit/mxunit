@@ -103,7 +103,7 @@
 </cffunction>
 
 <!--- Wrapper to add tracing --->
-<cffunction name="addTrace" returntype="void" access="public" hint="Adds a single string to the test result. Consider using debug() instead, especially for complex objects.">
+<cffunction name="addTrace" returntype="void" access="public" hint="Deprecated. Use debug() instead.">
   <cfargument name="message" type="string" required="false" default="" />
  <cfscript>
 	debug(arguments.message);
