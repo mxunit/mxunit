@@ -106,7 +106,8 @@
 <cffunction name="addTrace" returntype="void" access="public" hint="Adds a single string to the test result. Consider using debug() instead, especially for complex objects.">
   <cfargument name="message" type="string" required="false" default="" />
  <cfscript>
-   this.traceMessage = arguments.message;
+	debug(arguments.message);
+   //this.traceMessage = arguments.message;
   </cfscript>
 </cffunction>
 
@@ -319,6 +320,15 @@
 		<cfset this.MockingFramework = arguments.name />
 	</cffunction>
 
+	<cffunction name="getMockFactoryFactory" access="private" hint="Returns the MockFactoryFactory, configured for the specified framework">
+			<cfargument name="fw" type="Any" required="false" default="" hint="The name of the mocking framework to use" />
+			<cfreturn createObject("component","MockFactoryFactory").MockFactoryFactory(arguments.fw) />
+		</cffunction>
+
+	<cffunction name="getMockingFramework" access="private" hint="returns the configured Mocking Framework for this test case.">
+			<cfreturn this.MockingFramework />
+	</cffunction>
+
 	<cffunction name="getMockFactory" hint="Returns the actual Mock factory of the framework">
 		<cfargument name="fw" type="Any" required="false" default="" hint="The name of the mocking framework to use" />
 		<cfif not len(arguments.fw)>
@@ -349,15 +359,7 @@
 		<cfreturn theMock />
 	</cffunction>
 
-	<cffunction name="getMockFactoryFactory" access="private" hint="Returns the MockFactoryFactory, configured for the specified framework">
-		<cfargument name="fw" type="Any" required="false" default="" hint="The name of the mocking framework to use" />
-		<cfreturn createObject("component","MockFactoryFactory").MockFactoryFactory(arguments.fw) />
-	</cffunction>
-
-	<cffunction name="getMockingFramework" access="private" hint="returns the configured Mocking Framework for this test case.">
-		<cfreturn this.MockingFramework />
-	</cffunction>
-	
+		
 	<!--- annotation stuff --->
 	
 	<cffunction name="getAnnotation" access="public" returntype="Any" hint="Returns the value for an annotation, allowing for an mxunit namespace or not">

@@ -291,7 +291,7 @@
 </cffunction>
 
 <cffunction name="getHTMLResults" returnType="string" hint="Call this method to return preformatted HTML.">
- 	<cfset var htmlresult = createObject("component", "XMLTestResult").XMLTestResult(this)>
+ 	<cfset var htmlresult = createObject("component", "HTMLTestResult").HTMLTestResult(this)>
   	<cfreturn htmlresult.getHtmlresults()>
 </cffunction>
 
