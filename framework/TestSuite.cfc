@@ -230,8 +230,6 @@
 					<cfset results.addError(cfcatch)>
 				</cfcatch>
 				</cftry>
-
-				<cfset  results.addTrace( o.getTrace() ) />
 				<!--- //add the deubg array to the test result item --->
 				<cfset  results.setDebug( o.getDebug()) />
 				<!--- // make sure the debug buffer is reset for the next text method  --->

@@ -1,47 +1,85 @@
 <cfcomponent  extends="mxunit.framework.TestCase">
 
-	<cfscript>
+<cffunction name="_setFactoryOk" access="private" returntype="void"><!--- do nada for ok ---></cffunction>
+<cffunction name="_setFactoryNotOk" access="private" returntype="void">
+  <cfthrow type="Expression" message="Can't find component X ...">
+</cffunction>
+
+
+
+<cfscript>	
+		
 	// Mocking integration tests
+    function setUp(){
+		//mock mock framework      	
+        $mock = mock("my.mock.factory");			
+		
+		//mock mockfactory
+		$factory = mock("mxunit.framework.MockFactoryFactory");
+	    $factory.setFactory('{string}').returns();
+		$factory.getFactory().returns($mock);			
+		
+		//the real deal
+		realMockFactory = createObject('component','mxunit.framework.MockFactoryFactory').MockFactoryFactory("MightyMock");
+    }
+
+    //Reset State back to normal
+    function tearDown(){
+		$factory.reset();
+		$mock.reset();
+		setMockingFramework("");
+		_setMockFactory(realMockFactory);  
+	 }
 	
-		// for mockFactory
+	
+	function simpleMockFactoryFactoryTest(){
+	   var mf = createObject('component','mxunit.framework.MockFactoryFactory');
+	   var cu = mock("mxunit.framework.ComponentUtils");
+	   injectMethod( mf, this, "_setFactoryOK","setFactory");
+	   info = { factorypath='com.hoo.hoo', constructorname="init", constructorargs="foo" };
+	   cu.getMockFactoryInfo("hoohoo").returns(info);
+	   mf.setComponentUtils(cu);
+	   
+	   
+	   //test
+	   mf.MockFactoryFactory("hoohoo"); 
+      	   
+	  
+	}
+	
+	
+	function getMockFactoryIsInvokedOnce() {
+			_setMockFactory($factory);
+			//set fw
+			setMockingFramework("ColdMock");
+			//check/guard
+			assertTrue( this.MockingFramework == 'ColdMock' , "mock framework not set correctly" );
+			//this is our "main" test
+			getMockFactory();
+			//verify
+			$factory.verifyTimes(1).getFactory();
+		}
+	
+	
 		
 		function getMockFactoryReturnsMightyMockByDefault() {
+			_setMockFactory(realMockFactory);
 			mf = getMockFactory();
 			assertIsTypeOf(mf,"mxunit.framework.mightymock.MockFactory");
 		}
 
-
-
-		//We don't want to have to create a dependency on external
-		//resources in order to run tests.
-		function getMockFactoryReturnsSpecificMockFactory() {
-			mb = mock("Coldbox.system.testing.MockBox");
-			mf = mock().getMockFactory("MockBox").returns(mb);
-			o = mf.getMockFactory("MockBox");
-			mockDebugData = o.debugMock();
-			a = structKeyarray(mockDebugData);
-			debug( mockDebugData[a[3]]);
-			//Railo bug doesn't find name in struct?
-			assertEquals("Coldbox.system.testing.MockBox", mockDebugData[a[3]]);
-			//assertIsTypeOf(o,"Coldbox.system.testing.MockBox");
-		}
-
-
-		function getMockFactoryReturnsSpecificMockFactoryAfterSettingFrameworkName() {
-			setMockingFramework("ColdMock");
-			mf = getMockFactory();
-			assertIsTypeOf(mf,"coldmock.MockFactory");
-			setMockingFramework("");
-		}
-
+	
 		// For built-in MightyMock
 		
 		function mockNoNameShouldReturnMightyMockObject() {
 			mymock =  mock();
+			//debug( mymock.debugMock() );
 			assertIsTypeOf(mymock,"mxunit.framework.mightymock.MightyMock");
 			assertEquals("",mymock.getMocked().name);
 		}
 		
+
+
 		function mockExplicitFastShouldReturnFastMightyMockObject() {
 			mymock =  mock(mockType="fast");
 			assertIsTypeOf(mymock,"mxunit.framework.mightymock.MightyMock");
@@ -67,27 +105,27 @@
 			assertEquals("mxunit.framework.Assert",mymock.getMocked().name);
 		}
 	
+	
 	</cfscript>
 	
-	<cffunction name="mockWithPartialShouldThrow" mxunit:expectedException="MightyMock.MockFactory.partialMocksNotImplemented">
+	
+	
+	<cffunction name="mockWithPartialShouldThrow" mxunit:expectedException="MightyMock.MockFactory.PartialMocksNotImplemented">
 		<cfset mymock =  mock("mxunit.framework.Assert","partial") />
 	</cffunction>
 
 	<!--- For ColdMock --->
-		
-		<cffunction name="mockCMNoNameShouldThrow" mxunit:expectedException="mock.invalidCFC">
-			<cfset mymock = mock(fw="ColdMock") />
-		</cffunction>
-		
-		<cffunction name="mockCMWithInvalidNameShouldThrow" mxunit:expectedException="mock.invalidCFC">
-			<cfset mymock = mock(fw="ColdMock",mocked="foo") />
-		</cffunction>
+	
 						
 		<cffunction name="mockCMWithActualObjectShouldThrow" mxunit:expectedException="Expression">
 			<cfset assert = createObject("component","mxunit.framework.Assert") />
 			<cfset mymock =  mock(fw="ColdMock",mocked=assert) />
 		</cffunction>
 		
+		
+		<!--- Seems like these are testing the dependencies and not MXUnit? --->
+		
+	<!--- 
 		<cffunction name="mockCMWithValidNameShouldReturnColdMockObject">
 			<cfscript>
 				mymock =  mock(fw="ColdMock",mocked="mxunit.framework.Assert");
@@ -134,19 +172,13 @@
 		}
 		
 		
-		//beforeTest test
-		function $invokeBeforeTestsShouldSetSimpleValue(){
-		   debug(before_tests_expected);
-		}
 		
-		function $invokeAfterTestsShouldBeCalled(){
-		  fail("how to test afterTests?");
-		}
 		
 	</cfscript>
 
 	
 	
+ --->
 
 </cfcomponent>
 

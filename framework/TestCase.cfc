@@ -5,6 +5,18 @@
 --->
 <cfcomponent displayname="TestCase" extends="Assert" hint="Composite parent of all TestCases. Extend this class to build and run tests within the MXUnit framework.">
 
+
+	<!---
+		Intended be overridden in TestCases	  
+	--->
+
+	<cffunction name="beforeTests" returntype="void" access="public" hint="Invoked prior to any test methods and run once per TestCase. @Override."></cffunction>
+	<cffunction name="afterTests" returntype="void" access="public" hint="Invoked after all test methods and run once per TestCase. @Override."></cffunction>
+
+	<cffunction name="setUp" returntype="void" access="public" hint="Invoked by MXUnit prior to any test method. Override in your testcase"></cffunction>
+	<cffunction name="tearDown" returntype="void" access="public" hint="Invoked by MXUnit after to any test method. Override in your testcase"></cffunction>
+
+
 	<!--- constructor --->
 	<cfset initProperties()>
 
@@ -111,18 +123,6 @@
   </cfscript>
 </cffunction>
 
-<cffunction name="getTrace" returntype="string" access="public">
- <cfset var retVal = duplicate(this.traceMessage) />
- <cfset this.traceMessage = "" />
- <cfreturn retVal />
-</cffunction>
-
-
-<cffunction name="beforeTests" returntype="void" access="public" hint="Invoked prior to any test methods and run once per TestCase. @Override."></cffunction>
-<cffunction name="afterTests" returntype="void" access="public" hint="Invoked after all test methods and run once per TestCase. @Override."></cffunction>
-
-<cffunction name="setUp" returntype="void" access="public" hint="Invoked by MXUnit prior to any test method. Override in your testcase"></cffunction>
-<cffunction name="tearDown" returntype="void" access="public" hint="Invoked by MXUnit after to any test method. Override in your testcase"></cffunction>
 
 <!---
  Convenience method for running tests via URL/Web service invocation
@@ -315,41 +315,47 @@
 
 	<!--- Mocking stuff --->
 	
+	<cfset _mockFactory = createObject("component", "MockFactoryFactory") />
+	
+	<cffunction name="_setMockFactory" hint="Dependency injection window.">
+		<cfargument name="mf" type="any" required="true" />
+		<cfset _mockFactory = arguments.mf >
+	</cffunction>
+	
+	<cffunction name="_getMockFactory" hint="Returns the current MockFactory object.">
+		<cfreturn _mockFactory />
+	</cffunction>
+	
+	
 	<cffunction name="setMockingFramework" hint="Allows a developer to set the default Mocking Framework for this test case.">
 		<cfargument name="name" type="Any" required="true" hint="The name of the mocking framework to use" />
-		<cfset this.MockingFramework = arguments.name />
+		<cfset this.mockingFramework = arguments.name />
 	</cffunction>
 
-	<cffunction name="getMockFactoryFactory" access="private" hint="Returns the MockFactoryFactory, configured for the specified framework">
-			<cfargument name="fw" type="Any" required="false" default="" hint="The name of the mocking framework to use" />
-			<cfreturn createObject("component","MockFactoryFactory").MockFactoryFactory(arguments.fw) />
-		</cffunction>
-
-	<cffunction name="getMockingFramework" access="private" hint="returns the configured Mocking Framework for this test case.">
-			<cfreturn this.MockingFramework />
-	</cffunction>
-
+	
 	<cffunction name="getMockFactory" hint="Returns the actual Mock factory of the framework">
 		<cfargument name="fw" type="Any" required="false" default="" hint="The name of the mocking framework to use" />
 		<cfif not len(arguments.fw)>
-			<cfset arguments.fw = getMockingFramework() />
+			<cfset arguments.fw = this.mockingFramework />
 		</cfif>
-		<cfreturn getMockFactoryFactory(arguments.fw).getFactory() />
+		<cfreturn  _mockFactory.MockFactoryFactory(arguments.fw).getFactory() />
 	</cffunction>
 
+
 	<cffunction name="mock" output="false" access="public" returntype="any" hint="Returns a mock object via the configured Mock Factory">
-		<cfargument name="mocked" type="any" required="false" default="" hint="can be a component name or an actual component" />
-		<cfargument name="mockType" type="any" required="false" hint="the type of mock to create" />
-		<cfargument name="fw" type="Any" required="false" default="" hint="The name of the mocking framework to use" />
+		<cfargument name="mocked" type="any" required="false" default="" hint="Component name or an actual component" />
+		<cfargument name="mockType" type="string" required="false" hint="Type of mock to create (fast,typeSafe,...)" />
+		<cfargument name="fw" type="string" required="false" default="MightyMock" hint="The name of the mocking framework to use" />
 		
 		<cfset var theMock = 0 />
 		<cfset var mff = 0 />
 		<cfset var mf = 0 />
 		<cfif not len(arguments.fw)>
-			<cfset arguments.fw = getMockingFramework() />
+			<cfset arguments.fw = this.mockingFramework />
 		</cfif>
-		<cfset mff = getMockFactoryFactory(arguments.fw) />
+		<cfset mff = _mockFactory.MockFactoryFactory(arguments.fw) />
 		<cfset mf = mff.getFactory() />
+		
 		<cfif not IsObject(arguments.mocked)>
 			<cfset arguments[mff.getConfig("CreateMockStringArgumentName")] = arguments.mocked />
 		<cfelse>

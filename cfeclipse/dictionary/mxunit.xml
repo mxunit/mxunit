@@ -238,12 +238,11 @@ actual object to compare.
 			</parameter> <parameter name="message" type="string" required="true">
 				
 			</parameter></function>
-		<function creator="8" name="getTrace" returns="string">
-			</function>
-		<function creator="8" name="addTrace" returns="void">
+	
+		<function creator="8" name="mock" returns="Component">
 			<help><![CDATA[
-				Adds a single string to the test result. Consider using debug() instead, especially for complex objects.
-			]]></help> <parameter name="message" type="string" required="true">
+				Creates a mock object of the optional type passed in.
+			]]></help> <parameter name="type" type="string|component" required="false">
 				
 			</parameter></function>
 

@@ -116,6 +116,19 @@ Extension of TestResult
 							border: 1px solid ##D0D0D0;
 							padding: 7px;
 						}
+						
+						.error_toggle {
+						  cursor: pointer;
+						  color:gray;
+						}
+						
+						pre {
+							 white-space: pre-wrap;       /* css-3 */
+							 white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+							 white-space: -pre-wrap;      /* Opera 4-6 */
+							 white-space: -o-pre-wrap;    /* Opera 7 */
+							 word-wrap: break-word;       /* Internet Explorer 5.5+ */
+						}
 						</style>
 					</head>
 					<body>
@@ -133,7 +146,7 @@ Extension of TestResult
 								<tr>
 									<th>Test</th>
 									<th>Result</th>
-									<th>Error Info</th>
+									<th >Error Info</th>
 									<th>Speed</th>
 									<th>Output</th>
 								</tr>
@@ -200,7 +213,7 @@ Extension of TestResult
 							{
 								$tagcontext
 									.hide()
-									.before('<span><br />show info<\/span>')
+									.before('<span class="error_toggle"><br />[Toggle error info]<\/span>')
 									.css({cursor:"pointer"})
 									.prev()
 									.click(function(){
@@ -245,7 +258,8 @@ Extension of TestResult
 				<cftry>
 				<cfoutput>
 					<cfif Left(arguments.ErrorCollection.Message,2) neq "::">
-							#Replace(arguments.ErrorCollection.Message,"::","<br />")#
+							<strong>#Replace(arguments.ErrorCollection.Message,"::","<br />")#</strong> <br />
+							<pre style="width:100%;">#arguments.ErrorCollection.Detail#</pre>
 					<cfelse>
 							#arguments.ErrorCollection.Message#
 					</cfif>
