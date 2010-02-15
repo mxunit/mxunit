@@ -36,14 +36,15 @@
 	   var mf = createObject('component','mxunit.framework.MockFactoryFactory');
 	   var cu = mock("mxunit.framework.ComponentUtils");
 	   injectMethod( mf, this, "_setFactoryOK","setFactory");
-	   info = { factorypath='com.hoo.hoo', constructorname="init", constructorargs="foo" };
+	   args = {foo='bar'};
+	   info = { factorypath='com.hoo.hoo', constructorname="init", constructorargs=args };
 	   cu.getMockFactoryInfo("hoohoo").returns(info);
 	   mf.setComponentUtils(cu);
-	   
-	   
+	   	   
 	   //test
-	   mf.MockFactoryFactory("hoohoo"); 
-      	   
+	   myfactory = mf.MockFactoryFactory("hoohoo"); 
+      
+       assertEquals("mxunit.framework.mightymock.MightyMock",myfactory.getFactory());	   
 	  
 	}
 	
