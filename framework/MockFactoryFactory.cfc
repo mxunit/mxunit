@@ -1,6 +1,7 @@
 <cfcomponent displayname="MockFactoryFactory" output="false">
 	
 	<cfset variables.componentUtils = createObject("component","ComponentUtils") />
+	<cfset variables.Factory = 'mxunit.framework.mightymock.MightyMock' />
 	
 	<cffunction name="MockFactoryFactory">
 		<cfargument name="frameworkName" required="false" default="" />
