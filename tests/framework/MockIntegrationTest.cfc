@@ -56,7 +56,7 @@
 			//check/guard
 			assertTrue( this.MockingFramework == 'ColdMock' , "mock framework not set correctly" );
 			//this is our "main" test
-			getMockFactory();
+			mf = getMockFactory();
 			//verify
 			$factory.verifyTimes(1).getFactory();
 		}
@@ -117,16 +117,16 @@
 
 	<!--- For ColdMock --->
 	
+	<!--- 
 						
 		<cffunction name="mockCMWithActualObjectShouldThrow" mxunit:expectedException="Expression">
 			<cfset assert = createObject("component","mxunit.framework.Assert") />
-			<cfset mymock =  mock(fw="ColdMock",mocked=assert) />
+			<cfset mymock =  mock(fw="ColdMock", mocked=assert) />
 		</cffunction>
 		
 		
 		<!--- Seems like these are testing the dependencies and not MXUnit? --->
 		
-	<!--- 
 		<cffunction name="mockCMWithValidNameShouldReturnColdMockObject">
 			<cfscript>
 				mymock =  mock(fw="ColdMock",mocked="mxunit.framework.Assert");
