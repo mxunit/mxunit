@@ -39,22 +39,6 @@
 	}
 	
 	
-	function simpleMockFactoryFactoryTest(){
-	   var mf = createObject('component','mxunit.framework.MockFactoryFactory');
-	   var cu = mock("mxunit.framework.ComponentUtils");
-	   injectMethod( mf, this, "_setFactoryOK","setFactory");
-	   args = {foo='bar'};
-	   info = { factorypath='com.hoo.hoo', constructorname="init", constructorargs=args };
-	   cu.getMockFactoryInfo("hoohoo").returns(info);
-	   mf.setComponentUtils(cu);
-	   	   
-	   //test
-	   myfactory = mf.MockFactoryFactory("hoohoo"); 
-      
-       assertEquals("mxunit.framework.mightymock.MightyMock",myfactory.getFactory());	   
-	  
-	}
-	
 	
 	function getMockFactoryIsInvokedOnce() {
 			_setMockFactory($factory);

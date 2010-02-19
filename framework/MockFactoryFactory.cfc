@@ -1,4 +1,4 @@
-<cfcomponent displayname="MockFactoryFactory" output="false">
+<cfcomponent displayname="MockFactoryFactory" output="false" hint="Fetches mock frameworks for tests. Test writers should not have to deal with this object directly. Use mock(...) instead">
 	
 	<cfset variables.componentUtils = createObject("component","ComponentUtils") />
 	<cfset variables.Factory = 'mxunit.framework.mightymock.MightyMock' />
@@ -29,6 +29,7 @@
 			}
 		  return fw_inf;
 		}
+
 		
 		//injectable for cleaner design and testing
 		function setFactory( mockPath ){
@@ -38,21 +39,20 @@
 				_$throw("org.mxunit.exception.MockFrameworkNotInstalledException", "Mock framework '#arguments.mockPath#' appears not to be installed.", "Make sure '#arguments.mockPath#' is installed and registered correctly in mxunit-config.xml.");			
 			}
 		}
-		
-		//more dependency injection
-		function setComponentUtils(o){
-		  variables.componentUtils = o;
-		}
+
 		
 		function getFactory() {
 			return variables.Factory;
 		}
+
 		
 		function getConfig(name) {
 			return variables.mockFactoryInfo[name];
 		}
 			
 	</cfscript>	
+
+
 
 <cffunction name="_$throw">
   <cfargument name="type">
