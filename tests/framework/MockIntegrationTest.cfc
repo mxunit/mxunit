@@ -32,6 +32,13 @@
 	 }
 	
 	
+	function $getMM(){
+	//the real deal
+		var f = createObject('component','mxunit.framework.MockFactoryFactory');
+		f.MockFactoryFactory("MightyMock");
+	}
+	
+	
 	function simpleMockFactoryFactoryTest(){
 	   var mf = createObject('component','mxunit.framework.MockFactoryFactory');
 	   var cu = mock("mxunit.framework.ComponentUtils");
@@ -115,10 +122,40 @@
 		<cfset mymock =  mock("mxunit.framework.Assert","partial") />
 	</cffunction>
 
-	<!--- For ColdMock --->
+
+
+	<cffunction name="notregisteredMockFrameworkShouldThrowNotResgiteredException" mxunit:expectedException="org.mxunit.exception.MockFrameworkNotRegisteredException">
+		 <cfset	var f = createObject('component','mxunit.framework.MockFactoryFactory') />
+		 <cfset f.findMockFactory("hoosfoos") />
+	</cffunction>
+
+	<cffunction name="notinstalledMockFrameworkShouldThrowNotInstalledException" mxunit:expectedException="org.mxunit.exception.MockFrameworkNotInstalledException">
+		 <cfset	var f = createObject('component','mxunit.framework.MockFactoryFactory') />
+		 <cfset f.setFactory("coldmock.ColdMock") />
+	</cffunction>
 	
-	<!--- 
-						
+	<cffunction name="notinstalledMockBoxShouldThrowNotInstalledException" mxunit:expectedException="org.mxunit.exception.MockFrameworkNotInstalledException">
+		 <cfset	var f = createObject('component','mxunit.framework.MockFactoryFactory') />
+		 <cfset f.setFactory("coldmock.ColdMock") />
+	</cffunction>
+	
+	<cffunction name="notinstalledColdMockShouldThrowNotInstalledException" mxunit:expectedException="org.mxunit.exception.MockFrameworkNotInstalledException">
+		 <cfset	var f = createObject('component','mxunit.framework.MockFactoryFactory').MockFactoryFactory("ColdMock") />
+	</cffunction>
+	
+	<cffunction name="notinstalledMockBoxShouldThrowNotInstalledException" mxunit:expectedException="org.mxunit.exception.MockFrameworkNotInstalledException">
+		 <cfset	var f = createObject('component','mxunit.framework.MockFactoryFactory').MockFactoryFactory("MockBox") />
+	</cffunction>
+	
+	
+	<cffunction name="emptyConstructorShouldGenerateMM">
+		 <cfset	var f = createObject('component','mxunit.framework.MockFactoryFactory').MockFactoryFactory() />
+		 <cfset debug(f.getFactory())>
+		 <cfset assertIsTypeOf(f.getFactory(), "mxunit.framework.mightymock.MockFactory") />
+	</cffunction>
+
+	<!--- For ColdMock --->
+	<!--- 						
 		<cffunction name="mockCMWithActualObjectShouldThrow" mxunit:expectedException="Expression">
 			<cfset assert = createObject("component","mxunit.framework.Assert") />
 			<cfset mymock =  mock(fw="ColdMock", mocked=assert) />
