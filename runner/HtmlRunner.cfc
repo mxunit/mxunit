@@ -10,7 +10,6 @@
  <cfargument name="test" type="string" required="true" hint="TestCase,TestSuite, or Dircetory to run"  />
  <cfargument name="componentPath" type="string" required="false" default="" hint="A dotted prefix mapping for the directory; e.g., com.foo.bar"  />
  <cfargument name="output" required="false"  default="extjs" hint="The type of output format" />
- <cfset var local = "">
  <cfset var dirrunner = "">
  <cfset var results = "">
  <cfif refind("[\\/]+", arguments.test)>
