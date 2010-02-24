@@ -8,28 +8,32 @@
 		
 		Override in your testcase.
 	--->
-	<cffunction name="beforeTests" returntype="void" access="public" />
+	<cffunction name="beforeTests" returntype="void" access="public">
+	</cffunction>
 	
 	<!---
 		Invoked after all test methods and run once per TestCase.
 		
 		Override in your testcase.
 	--->
-	<cffunction name="afterTests" returntype="void" access="public" />
+	<cffunction name="afterTests" returntype="void" access="public">
+	</cffunction>
 	
 	<!---
 		Invoked by MXUnit prior to any test method.
 		
 		Override in your testcase.
 	--->
-	<cffunction name="setUp" returntype="void" access="public" hint="" />
+	<cffunction name="setUp" returntype="void" access="public" hint="">
+	</cffunction>
 	
 	<!---
 		Invoked by MXUnit after to any test method.
 		
 		Override in your testcase.
 	--->
-	<cffunction name="tearDown" returntype="void" access="public" />
+	<cffunction name="tearDown" returntype="void" access="public">
+	</cffunction>
 	
 	<!--- constructor --->
 	<cfset initProperties() />
