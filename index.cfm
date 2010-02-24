@@ -52,7 +52,13 @@
 	<cfset testSuiteMeta = getMetaData(testSuite) />
 	
 	<!--- Determine the component path to use --->
-	<cfset componentPath = left(testSuiteMeta.fullname, len(testSuiteMeta.fullname) - len(testSuitePath)) />
+	<cfif len(testSuiteMeta.name) gt len(testSuitePath)>
+		<!--- Try to dynamically figure out the component path to the current directory --->
+		<cfset componentPath = left(testSuiteMeta.name, len(testSuiteMeta.name) - len(testSuitePath)) />
+	<cfelse>
+		<!--- Default to using the mxunit as the component path --->
+		<cfset componentPath = 'mxunit.' />
+	</cfif>
 	
 	<cfset testSuite.addAll("#componentPath#MXUnitInstallTest") />
 	
