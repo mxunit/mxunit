@@ -1,5 +1,6 @@
 <cfparam name="title" default="Unit Test Framework and Eclipse Plugin for CFML engines" />
 <cfparam name="pathBase" default="./" />
+<cfparam name="scripts" default="#arrayNew(1)#" />
 
 <cfset context = getDirectoryFromPath(expandPath(pathBase)) />
 
@@ -21,13 +22,13 @@
 	
 	<meta name="keywords" value="coldfusion unit testing test cfml cfmx xunit developer framework quality assurance open source community free" />
 	
-	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/ExtStart.css">
 	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/theme/960.css">
 	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/theme/styles.css">
+	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/theme/results.css">
 </head>
 <body>
 	<div class="container_12">
-		<div class="header">
+		<div class="pageHeader">
 			<div class="grid_3">
 				<a href="<cfoutput>#pathBase#</cfoutput>index.cfm">
 					<img src="<cfoutput>#pathBase#</cfoutput>images/MXUnit-Small.png" alt="Get rid of those pesky bugs.">

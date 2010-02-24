@@ -1,4 +1,4 @@
-<cfparam name="url.output" default="jqgrid" />
+<cfparam name="url.output" default="js" />
 
 <cfinclude template="resources/theme/header.cfm" />
 
@@ -81,10 +81,6 @@
 	</cfcatch>
 	
 	<cfcatch type="any">
-		<!--- TODO Remove --->
-		<cfdump var="#cfcatch#" />
-		<cfabort />
-		
 		<h2 class="error">Ooops!</h2>
 		
 		<p>
@@ -107,6 +103,12 @@
 				</li>
 			</ul>
 		</cfoutput>
+		
+		<p>
+			If the error is from not having write permissions most of the framework
+			should still function. Some features will not function, such as 
+			making private functions public for testing.
+		</p>
 		
 		<p>
 			Also, make sure you or CFML engine has write access to this directory

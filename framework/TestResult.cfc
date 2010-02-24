@@ -281,18 +281,6 @@
 	</cffunction>
 	
 	<!---
-		Returns the appropriate HTML for showing results in an jqgrid js Grid
-	--->
-	<cffunction name="getjqgridResults" returntype="string" output="false">
-		<cfargument name="DirName" type="string" required="false" default="" hint="Directory under test, if this TestResult is part of a directory test suite" />
-		<cfargument name="jqgridRoot" type="string" required="false" default="#getInstallRoot()#resources/jquery/jqgrid" hint="where jqgrid lives" />
-		
-		<cfset var jqgridresult = createObject("component","JqgridTestResult").jqgridTestResult(this,jqgridRoot) />
-		
-		<cfreturn jqgridresult.getHTMLResults(DirName) />
-	</cffunction>
-	
-	<!---
 		Call this method to return raw XML. You can then apply your own xsl.
 	--->
 	<cffunction name="getXMLResults" returnType="string" output="false">

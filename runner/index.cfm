@@ -2,11 +2,12 @@
 
 <cfparam name="url.test" default="" />
 <cfparam name="url.componentPath" default="" />
-<cfparam name="url.output" default="extjs" />
+<cfparam name="url.output" default="js" />
+
 <cfset pathBase = '../' />
 <cfset title = 'Runner' />
 
-<cfinclude template="../resources/theme/header.cfm" />
+<cfinclude template="#pathBase#resources/theme/header.cfm" />
 
 <cfset scripts = arrayNew(1) />
 <cfset arrayAppend(scripts, 'runner.js') />
@@ -47,4 +48,4 @@
 	<cfinvoke component="HtmlRunner" method="run" test="#testToRun#" componentPath="#url.componentPath#" output="#url.output#" />
 </cfif>
 
-<cfinclude template="../resources/theme/footer.cfm" />
+<cfinclude template="#pathBase#resources/theme/footer.cfm" />

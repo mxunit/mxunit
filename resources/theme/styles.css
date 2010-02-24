@@ -1,9 +1,12 @@
 body {
-	color: #333;
+	font-family: Tahoma,Arial,Helvetica,sans-serif;
+	font-size:12px;
+	color:#333;
+	margin:0;
+	padding:0;
 }
 
 a {
-	font-weight: normal;
 	color: #083772;
 }
 
@@ -31,7 +34,7 @@ input {
 	margin: .5em 0;
 }
 
-.header {
+.pageHeader {
 	padding: .25em 0;
 	background: #eeeeee;
 	-moz-border-radius-bottomleft: 1em;
@@ -40,7 +43,7 @@ input {
 	-webkit-border-bottom-right-radius: 1em;
 }
 
-.header .nav {
+.pageHeader .nav {
 	margin-top: 1.5em;
 }
 
@@ -53,10 +56,8 @@ input {
 	font-family: serif;
 }
 
-.footer {
-	margin: 1em;
-	padding-top: 1em;
-	border-top: 1px solid #333;
+.pageFooter {
+	padding: 1em 0;
 	text-align: center;
 }
 
@@ -73,17 +74,28 @@ input {
 	float: left;
 }
 
-.error {
+.error,
+.failed,
+.error a,
+.failed a {
 	font-weight: bold;
 	color: #DD3C10;
 }
 
-.success {
+.success,
+.passed,
+.success a, 
+.passed a {
 	color: #006400;
 }
 
-.message {
+.message,
+.failure a {
 	color: #083772;
+}
+
+.nav.horizontal {
+	padding: 0;
 }
 
 .nav.horizontal li {
@@ -91,8 +103,13 @@ input {
 	list-style: none;
 }
 
-.nav.horizontal a {
+.nav.horizontal a,
+.nav.horizontal span {
 	font-weight: bold;
 	display: block;
 	padding: .5em 1.5em;
+}
+
+.clear {
+	clear: both;
 }
