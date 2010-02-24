@@ -258,6 +258,7 @@
 	<cfargument name="mode" required="true" hint="html,jqgrid,xml,junitxml,query,struct,text">
 	<cfset arguments.mode = listLast(arguments.mode)>
 	<cfswitch expression="#arguments.mode#">
+		<!--- TODO extjs depreciated --->
 		<cfcase value="jqgrid,jq,extjs" delimiters=",">
 			<cfreturn getjqgridResults()>
 		</cfcase>
@@ -270,13 +271,13 @@
 		<cfcase value="json">
 			<cfreturn getJSONResults()>
 		</cfcase>
-	    <cfcase value="query">
+		<cfcase value="query">
 				<cfreturn getQueryResults()>
 			</cfcase>
-	    <cfcase value="array">
+		<cfcase value="array">
 				<cfreturn getResults()>
 			</cfcase>
-	    <cfcase value="text">
+		<cfcase value="text">
 			<cfreturn getTextResults()>
 		</cfcase>
 		<cfdefaultcase>
