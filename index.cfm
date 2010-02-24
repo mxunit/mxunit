@@ -48,19 +48,9 @@
 	<cfset testSuitePath = 'framework.TestSuite' />
 	<cfset testSuite = createObject("component", testSuitePath).TestSuite() />
 	
-	<!--- Get the meta information from the test suite --->
-	<cfset testSuiteMeta = getMetaData(testSuite) />
+	<cfset installTest = createObject("component", "MXUnitInstallTest") />
 	
-	<!--- Determine the component path to use --->
-	<cfif len(testSuiteMeta.name) gt len(testSuitePath)>
-		<!--- Try to dynamically figure out the component path to the current directory --->
-		<cfset componentPath = left(testSuiteMeta.name, len(testSuiteMeta.name) - len(testSuitePath)) />
-	<cfelse>
-		<!--- Default to using the mxunit as the component path --->
-		<cfset componentPath = 'mxunit.' />
-	</cfif>
-	
-	<cfset testSuite.addAll("#componentPath#MXUnitInstallTest") />
+	<cfset testSuite.addAll("MXUnitInstallTest", installTest) />
 	
 	<cfset results = testSuite.run() />
 	
