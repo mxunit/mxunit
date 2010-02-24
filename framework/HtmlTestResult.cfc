@@ -25,11 +25,25 @@
 		<cfset var classname = "" />
 		<cfset var i = "" />
 		<cfset var k = "" />
+		<cfset var isNewComponent = false />
+		<cfset var tableHead = '' />
 		<cfset var theme = "pass" />
 		
 		<cfif this.successes neq this.testRuns>
 			<cfset theme = "fail" />
 		</cfif>
+		
+		<cfsavecontent variable="tableHead">
+			<thead>
+				<tr>
+					<th>Test</th>
+					<th>Result</th>
+					<th>Error Info</th>
+					<th>Speed</th>
+					<th>Output</th>
+				</tr>
+			</thead>
+		</cfsavecontent>
 		
 		<cfsavecontent variable="result">
 			<cfoutput>
@@ -44,58 +58,57 @@
 						<div class="clear"><!-- clear --></div>
 					</div>
 					
-					<table class="results #theme#">
-						<thead>
-							<tr>
-								<th>Test</th>
-								<th>Result</th>
-								<th>Error Info</th>
-								<th>Speed</th>
-								<th>Output</th>
-							</tr>
-						</thead>
+					<cfloop from="1" to="#ArrayLen(this.testResults)#" index="i">
+						<!--- Check if we are on a new component --->
+						<cfset isNewComponent = classname neq this.testResults[i].component />
 						
-						<tbody>
-							<cfloop from="1" to="#ArrayLen(this.testResults)#" index="i">
-								<cfif classname neq this.testResults[i].component>
-									<cfset classname = this.testResults[i].component>
-									<cfset classtesturl = "/" & Replace(this.testResults[i].component, ".", "/", "all") & ".cfc?method=runtestremote&amp;output=html">
-									
-									<tr class="component">
-										<th colspan="5"><a href="#classtesturl#" title="run all tests in #this.testResults[i].component#">#this.testResults[i].component#</a></th>
-									</tr>
-								</cfif>
-								
-								<tr class="#lCase(this.testResults[i].TestStatus)#">
-									<th>
-										<a href="#classtesturl#&amp;testmethod=#this.testResults[i].TestName#" title="only run the #this.testResults[i].TestName# test">#this.testResults[i].TestName#</a>
-									</th>
-									<td>
-										#this.testResults[i].TestStatus#
-									</td>
-									<td>
-										#renderErrorStruct(this.testResults[i].Error)#
-									</td>
-									<td>
-										#this.testResults[i].Time#ms
-									</td>
-									<td>
-										<cfif ArrayLen(this.testResults[i].Debug)>
-											<cfloop from="1" to="#ArrayLen(this.testResults[i].Debug)#" index="k">
-												<cfif IsSimpleValue(this.testResults[i].Debug[k])>
-													#this.testResults[i].Debug[k]#<br />
-												<cfelseif IsStruct(this.testResults[i].Debug[k]) AND StructKeyExists(this.testResults[i].Debug[k], "TagContext")>
-													<!--- error thrown, shown in error info col so hide here
-													#renderErrorStruct( this.testResults[i].Debug[k] )#
-													--->
-												<cfelse>
-													<cfdump var="#this.testResults[i].Debug[k]#">
-												</cfif>
-											</cfloop>
+						<cfif isNewComponent>
+							<!--- If this is not the first component close the previous one --->
+							<cfif classname neq ''>
+									</tbody>
+								</table>
+							</cfif>
+							
+							<cfset classname = this.testResults[i].component>
+							<cfset classtesturl = "/" & Replace(this.testResults[i].component, ".", "/", "all") & ".cfc?method=runtestremote&amp;output=html">
+							
+							<h3><a href="#classtesturl#" title="Run all tests in #this.testResults[i].component#">#this.testResults[i].component#</a></h3>
+							
+							<table class="results tablesorter #theme#">
+								#tableHead#
+								<tbody>
+						</cfif>
+						
+						<tr class="#lCase(this.testResults[i].TestStatus)#">
+							<td>
+								<a href="#classtesturl#&amp;testmethod=#this.testResults[i].TestName#" title="only run the #this.testResults[i].TestName# test">#this.testResults[i].TestName#</a>
+							</td>
+							<td>
+								#this.testResults[i].TestStatus#
+							</td>
+							<td>
+								#renderErrorStruct(this.testResults[i].Error)#
+							</td>
+							<td>
+								#this.testResults[i].Time# ms
+							</td>
+							<td>
+								<cfif ArrayLen(this.testResults[i].Debug)>
+									<cfloop from="1" to="#ArrayLen(this.testResults[i].Debug)#" index="k">
+										<cfif IsSimpleValue(this.testResults[i].Debug[k])>
+											#this.testResults[i].Debug[k]#<br />
+										<cfelseif IsStruct(this.testResults[i].Debug[k]) AND StructKeyExists(this.testResults[i].Debug[k], "TagContext")>
+											<!--- error thrown, shown in error info col so hide here
+											#renderErrorStruct( this.testResults[i].Debug[k] )#
+											--->
+										<cfelse>
+											<cfdump var="#this.testResults[i].Debug[k]#">
 										</cfif>
-									</td>
-								</tr>
-							</cfloop>
+									</cfloop>
+								</cfif>
+							</td>
+						</tr>
+					</cfloop>
 						</tbody>
 					</table>
 				</div>

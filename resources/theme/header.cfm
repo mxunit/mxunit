@@ -24,6 +24,7 @@
 	
 	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/theme/960.css">
 	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/theme/styles.css">
+	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/jquery/tablesorter/blue/style.css">
 	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/theme/results.css">
 </head>
 <body>

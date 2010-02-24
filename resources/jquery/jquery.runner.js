@@ -7,6 +7,15 @@
 	$(function(){
 		container = $('.mxunitResults');
 		
+		// Make the table into a grid
+		$('table.results', container).tablesorter({
+			headers: { 
+				3: {
+					sorter: 'digit' 
+				}
+			}
+		});
+		
 		// Add the active toggle for the filters
 		$('.summary a', container)
 			.addClass('active')

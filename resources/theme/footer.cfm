@@ -9,6 +9,7 @@
 	
 	<!--- Check if doing js enhancement --->
 	<cfif structKeyExists(url, 'output') and url.output eq 'js'>
+		<cfset arrayAppend(scripts, pathBase & 'resources/jquery/tablesorter/jquery.tablesorter.js') />
 		<cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.runner.js') />
 	</cfif>
 	
