@@ -52,7 +52,7 @@
 	<cfset testSuiteMeta = getMetaData(testSuite) />
 	
 	<!--- Determine the component path to use --->
-	<cfset componentPath = left(testSuiteMeta.name, len(testSuiteMeta.name) - len(testSuitePath)) />
+	<cfset componentPath = left(testSuiteMeta.fullname, len(testSuiteMeta.fullname) - len(testSuitePath)) />
 	
 	<cfset testSuite.addAll("#componentPath#MXUnitInstallTest") />
 	
