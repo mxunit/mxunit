@@ -1,0 +1,67 @@
+<config>
+  <!-- Boolean:   Lazy load (true) enables faster loading of cfc's, but disables distinction between
+          components and interfaces in the lower left frame, interfaces are however still 
+          parsed correctly in the detail frame. -->
+  <lazyLoad>false</lazyLoad>
+  <!-- Boolean:  indicates whether or not to show the source code of components -->
+  <revealCode>true</revealCode>
+  <!-- Boolean:  indicates whether or not to show the full CFC source of components -->
+  <!--           defaults to revealCode -->
+  <revealCFCCode>false</revealCFCCode>
+  <!-- Boolean: indicates whether or not to show private methods -->
+  <hidePrivateMethods>false</hidePrivateMethods>
+  <!-- The title to show in the title bar of the browser -->
+  <pagetitle>MXUnit API</pagetitle>
+  <!-- The CFCdoc start page -->
+  <startPage>../mxunit-home.cfm</startPage>  
+  <!-- You can have as many constructorname blocks as you'd like -->
+  <!-- any methods with a matching name will be displayed "specially"
+     to indicate that they represent a "constructor"
+  -->
+  <constructorname>init</constructorname>
+
+  <!-- You can have as many root blocks as you like.
+  Each of them represents a unique directory path.
+  Paths starting with a '.' are assumed to be relative and are expanded
+  using expandPath() all other paths are assumed to be absolute
+
+  e.g.
+  <root>
+    <path>C:\Documents and Settings\jax\workspace\trunk</path>
+    <prefix>NZR</prefix>
+  </root>
+  -->
+
+  <!-- This root entry only available when CFCdoc is run from a machine called 'aMachineName'  
+  <host name="local">
+    <root>
+      <path>.</path>
+      <prefix>cfcdocTest</prefix>
+    </root>
+  </host>-->
+  <!-- next entries available on all hosts -->
+   <root>
+      <path>../../framework</path>
+        <prefix>mxunit.framework</prefix>
+        </root>
+  
+        <root>
+        <path>../../runner</path>
+        <prefix>mxunit.runner</prefix>
+        </root>
+  
+        <root>
+        <path>../../generator</path>
+        <prefix>mxunit.generator</prefix>
+        </root>
+  
+        <root>
+        <path>../../samples</path>
+        <prefix>mxunit.samples</prefix>
+      </root>
+      
+      <root>
+         <path>../../tests</path>
+         <prefix>mxunit.tests</prefix>
+      </root>
+</config>

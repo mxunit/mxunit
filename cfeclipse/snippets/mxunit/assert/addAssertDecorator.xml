@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>addAssertDecorator</name>
+<help></help>
+<starttext><![CDATA[<cfset addAssertDecorator("$${Decorator Name}", $${overrideBehaviors:false|true}]]></starttext>
+<endtext><![CDATA[)>]]></endtext>
+</snippet>

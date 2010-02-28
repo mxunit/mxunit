@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>test-time override function</name>
+<help></help>
+<starttext><![CDATA[<cffunction name="$${function name}" access="private" hint="will be used as a test-time override with injectMethod()">
+
+
+]]></starttext>
+<endtext><![CDATA[</cffunction>]]></endtext>
+</snippet>

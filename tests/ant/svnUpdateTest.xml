@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+ <project xmlns:au="antlib:org.apache.ant.antunit"
+          xmlns="antlib:org.apache.tools.ant" >
+
+
+  <target name="testUpdate">
+    <au:assertFileExists file="${temp.dir}/index.cfm"/>
+    <au:assertFileExists file="${temp.dir}/Application.cfm"/>
+  </target>
+  
+  
+  
+  
+
+ <target name="setUp">
+   <!-- for log assertions -->
+  <au:logcontent level="verbose" />
+  <path id="project.classpath">
+     <pathelement location="../lib/svnjavahl.jar" /> 
+     <pathelement location="../lib/svnant.jar/" />
+     <pathelement location="../lib/svnClientAdapter.jar/" />
+   </path>  
+   <property file="../../buildprops/uname.properties" />
+   <!-- load the svn task -->
+   <taskdef resource="svntask.properties" classpathref="project.classpath"/>
+
+ 	<property name="temp.dir" value="fixture/temp" />
+ 	<mkdir dir="${temp.dir}"/>
+   <svn>
+     <checkout url="http://mxunit.googlecode.com/svn/mxunit/branches/sandbox" 
+     		   recurse="true" 
+     	       destPath="${temp.dir}" />
+   </svn> 
+ </target>
+
+
+  
+  <target name="tearDown">
+  	<!-- clean up -->	
+  	<delete dir="${temp.dir}" />
+
+  </target>
+
+
+</project>

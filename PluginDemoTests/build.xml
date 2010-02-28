@@ -1,0 +1,37 @@
+<project name="PluginDemoTestAntRunner" default="runTests">
+
+
+	<target name="init">
+		<property name="antrunner.file" value="../buildprops/antrunner.properties" />
+		<path id="plugindemotests.classpath">
+			<fileset dir="../ant/lib">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpathref="plugindemotests.classpath" />
+	</target>
+
+	<target name="runTests" depends="init">
+
+		<!-- load the current version of the package-summary file; this way, we can put it at the end of the email we send so that
+			comparing test the aggregate test results is easy; makes it simpler to see if any test failures crept in -->
+
+
+
+		<!-- get the server, port, and webroot properties from the antrunner file; this way
+		each developer can have their own version of the properties file with different
+		values depending on their setup -->
+		<property file="${antrunner.file}" />
+
+		<mxunittask server="${server}" port="${port}" defaultrunner="/mxunit/runner/HttpAntRunner.cfc" verbose="true" >
+
+			<!-- componentPath is not required, but it results in a much faster test run -->
+			<directory remoteMethod="run" path="${webroot}\mxunit\PluginDemoTests" packageName="mxunit.PluginDemoTests" componentPath="mxunit.PluginDemoTests" recurse="true" includes="*.cfc" excludes="FiveSecondTest" />
+			
+		</mxunittask>
+
+
+	</target>
+
+
+</project>

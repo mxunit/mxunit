@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>Directory Test Suite Skeleton</name>
+<help></help>
+<starttext><![CDATA[<cfparam name="URL.output" default="extjs">
+
+<cfset dir = expandPath(".")> 
+<cfoutput><h1>#dir#</h1></cfoutput>
+
+<cfset DTS = createObject("component","mxunit.runner.DirectoryTestSuite")>
+<cfset excludes = "">
+<cfinvoke component="#DTS#" 
+	method="run"
+	directory="#dir#" 
+	recurse="true" 
+	excludes="#excludes#"
+	returnvariable="Results"
+	componentpath="????.????"> <!---  <-- Fill this in! This is the root component path for your tests. if your tests are at {webroot}/app1/test, then your componentpath will be app1.test   --->
+
+<cfsetting showdebugoutput="true">
+<cfoutput>#results.getResultsOutput(URL.output)#</cfoutput> ]]></starttext>
+<endtext><![CDATA[]]></endtext>
+</snippet>

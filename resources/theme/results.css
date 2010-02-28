@@ -1,0 +1,48 @@
+.mxunitResults .summary {
+	margin: 1em 0;
+}
+
+.mxunitResults .summary .active {
+	background: #e5e5e5;
+}
+
+.mxunitResults table {
+	width: 100%;
+}
+
+.mxunitResults th {
+	text-align: left;
+}
+
+.mxunitResults tr.component {
+	padding-top: 1em;
+	background: transparent;
+	border-bottom: 1px solid #333;
+	font-size: 1.35em;
+}
+
+.mxunitResults th,
+.mxunitResults td {
+	vertical-align: top;
+	padding: .5em;
+}
+
+.mxunitResults tbody tr:nth-child(even) {
+	background: #e5e5e5;
+}
+
+.mxunitResults .summary .nav a {
+	border: 1px solid #D0D0D0;
+	-moz-border-radius: .5em;
+	-webkit-border-radius: .5em;
+	padding: .5em 1em;
+	margin-right: 1em;
+}
+
+.mxunitResults pre {
+	white-space: pre-wrap; /* css-3 */
+	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+	white-space: -pre-wrap; /* Opera 4-6 */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* Internet Explorer 5.5+ */
+}

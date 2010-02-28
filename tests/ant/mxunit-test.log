@@ -1,0 +1,29 @@
+parsing buildfile jar:file:/C:/apache/apache-ant-1.7.0/lib/ant-antunit-1.0.jar!/org/apache/ant/antunit/antlib.xml with URI = jar:file:/C:/apache/apache-ant-1.7.0/lib/ant-antunit-1.0.jar!/org/apache/ant/antunit/antlib.xml
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertFalse
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertEquals
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertPropertySet
+Property "@{name" has not been set
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertPropertyEquals
+Property "@{name" has not been set
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertPropertyContains
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertFileExists
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertFileDoesntExist
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertDestIsUptodate
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertDestIsOutofdate
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertFilesMatch
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertFilesDiffer
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertReferenceSet
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertReferenceIsType
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertLogContains
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertLogDoesntContain
+ [macrodef] creating macro  antlib:org.apache.ant.antunit:assertMatches
+[au:antunit] Build File: C:\CFusionMX7\wwwroot\mxunit\tests\ant\commitSvnTest.xml
+[au:antunit] Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 0.015 sec
+[au:antunit] Target: testCommit took 0.015 sec
+[au:antunit] Build File: C:\CFusionMX7\wwwroot\mxunit\tests\ant\svnUpdateTest.xml
+[au:antunit] Tests run: 1, Failures: 0, Errors: 0, Time elapsed: 18.375 sec
+[au:antunit] Target: testUpdate took 0 sec
+main:  duration 18 seconds
+BUILD SUCCESSFUL
+
+BUILD SUCCESSFUL

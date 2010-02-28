@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>assertFalse</name>
+<help></help>
+<starttext><![CDATA[<cfset assertFalse($${Clause that evaluates to boolean}]]></starttext>
+<endtext><![CDATA[,"$${message}")>]]></endtext>
+</snippet>

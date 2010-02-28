@@ -1,0 +1,4 @@
+.project
+MXUnitInstallTest.cfc
+*.svn
+**/.svn

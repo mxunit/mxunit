@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>try catch error path</name>
+<help></help>
+<starttext><![CDATA[<cftry>			
+	<!--- do something here to cause an error --->
+
+
+]]></starttext>
+<endtext><![CDATA[
+
+	<cfset fail("Error path test... should not have gotten here")>
+<cfcatch type="mxunit.exception.AssertionFailedError">
+	<cfrethrow>
+</cfcatch>
+<cfcatch type="any"></cfcatch>
+</cftry>]]></endtext>
+</snippet>

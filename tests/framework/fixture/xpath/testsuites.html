@@ -1,0 +1,226 @@
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+		
+			
+		
+		
+		
+		
+	
+
+
+
+
+		
+	
+
+
+<html>
+<head>
+    <title>MXUnit - Unit Test Framework and Eclipse Plugin for Adobe ColdFusion</title>
+    <meta name="keywords" value="coldfusion unit testing test cfmx xunit developer framework quality assurance open source community free" />
+
+	
+	<link href="/stylesheets/mxunit.css" type="text/css" rel="stylesheet" />
+	<link href='/doc/tutorial/dp.SyntaxHighlighter/styles/SyntaxHighlighter.css' rel='stylesheet' type='text/css'/>
+	<!-- Include the SyntaxHighlighter stylesheet -->
+	<style type="<a class="jigluLink" onclick="return(Jiglu.overlayOpen(this))" href="http://boyan-tagging.jiglu.com/tags/topics/textcss%21overlay" title="Jiglu topic tag: text/css">text/css</a>">
+	.dp-highlighter ol li, .dp-highlighter .columns div { padding: 0px 3px 0px 0px  !important; font-size: 12px !important; font-family: 'Lucida Console', 'Bitstream Vera Sans Mono', 'Courier New', Monaco, Courier, monospace; }
+	.dp-highlighter .tools { padding-left: 0px; }
+	.dp-highlighter .tools a { color: #000; text-decoration: underline; }
+	.dp-highlighter .tools a:hover { margin-right: 10px; }
+	</style>
+	<!-- Include the core SyntaxHighlighter library -->
+	<script language="javascript" src="/doc/tutorial/dp.SyntaxHighlighter/scripts/shCore.js"></script>
+	<!-- Include the <a class="jigluLink" onclick="return(Jiglu.overlayOpen(this))" href="http://boyan-tagging.jiglu.com/tags/topics/coldfusion%21overlay" title="Jiglu topic tag: ColdFusion">ColdFusion</a> brush -->
+	<script language="javascript" src="/doc/tutorial/dp.SyntaxHighlighter/scripts/shBrushColdFusion.js"></script>
+	<script language="javascript" src="/doc/tutorial/dp.SyntaxHighlighter/scripts/shBrushXML.js"></script>
+  <script language="javascript">
+	window.onload = function () {
+	 // Set the path to the flash component to enable 'copy to clipboard' in <a class="jigluLink" onclick="return(Jiglu.overlayOpen(this))" href="http://boyan-tagging.jiglu.com/tags/topics/firefox%21overlay" title="Jiglu topic tag: Firefox">firefox</a>
+	 dp.SyntaxHighlighter.ClipboardSwf = '/doc/tutorial/dp.SyntaxHighlighter/scripts/clipboard.swf';
+	 //dp.SyntaxHighlighter\Scripts
+	 // Enable blogger mode (if using Blogger)
+	 dp.SyntaxHighlighter.BloggerMode();
+	 // Highlight page elements with the name "code"
+	 // For configuration options see http://code.google.com/p/syntaxhighlighter/wiki/HighlightAll
+	 //function dp.SyntaxHighlighter.HighlightAll(name, [showGutter], [showControls], [collapseAll], [firstLine], [showColumns])
+	 dp.SyntaxHighlighter.HighlightAll('code', false, true, false, 1, false);
+	 //alert(dp)
+	}
+	</script>
+	
+	
+	
+	<style type='text/css'>
+	  .post div { line-height: 1.3em; margin: 0; }
+	  .dp-highlighter { font: 13px "Courier New", Courier, monospace; }
+	  .dp-highlighter ol li, .dp-highlighter .columns div { padding: 0px 3px 0px 0px  !important; font-size: 12px !important; font-family: 'Lucida Console', 'Bitstream Vera Sans Mono', 'Courier New', Monaco, Courier, monospace; }
+	  .dp-highlighter .tools { padding-left: 0px; }
+	  .dp-highlighter .tools a { color: #000; text-decoration: underline; }
+	  .dp-highlighter .tools a:hover { margin-right: 10px; }
+	</style>
+
+
+
+
+
+</head>
+<body>
+  <h1 style="height:76;padding-bottom:12">
+ 
+ <img style="font-size:11px;position:absolute;left:0;top:0;" src="/images/no-bugs.gif" border="0" alt="Download to get rid of those pesky bugs." align="absmiddle">
+ 
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+  MXUnit <span style="font-size:11px;position:absolute;left:82;top:40;color:gray;font-family:serif"> Unit Testing framework for ColdFusion developers</span>
+
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	
+  <a href="/download.cfm" style="font-size:12pt" title="Download the latest version"> Download </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="/doc/index.cfm" style="font-size:12pt;" title="Documentation, Tutorials, etc ..."> Details </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="/index.cfm" style="font-size:12pt;"> Home </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="http://groups.google.com/group/mxunit/topics" style="font-size:12pt"> Support </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="/blog" style="font-size:12pt"> Blog </a>
+  
+  </h1>
+
+    <div id="doccontent">
+		
+		
+		
+			
+<h2><strong>Getting Started with TestSuites</strong></h2>
+<p>A TestSuite is a collection of tests that logically fit together.
+
+</p>
+
+<p><strong>Creating and Running a TestSuite</strong>
+<p>
+ MXUnit was built to make it as easy as possible to create tests and test suites.
+ <br />For this tutorial we will <em>incrementally</em> rebuild the MXUnit example found in
+ the installation package <code>mxunit/samples/MyTestSuite.cfm</code>.
+ <p>The steps for creating and running a TestSuite are:
+  
+  </p>
+ <ol>
+  <li>Create a ColdFusion page to run the suite</li>
+  <li>Create a TestSuite object</li>
+  <li>Tell the TestSuite what tests to add</li>
+  <li>run() the TestSuite</li>
+  <li>Print the output</li>
+  <li>Run the suite in your web browser</li>
+</ol> 
+</p>
+
+<p><strong>1. Create a ColdFusion page to run this example</strong><br />
+Create an empty ColdFusion page and save it as MyTestSuite.cfm in
+<code>/mxunit/doc/tutorial/mytests</code>
+</p>
+
+
+
+<p><strong>2. Create a TestSuite object</strong><br />
+Type the following code into the template:
+<pre class="cf" name="code">
+&lt;cfscript&gt;
+ testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
+&lt;/cfscript&gt;
+</pre>
+</p>
+
+<p><strong>3. Tell the TestSuite what tests to add</strong>
+<pre class="cf" name="code">
+&lt;cfscript&gt;
+ testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
+ //Add all runnable methods in MyComponentTest
+ testSuite.addAll("mxunit.samples.MyComponentTest");
+ testSuite.addAll("mxunit.samples.MyOtherComponentTest"); //Identical to above
+ //add explicit test cased (don't start with 'test').
+ //Note you can add more than one at a time as a list
+ testSuite.add("mxunit.samples.MyOtherComponentTest","aTestFunctionThatDoesNotBeginWithTest,anotherTestFunctionThatDoesNotBeginWithTest");
+ 
+&lt;/cfscript&gt;
+</pre>
+
+</p>
+
+<p><strong>4. Run the TestSuite</strong>
+<pre class="cf" name="code">
+&lt;cfscript&gt;
+ testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
+ testSuite.addAll("mxunit.samples.MyComponentTest");
+ testSuite.addAll("mxunit.samples.MyOtherComponentTest"); 
+ testSuite.add("mxunit.samples.MyOtherComponentTest","aTestFunctionThatDoesNotBeginWithTest,anotherTestFunctionThatDoesNotBeginWithTest");
+ //Run the tests and save everything in "results"
+ results = testSuite.run();
+&lt;/cfscript&gt;
+</pre>
+</p>
+
+<p><strong>5. Do something with the output</strong>
+<pre class="cf" name="code">
+&lt;cfscript&gt;
+ testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();
+ testSuite.addAll("mxunit.samples.MyComponentTest");
+ testSuite.addAll("mxunit.samples.MyOtherComponentTest"); //Identical to above
+ testSuite.add("mxunit.samples.MyOtherComponentTest","aTestFunctionThatDoesNotBeginWithTest,anotherTestFunctionThatDoesNotBeginWithTest");
+ results = testSuite.run();
+ //Now print the results. Simple!
+ writeOutput(results.getResultsOutput('html')); //See next section for other output formats
+&lt;/cfscript&gt;
+
+</pre>
+</p>
+
+<p><strong>6. Run the suite in your web browser</strong><br />
+<a href="http://localhost:8500/mxunit/doc/tutorial/mytests/MyTestSuite.cfm">http://localhost:8500/mxunit/doc/tutorial/mytests/MyTestSuite.cfm</a>
+ <br />
+ You should see this:<br />
+ <img src="tutorial/images/suites-1.png" />
+</p>
+
+
+
+
+<div align="center">
+[Next - <a href="index.cfm?doc=outputformats">Overview of MXUnit output formats</a>]<br />
+
+</div> 
+
+		
+	</div>
+
+
+
+
+  <div align="center">
+  <hr size="1"  style="width:98%" />
+   <a href="../license.txt" title="Copyleft - GNU 3.0 Public License"><img border="0" src="../images/copyleft.png" align="absmiddle" title="Copyleft - GNU 3.0 Public License"> 2008 MXUnit.org</a>
+  </div>
+</body>
+</html>
