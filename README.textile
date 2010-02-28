@@ -12,7 +12,7 @@ This repository is the development branch for MXUnit 2.0; aka the "MIT" branch. 
 
 This repository is here to (1) help distribute MXUnit to as many people as possible (like those who prefer Git), (2) to work on MXUnit 2.0 in a collaborative Git environment, and (3) to explore what it takes to keep a Git and SVN repository in synch.
 
-The presence of MXUnit here _does not_ indicate that MXUnit is moving from SVN to Git.
+The presence of MXUnit here _does not_ indicate that MXUnit is moving from Google Code to Github.
 
 h2. Collaborating Guidlines
 
