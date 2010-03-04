@@ -122,7 +122,9 @@
 		<cfargument name="ErrorCollection" required="true" type="any">
 		
 		<cfset var result = "" />
-		<cfset var i = 0 />
+		<cfset var i = 0 />     
+		<cfset var template = "" />
+		<cfset var line = "" />
 		
 		<cfif NOT IsSimpleValue(arguments.ErrorCollection)>
 			<cfsavecontent variable="result">
@@ -136,9 +138,12 @@
 					
 					<table class="tagcontext">
 						<cfloop from="1" to="#ArrayLen(arguments.ErrorCollection.TagContext)#" index="i">
+							<cfset template = arguments.ErrorCollection.TagContext[i].template /> 
+							<cfset line = arguments.ErrorCollection.TagContext[i].line />
 							<tr>
-								<td>#arguments.ErrorCollection.TagContext[i].line#</td>
-								<td>#arguments.ErrorCollection.TagContext[i].template#</td>
+								<td>      
+									<a href="txmt://open/?url=file://#template#&line=#line#">#template# (#line#)</a>
+								</td>
 							</tr>
 						</cfloop>
 					</table>
