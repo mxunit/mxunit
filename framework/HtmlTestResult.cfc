@@ -20,8 +20,9 @@
 	
 
 	<!--- bill : 3.4.10
-	 
-			Todo: Make sure it works with no external CSS or JavaScript. Maybe redirest to old XMLResult if JS is not enabled?
+			
+			Todo: Still some issue with the links to TestCases - don't include correct context
+			Todo: Make sure it works with no external CSS or JavaScript. Maybe redirect to old XMLResult if JS is not enabled?
 			todo: Still need to format to display on solo page and home page
 			Todo: Combine all suite results so  filter works with all
 			Todo: Add <title>[Component or Suite or MXUnit Test Results]
@@ -59,6 +60,9 @@
 			<cfoutput>
 
 			<!--- This should be somewhere else --->
+<!--- 
+			
+ --->			
 			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/960.css">
 			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/styles.css">
 			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tablesorter/blue/style.css">
@@ -68,8 +72,8 @@
 			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.runner.js"></script>
-			
-			
+
+
 			
 				<div class="mxunitResults" style="padding:20px">
 					
