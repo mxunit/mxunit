@@ -21,11 +21,14 @@
 	
 	<h2>Welcome, <cfoutput>#cfEngine#</cfoutput> User!</h2>
 	
-	<p>
-		Here is a sample of the test suite to verify your installation works:
-	</p>
+	<div  style="font-size:1.25em;color:#01010;text-decoration:italic">
+		Below is a simple test suite to verify your installation. Note that there are
+		intentional failures and errors so you can see what they're supposed to looks like.
+	</div>
 	
-	<cfset testCase = '<cfcomponent displayname="MxunitInstallVerificationTest" extends="mxunit.framework.TestCase">
+	<p><hr color="#eaeaea" noshade="true" size="1" /></p>
+	
+	<cfset testCase = '<cfcomponent displayname="MxunitInstallVerificationTest" extends="framework.TestCase">
 			<cffunction name="testThis" >
 				<cfset assertEquals("this","this") />
 			</cffunction>
@@ -35,12 +38,20 @@
 			</cffunction>
 			
 			<cffunction name="testSomething" >
+			   <cfset a = arrayNew(1)>
+			   <cfset a[1] = "some debug traces" />
+			    <cfset debug(a) />
 				<cfset assertEquals(1,1) />
 			</cffunction>
 			
 			<cffunction name="testSomethingElse">
 				<cfset assertTrue(true) />
 			</cffunction>
+			
+			<cffunction name="testIntentionalError">
+				<cfset foo = bar />
+			</cffunction>
+			
 		</cfcomponent>' />
 	
 	<cffile action="write" file="#context#MXUnitInstallTest.cfc" output="#testCase#" />
@@ -48,7 +59,7 @@
 	<cfset testSuitePath = 'framework.TestSuite' />
 	<cfset testSuite = createObject("component", testSuitePath).TestSuite() />
 	
-	<cfset installTest = createObject("component", "MXUnitInstallTest") />
+	<cfset installTest = createObject("component", "mxunit.MXUnitInstallTest") />
 	
 	<cfset testSuite.addAll("MXUnitInstallTest", installTest) />
 	

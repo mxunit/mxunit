@@ -17,10 +17,20 @@
 		<cfreturn this />
 	</cffunction>
 	
-	<!---
-		Returns a HTML representation of the TestResult
-	--->
-	<cffunction name="getHtmlResults" access="public" returntype="string" output="false">
+	
+
+	<!--- bill : 3.4.10
+	 
+			Todo: Make sure it works with no external CSS or JavaScript. Maybe redirest to old XMLResult if JS is not enabled?
+			todo: Still need to format to display on solo page and home page
+			Todo: Combine all suite results so  filter works with all
+			Todo: Add <title>[Component or Suite or MXUnit Test Results]
+			Todo: Maybe display as tree?
+			
+   --->
+	<cffunction name="getHtmlResults" access="public" returntype="string" output="false" hint="Returns a HTML representation of the TestResult">
+		<cfargument name="mxunit_root" required="no" default="mxunit" hint="Location in the webroot where MXUnit is installed." />
+		
 		<cfset var result = "" />
 		<cfset var classname = "" />
 		<cfset var i = "" />
@@ -47,16 +57,21 @@
 		
 		<cfsavecontent variable="result">
 			<cfoutput>
-				<div class="mxunitResults">
-					<div class="summary">
-						<ul class="nav horizontal">
-							<li class="failed"><a href="##">#this.failures# Failures</a></li>
-							<li class="error"><a href="##">#this.errors# Errors</a></li>
-							<li class="passed"><a href="##">#this.successes# Successes</a></li>
-						</ul>
-						
-						<div class="clear"><!-- clear --></div>
-					</div>
+
+			<!--- This should be somewhere else --->
+			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/960.css">
+			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/styles.css">
+			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tablesorter/blue/style.css">
+			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/results.css">
+
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
+			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.runner.js"></script>
+			
+			
+			
+				<div class="mxunitResults" style="padding:20px">
 					
 					<cfloop from="1" to="#ArrayLen(this.testResults)#" index="i">
 						<!--- Check if we are on a new component --->
@@ -73,6 +88,15 @@
 							<cfset classtesturl = "/" & Replace(this.testResults[i].component, ".", "/", "all") & ".cfc?method=runtestremote&amp;output=html">
 							
 							<h3><a href="#classtesturl#" title="Run all tests in #this.testResults[i].component#">#this.testResults[i].component#</a></h3>
+							
+							<div class="summary">
+								<ul class="nav horizontal">
+									<li class="failed"><a href="##" title="Filter by Failures">#this.failures# Failures</a></li>
+									<li class="error"><a href="##" title="Filter by Errors">#this.errors# Errors</a></li>
+									<li class="passed"><a href="##" title="Filter by Successes">#this.successes# Successes</a></li>
+								</ul>
+								<div class="clear"><!-- clear --></div>
+							</div>
 							
 							<table class="results tablesorter #theme#">
 								#tableHead#
@@ -112,6 +136,7 @@
 						</tbody>
 					</table>
 				</div>
+				
 			</cfoutput>
 		</cfsavecontent>
 		

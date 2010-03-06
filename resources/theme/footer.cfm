@@ -1,6 +1,6 @@
 		<div class="grid_12 pageFooter">
-			<a href="http://mxunit.org/MIT-license.txt" title="MIT License">
-				<cfoutput>#year(now())# MXUnit.org - v<cfoutput>#version#</cfoutput></cfoutput>
+			<a href="MIT-License.txt" title="MIT License">
+				&copy;<cfoutput>#year(now())# MXUnit.org - v<cfoutput>#version#</cfoutput></cfoutput>
 			</a>
 		</div>
 		

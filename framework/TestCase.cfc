@@ -180,10 +180,8 @@
 				break;
 			
 			case 'extjs': // TODO deprecated
-			case 'jqGrid':
-			case 'jq':
-				writeoutput('<body>#this.result.getjqGridresults(this.name)#<div id="testresultsgrid" class="bodypad"></div></body>');
-				break;
+			 writeoutput( this.result.getHtmlresults() );
+			break;		
 			
 			case 'text':
 				writeoutput( trim(this.result.getTextresults(this.name)));
