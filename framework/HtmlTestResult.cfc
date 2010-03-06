@@ -142,7 +142,7 @@
 							<cfset line = arguments.ErrorCollection.TagContext[i].line />
 							<tr>
 								<td>      
-									<a href="txmt://open/?url=file://#template#&line=#line#">#template# (#line#)</a>
+									#template# (<a href="txmt://open/?url=file://#template#&line=#line#" title="Open this in TextMate">#line#</a>)
 								</td>
 							</tr>
 						</cfloop>
