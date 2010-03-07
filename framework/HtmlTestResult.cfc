@@ -96,6 +96,7 @@
 							</div>
 							
 					<cfloop from="1" to="#ArrayLen(this.testResults)#" index="i">
+					
 						<!--- Check if we are on a new component --->
 						<cfset isNewComponent = classname neq this.testResults[i].component />
 						

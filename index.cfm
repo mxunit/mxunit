@@ -58,12 +58,11 @@
 	
 	<cfset testSuitePath = 'framework.TestSuite' />
 	<cfset testSuite = createObject("component", testSuitePath).TestSuite() />
-	
-	<cfset installTest = createObject("component", "mxunit.MXUnitInstallTest") />
-	
-	<cfset testSuite.addAll("MXUnitInstallTest", installTest) />
-	
+	<cfset installTest = createObject("component", "MXUnitInstallTest") />
+	<cfset installTestMetaData = getMetadata(installTest) />
+	<cfset testSuite.addAll(installTestMetaData.name, installTest) />
 	<cfset results = testSuite.run() />
+	
 	
 	<div>
 		<cfoutput>
@@ -88,6 +87,7 @@
 	</cfcatch>
 	
 	<cfcatch type="any">
+		<cfdump var="#cfcatch#">
 		<h2 class="error">Ooops!</h2>
 		
 		<p>

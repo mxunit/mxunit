@@ -285,7 +285,7 @@
 		Call this method to return preformatted HTML.
 	--->
 	<cffunction name="getHTMLResults" returnType="string" output="false">
-		<cfset var htmlresult = createObject("component", "HTMLTestResult").HTMLTestResult(this) />
+		<cfset var htmlresult = createObject("component", "HtmlTestResult").HTMLTestResult(this) />
 		
 		<cfreturn htmlresult.getHtmlresults() />
 	</cffunction>
@@ -294,7 +294,7 @@
 		Call this method to return _raw_ (unstylized) HTML.
 	--->
 	<cffunction name="getRawHTMLResults" returnType="string" output="false">
-		<cfset var htmlresult = createObject("component", "HTMLTestResult").HTMLTestResult(this) />
+		<cfset var htmlresult = createObject("component", "HtmlTestResult").HTMLTestResult(this) />
 		<cfreturn htmlresult.getRawHtmlResults() />
 	</cffunction>
 	
