@@ -13,7 +13,7 @@
 		<cfset this.successes = arguments.testResults.testSuccesses />
 		<cfset this.totalExecutionTime = arguments.testResults.totalExecutionTime />
 		<cfset this.testResults = arguments.testResults.results />
-		
+		<cfset this.installRoot = createObject("component","ComponentUtils").getComponentRoot() />
 		<cfreturn this />
 	</cffunction>
 	
@@ -29,9 +29,34 @@
 			Todo: Maybe display as tree?
 			
    --->
-	<cffunction name="getHtmlResults" access="public" returntype="string" output="false" hint="Returns a HTML representation of the TestResult">
-		<cfargument name="mxunit_root" required="no" default="mxunit" hint="Location in the webroot where MXUnit is installed." />
-		
+
+	<cffunction name="printResources" access="public" output="true" hint="Prints CSS and JavaScript refs for stylizing">
+ 		<cfargument name="mxunit_root" required="no" default="mxunit" hint="Location in the webroot where MXUnit is installed." />
+			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/styles.css">
+			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tablesorter/blue/style.css">
+			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/results.css">
+
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
+			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.runner.js"></script>
+	</cffunction>
+
+
+   <cffunction name="getHtmlResults" access="public" returntype="string" output="false" hint="Returns a stylized HTML representation of the TestResult">
+ 		<cfargument name="mxunit_root" required="no" default="#this.installRoot#" hint="Location in the webroot where MXUnit is installed." />
+        <cfset var result = "" />
+		<cfset var temp = "" />
+		<cfsavecontent variable="result">
+			<cfset printResources() />
+			<cfset temp = trim(getRawHtmlResults(mxunit_root))>
+			<cfoutput>#temp#</cfoutput>
+		</cfsavecontent>
+		<cfreturn result>
+   </cffunction>
+
+
+	<cffunction name="getRawHtmlResults" access="public" returntype="string" output="false" hint="Returns a _raw_ HTML representation of the TestResult">
 		<cfset var result = "" />
 		<cfset var classname = "" />
 		<cfset var i = "" />
@@ -58,25 +83,18 @@
 		
 		<cfsavecontent variable="result">
 			<cfoutput>
-
-			<!--- This should be somewhere else --->
-<!--- 
-			
- --->			
-			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/960.css">
-			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/styles.css">
-			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tablesorter/blue/style.css">
-			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/results.css">
-
-			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
-			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
-			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.runner.js"></script>
-
-
 			
 				<div class="mxunitResults" style="padding:20px">
 					
+							<div class="summary">
+								<ul class="nav horizontal">
+									<li class="failed"><a href="##" title="Filter by Failures">#this.failures# Failures</a></li>
+									<li class="error"><a href="##" title="Filter by Errors">#this.errors# Errors</a></li>
+									<li class="passed"><a href="##" title="Filter by Successes">#this.successes# Successes</a></li>
+								</ul>
+								<div class="clear"><!-- clear --></div>
+							</div>
+							
 					<cfloop from="1" to="#ArrayLen(this.testResults)#" index="i">
 						<!--- Check if we are on a new component --->
 						<cfset isNewComponent = classname neq this.testResults[i].component />
@@ -87,20 +105,11 @@
 									</tbody>
 								</table>
 							</cfif>
-							
 							<cfset classname = this.testResults[i].component>
+							<!--- printing incorrect results for MXUnitInstallTest.cfc - could be engine bug --->
 							<cfset classtesturl = "/" & Replace(this.testResults[i].component, ".", "/", "all") & ".cfc?method=runtestremote&amp;output=html">
 							
 							<h3><a href="#classtesturl#" title="Run all tests in #this.testResults[i].component#">#this.testResults[i].component#</a></h3>
-							
-							<div class="summary">
-								<ul class="nav horizontal">
-									<li class="failed"><a href="##" title="Filter by Failures">#this.failures# Failures</a></li>
-									<li class="error"><a href="##" title="Filter by Errors">#this.errors# Errors</a></li>
-									<li class="passed"><a href="##" title="Filter by Successes">#this.successes# Successes</a></li>
-								</ul>
-								<div class="clear"><!-- clear --></div>
-							</div>
 							
 							<table class="results tablesorter #theme#">
 								#tableHead#
@@ -121,6 +130,7 @@
 								#this.testResults[i].Time# ms
 							</td>
 							<td>
+							  <cfif not structKeyExists(url,"toggledebug")>
 								<cfif ArrayLen(this.testResults[i].Debug)>
 									<cfloop from="1" to="#ArrayLen(this.testResults[i].Debug)#" index="k">
 										<cfif IsSimpleValue(this.testResults[i].Debug[k])>
@@ -134,6 +144,7 @@
 										</cfif>
 									</cfloop>
 								</cfif>
+							</cfif>
 							</td>
 						</tr>
 					</cfloop>

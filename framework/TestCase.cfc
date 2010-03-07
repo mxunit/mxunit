@@ -163,32 +163,40 @@
 			this.result = runTest();
 			
 			switch(arguments.output){
-			case 'xml':
-				writeoutput(this.result.getXmlresults());
+				case 'html':
+				  writeoutput(this.result.getHtmlresults());
 				break;
-			
-			case 'junitxml':
-				writeoutput(this.result.getJUnitXmlresults());
+				
+				case 'rawhtml':
+				  writeoutput(this.result.getHtmlresults());
 				break;
-			
-			case 'json':
-				writeoutput(this.result.getJSONResults());
+				
+				case 'xml':
+					writeoutput(this.result.getXmlresults());
 				break;
-			
-			case 'query':
-				dump(this.result.getQueryresults());
+				
+				case 'junitxml':
+					writeoutput(this.result.getJUnitXmlresults());
 				break;
-			
-			case 'extjs': // TODO deprecated
-			 writeoutput( this.result.getHtmlresults() );
-			break;		
-			
-			case 'text':
-				writeoutput( trim(this.result.getTextresults(this.name)));
+				
+				case 'json':
+					writeoutput(this.result.getJSONResults());
 				break;
-			
-			default:
-				writeoutput(this.result.getHtmlresults());
+				
+				case 'query':
+					dump(this.result.getQueryresults());
+				break;
+				
+				case 'extjs': // TODO deprecated
+				 	writeoutput( this.result.getHtmlresults() );
+				break;		
+				
+				case 'text':
+					writeoutput( trim(this.result.getTextresults(this.name)));
+				break;
+				
+				default:
+					writeoutput(this.result.getHtmlresults());
 				break;
 			}
 		</cfscript>

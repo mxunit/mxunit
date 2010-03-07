@@ -67,7 +67,7 @@
 	
 	<div>
 		<cfoutput>
-			#results.getResultsOutput(url.output)#
+			#results.getResultsOutput("rawhtml")#
 		</cfoutput>
 	</div>
 	
