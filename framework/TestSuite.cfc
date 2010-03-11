@@ -121,13 +121,13 @@
 		<cfset var components = structKeyArray(this.suites()) />
 		
 		<!---  Returns a structure corresponding to the key/componentName --->
-		<cfset var temp = this.suites() />
+		<cfset var originalSuites = this.suites() />
 		
 		<!--- top-level exception is always event name / expression for Application.cfc (but not fusebox5.cfm) --->
 		<cfset var caughtException = "" />
 		
 		<cfloop from="1" to="#arrayLen(components)#" index="i">
-			<cfset this.suites = structFind(temp, components[i] ) />
+			<cfset this.suites = structFind(originalSuites, components[i] ) />
 			
 			<cfif len(arguments.testMethod)>
 				<cfset methods[1] = arguments.testMethod />
