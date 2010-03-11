@@ -12,7 +12,7 @@
 		<cfset var i = "">
 		<cfset var j = "">
 		<cfset var methodName = "">
-		<cfset var exception = "" />
+		<cfset var expectedException = "" />
 		<cfset var dpName = "" />
 		<cfset var components = structKeyArray(suite.suites()) />
 		
@@ -52,7 +52,7 @@
 				<cfset suite.c = "">
 				<cfset  start = getTickCount() />
 				
-				<cfset exception = o.getAnnotation(methodName,"expectedException") />
+				<cfset expectedException = o.getAnnotation(methodName,"expectedException") />
 				
 				<cftry>
 					<cfset  results.startTest(methodName,components[i]) />
@@ -81,39 +81,35 @@
 					 </cfsavecontent>
 					
 					<!--- Were we expecting an error or not? --->
-					<cfif exception EQ "">
+					<cfif expectedException EQ "">
 						<cfset  results.addSuccess('Passed') />
 						
 						<!--- Add the trace message from the TestCase instance --->
 						<cfset  results.addContent(suite.c) />
 					<cfelse>
-						 <cfthrow type="mxunit.exception.AssertionFailedError" message="Exception: #exception# expected but no exception was thrown" />
+						 <cfthrow type="mxunit.exception.AssertionFailedError" message="Exception: #expectedException# expected but no exception was thrown" />
 					</cfif>
 					
 					<cfcatch type="mxunit.exception.AssertionFailedError">
-						<cfset addFailureToResults(results=results,expected=o.expected,actual=o.actual,exception=cfcatch,content=suite.c)>
+						<cfset addFailureToResults(results=results,expected=expectedException,actual=o.actual,exception=cfcatch,content=suite.c)>
 					</cfcatch>
 					
 					<cfcatch type="any">
 						<!--- paranoia --->
-						<cfset caughtException = cfcatch />
+						<cfset caughtException = rootOfException(cfcatch)>
 						
-						<cfif structKeyExists(caughtException,"rootcause")>
-							<cfset caughtException = caughtException.rootcause />
-						</cfif>
-						
-						<cfif exception NEQ "" and (listFindNoCase(exception, cfcatch.type) OR listFindNoCase(exception, getMetaData(cfcatch).getName()) )>
+						<cfif expectedException NEQ "" and (listFindNoCase(expectedException, cfcatch.type) OR listFindNoCase(expectedException, getMetaData(cfcatch).getName()) )>
 							<cfset  results.addSuccess('Passed') />
 							<cfset  results.addContent(suite.c) />
 							<cfset  o.debug(caughtException) />
-						<cfelseif exception NEQ "">
+						<cfelseif expectedException NEQ "">
 							<cfset o.debug(caughtException) />
 							
 							<cftry>
-								<cfthrow message="Exception: #exception# expected but #cfcatch.type# was thrown">
+								<cfthrow message="Exception: #expectedException# expected but #cfcatch.type# was thrown">
 								
 								<cfcatch>
-									<cfset addFailureToResults(results=results,expected=exception,actual=cfcatch.type,exception=cfcatch,content=suite.c)>
+									<cfset addFailureToResults(results=results,expected=expectedException,actual=cfcatch.type,exception=cfcatch,content=suite.c)>
 								</cfcatch>
 							</cftry>
 						<cfelse>
@@ -155,7 +151,15 @@
 		
 		<cfreturn results />
 	</cffunction>   
+	                  
 	
+	<cffunction name="rootOfException" access="private">
+		<cfargument name="caughtException"/>
+		<cfif structKeyExists(caughtException,"rootcause")>
+			<cfreturn caughtException.rootcause />
+		</cfif>        
+		<cfreturn caughtException />		
+	</cffunction>
 	
 	<cffunction name="addFailureToResults" access="private">
 		<cfargument name="results" required="true" hint="the results object">
