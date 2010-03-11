@@ -123,11 +123,11 @@
 		 <cfset f.setFactory("coldmock.ColdMock") />
 	</cffunction>
 	
-	<cffunction name="notinstalledColdMockShouldThrowNotInstalledException" mxunit:expectedException="org.mxunit.exception.MockFrameworkNotInstalledException">
+	<cffunction name="notinstalledColdMockShouldThrowNotInstalledException2" mxunit:expectedException="org.mxunit.exception.MockFrameworkNotInstalledException">
 		 <cfset	var f = createObject('component','mxunit.framework.MockFactoryFactory').MockFactoryFactory("ColdMock") />
 	</cffunction>
 	
-	<cffunction name="notinstalledMockBoxShouldThrowNotInstalledException" mxunit:expectedException="org.mxunit.exception.MockFrameworkNotInstalledException">
+	<cffunction name="notinstalledMockBoxShouldThrowNotInstalledException2" mxunit:expectedException="org.mxunit.exception.MockFrameworkNotInstalledException">
 		 <cfset	var f = createObject('component','mxunit.framework.MockFactoryFactory').MockFactoryFactory("MockBox") />
 	</cffunction>
 	
