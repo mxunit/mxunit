@@ -10,7 +10,6 @@
      suites = testSuite.suites();
      //debug(suites["mxunit.tests.bugs.fixture.test-with_hyphen"]);
      methods = suites["mxunit.tests.bugs.fixture.test-with_hyphen"].methods;
-     debug(methods);
      assertEquals(3,arrayLen(methods),"Should be adding to methods element.");
     
     </cfscript>

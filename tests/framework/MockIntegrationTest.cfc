@@ -134,7 +134,6 @@
 	
 	<cffunction name="emptyConstructorShouldGenerateMM">
 		 <cfset	var f = createObject('component','mxunit.framework.MockFactoryFactory').MockFactoryFactory() />
-		 <cfset debug(f.getFactory())>
 		 <cfset assertIsTypeOf(f.getFactory(), "mxunit.framework.mightymock.MockFactory") />
 	</cffunction>
 
