@@ -59,7 +59,7 @@
 					<cfset  results.startTest(methodName,components[i]) />
 					
 					<!--- Get start time Execute the test --->
-					<cfinvoke component="#o#" method="clearClassVariables" />
+					<cfset o.clearClassVariables() />
 					
 					<cfset o.initDebug() />
 					
@@ -67,7 +67,7 @@
 						<cfset o.createRequestScopeDebug() />
 					</cfif>
 					
-					<cfinvoke component="#o#" method="setUp" />
+					<cfset o.setUp()/>
 					
 					<cfsavecontent variable="outputOfTest">
 						<cfset dpName = o.getAnnotation(methodName,"dataprovider") />
@@ -124,7 +124,7 @@
 				</cftry>
 				
 				<cftry>
-					<cfinvoke component="#o#" method="tearDown">
+					<cfset o.tearDown() />
 					
 					<cfcatch type="any">
 						<cfset results.addError(cfcatch)>
@@ -145,7 +145,7 @@
 			</cfloop>
 			
 			<!--- Invoke prior to tests. Class-level setUp --->
-			<cfinvoke component="#o#" method="afterTests">
+			<cfset o.afterTests()>
 		</cfloop>
 		
 		<cfset results.closeResults() /><!--- Get correct time run for suite --->
