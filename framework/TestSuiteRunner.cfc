@@ -14,7 +14,8 @@
 		<cfset var methodName = "">
 		<cfset var expectedException = "" />
 		<cfset var dpName = "" />
-		<cfset var components = structKeyArray(suite.suites()) />
+		<cfset var components = structKeyArray(suite.suites()) />    
+		<cfset var outputOfTest = "" />
 		
 		<!---  Returns a structure corresponding to the key/componentName --->
 		<cfset var originalSuites = suite.suites() />
@@ -49,7 +50,7 @@
 			
 			<cfloop from="1" to="#arrayLen(methods)#" index="j">
 				<cfset methodName = methods[j] />
-				<cfset suite.c = "">
+				<cfset outputOfTest = "">
 				<cfset  start = getTickCount() />
 				
 				<cfset expectedException = o.getAnnotation(methodName,"expectedException") />
@@ -68,7 +69,7 @@
 					
 					<cfinvoke component="#o#" method="setUp" />
 					
-					<cfsavecontent variable="suite.c">
+					<cfsavecontent variable="outputOfTest">
 						<cfset dpName = o.getAnnotation(methodName,"dataprovider") />
 						
 						<cfif len(dpName) gt 0>
@@ -85,13 +86,13 @@
 						<cfset  results.addSuccess('Passed') />
 						
 						<!--- Add the trace message from the TestCase instance --->
-						<cfset  results.addContent(suite.c) />
+						<cfset  results.addContent(outputOfTest) />
 					<cfelse>
 						 <cfthrow type="mxunit.exception.AssertionFailedError" message="Exception: #expectedException# expected but no exception was thrown" />
 					</cfif>
 					
 					<cfcatch type="mxunit.exception.AssertionFailedError">
-						<cfset addFailureToResults(results=results,expected=expectedException,actual=o.actual,exception=cfcatch,content=suite.c)>
+						<cfset addFailureToResults(results=results,expected=expectedException,actual=o.actual,exception=cfcatch,content=outputOfTest)>
 					</cfcatch>
 					
 					<cfcatch type="any">
@@ -100,7 +101,7 @@
 						
 						<cfif expectedException NEQ "" and (listFindNoCase(expectedException, cfcatch.type) OR listFindNoCase(expectedException, getMetaData(cfcatch).getName()) )>
 							<cfset  results.addSuccess('Passed') />
-							<cfset  results.addContent(suite.c) />
+							<cfset  results.addContent(outputOfTest) />
 							<cfset  o.debug(caughtException) />
 						<cfelseif expectedException NEQ "">
 							<cfset o.debug(caughtException) />
@@ -109,13 +110,13 @@
 								<cfthrow message="Exception: #expectedException# expected but #cfcatch.type# was thrown">
 								
 								<cfcatch>
-									<cfset addFailureToResults(results=results,expected=expectedException,actual=cfcatch.type,exception=cfcatch,content=suite.c)>
+									<cfset addFailureToResults(results=results,expected=expectedException,actual=cfcatch.type,exception=cfcatch,content=outputOfTest)>
 								</cfcatch>
 							</cftry>
 						<cfelse>
 							<cfset o.debug(caughtException) />
 							<cfset results.addError(caughtException) />
-							<cfset results.addContent(suite.c) />
+							<cfset results.addContent(outputOfTest) />
 							
 							<cflog file="mxunit" type="error" application="false" text="#cfcatch.message#::#cfcatch.detail#" />
 						</cfif>
