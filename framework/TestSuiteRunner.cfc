@@ -9,8 +9,8 @@
 		<cfset var o = "">
 		<cfset var start = "">
 		<cfset var end = "">
-		<cfset var i = "">
-		<cfset var j = "">
+		<cfset var componentIndex = 0>
+		<cfset var methodIndex = 0>
 		<cfset var methodName = "">
 		<cfset var expectedExceptionType = "" />
 		<cfset var dpName = "" />
@@ -23,8 +23,8 @@
 		<!--- top-level exception is always event name / expression for Application.cfc (but not fusebox5.cfm) --->
 		<cfset var caughtException = "" />
 		
-		<cfloop from="1" to="#arrayLen(components)#" index="i">
-			<cfset suite.suites = structFind(originalSuites, components[i] ) />
+		<cfloop from="1" to="#arrayLen(components)#" index="componentIndex">
+			<cfset suite.suites = structFind(originalSuites, components[componentIndex] ) />
 			
 			<cfif len(arguments.testMethod)>
 				<cfset methods[1] = arguments.testMethod />
@@ -35,7 +35,7 @@
 			<cfset componentObject = structFind(suite.suites,"ComponentObject") />
 			
 			<cfif isSimpleValue(componentObject)>
-				<cfset o = createObject("component", components[i]).TestCase(componentObject) />
+				<cfset o = createObject("component", components[componentIndex]).TestCase(componentObject) />
 			<cfelse>
 				<cfset o = componentObject.TestCase(componentObject) />
 			</cfif>
@@ -48,15 +48,15 @@
 			<!--- Invoke prior to tests. Class-level setUp --->
 			<cfset o.beforeTests() />
 			
-			<cfloop from="1" to="#arrayLen(methods)#" index="j">
-				<cfset methodName = methods[j] />
+			<cfloop from="1" to="#arrayLen(methods)#" index="methodIndex">
+				<cfset methodName = methods[methodIndex] />
 				<cfset outputOfTest = "">
 				<cfset  start = getTickCount() />
 				
 				<cfset expectedExceptionType = o.getAnnotation(methodName,"expectedException") />
 				
 				<cftry>
-					<cfset  results.startTest(methodName,components[i]) />
+					<cfset  results.startTest(methodName,components[componentIndex]) />
 					
 					<cfset o.clearClassVariables() />
 					<cfset o.initDebug() />
