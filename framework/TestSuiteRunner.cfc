@@ -13,7 +13,6 @@
 		<cfset var methodIndex = 0>
 		<cfset var methodName = "">
 		<cfset var expectedExceptionType = "" />
-		<cfset var dpName = "" />
 		<cfset var components = structKeyArray(suite.suites()) />    
 		<cfset var outputOfTest = "" />
 		
@@ -120,7 +119,8 @@
 		<cfargument name="o" /> 
 		<cfargument name="methodName"/>
 		<cfargument name="dataproviderHandler" />
-		<cfset var outputOfTest = "" />
+		<cfset var outputOfTest = "" />       
+		<cfset var dpName = "" />
 		<cfsavecontent variable="outputOfTest">
 				<cfset dpName = o.getAnnotation(methodName,"dataprovider") />
 				
