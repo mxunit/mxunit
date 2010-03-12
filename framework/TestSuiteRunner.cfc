@@ -68,18 +68,16 @@
 					</cfif>
 					
 					<cfset o.setUp()/>
+					                                                       
 					
-					<cfsavecontent variable="outputOfTest">
-						<cfset dpName = o.getAnnotation(methodName,"dataprovider") />
-						
-						<cfif len(dpName) gt 0>
-							<cfset o._$snif = _$snif />
-							<cfset suite.dataProviderHandler.init(o._$snif()) />
-							<cfset suite.dataProviderHandler.runDataProvider(o,methodName,dpName)>
-						<cfelse>
-							<cfinvoke component="#o#" method="#methodName#">
-						</cfif>
-					 </cfsavecontent>
+					<!--- 
+						ATTENTION:					
+						This is where the test method is run. The following line is the center of the MXUnit universe.
+					--->
+					<cfset outputOfTest = runTest(o, methodName, suite.dataProviderHandler) />
+					            
+					
+					
 					
 					<!--- Were we expecting an error or not? --->
 					<cfif expectedException EQ "">
@@ -153,6 +151,26 @@
 		<cfreturn results />
 	</cffunction>   
 	                  
+	<cffunction name="runTest" access="private">
+		<cfargument name="o" /> 
+		<cfargument name="methodName"/>
+		<cfargument name="dataproviderHandler" />
+		<cfset var outputOfTest = "" />
+		<cfsavecontent variable="outputOfTest">
+				<cfset dpName = o.getAnnotation(methodName,"dataprovider") />
+				
+				<cfif len(dpName) gt 0>
+					<cfset o._$snif = _$snif />
+					<cfset dataProviderHandler.init(o._$snif()) />
+					<cfset dataProviderHandler.runDataProvider(o,methodName,dpName)>
+				<cfelse>
+					<cfinvoke component="#o#" method="#methodName#">
+				</cfif>
+		</cfsavecontent>
+		<cfreturn outputOfTest />
+		
+	</cffunction>
+	
 	
 	<cffunction name="rootOfException" access="private">
 		<cfargument name="caughtException"/>
