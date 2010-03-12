@@ -46,7 +46,7 @@
 			</cfif>
 			
 			<!--- Invoke prior to tests. Class-level setUp --->
-			<cfinvoke component="#o#" method="beforeTests" />
+			<cfset o.beforeTests() />
 			
 			<cfloop from="1" to="#arrayLen(methods)#" index="j">
 				<cfset methodName = methods[j] />
@@ -58,11 +58,8 @@
 				<cftry>
 					<cfset  results.startTest(methodName,components[i]) />
 					
-					<!--- Get start time Execute the test --->
 					<cfset o.clearClassVariables() />
-					
 					<cfset o.initDebug() />
-					
 					<cfif requestScopeDebuggingEnabled OR structKeyExists(url,"requestdebugenable")>
 						<cfset o.createRequestScopeDebug() />
 					</cfif>
