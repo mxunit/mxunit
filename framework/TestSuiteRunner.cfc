@@ -1,5 +1,5 @@
 <cfcomponent>
-	<cffunction name="run" returntype="WEB-INF.cftags.component" access="remote" output="true" hint="Primary method for running TestSuites and individual tests.">
+	<cffunction name="run" returntype="WEB-INF.cftags.component" access="public" output="true" hint="Primary method for running TestSuites and individual tests.">
 		<cfargument name="suite" />
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
@@ -69,20 +69,15 @@
 					
 					<cfset o.setUp()/>
 					                                                       
-					
 					<!--- 
-						ATTENTION:					
-						This is where the test method is run. The following line is the center of the MXUnit universe.
+						ATTENTION: This is where the test method is run. The following line is the center of the MXUnit universe.
 					--->
 					<cfset outputOfTest = runTest(o, methodName, suite.dataProviderHandler) />
 					            
 					
-					
-					
 					<!--- Were we expecting an error or not? --->
-					<cfif expectedException EQ "">
+					<cfif expectedException NEQ "">
 						<cfset  results.addSuccess('Passed') />
-						
 						<!--- Add the trace message from the TestCase instance --->
 						<cfset  results.addContent(outputOfTest) />
 					<cfelse>
