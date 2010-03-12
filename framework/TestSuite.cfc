@@ -147,37 +147,6 @@
 		</cfif>
 	</cffunction>
 	
-	<cffunction name="runTestWithDataProvider" access="private" hint="runner for DataProvider-driven tests">
-		<cfargument name="objectUnderTest" type="any" required="true"/>
-		<cfargument name="methodName" type="string" required="true">
-		<cfargument name="dataProviderName" type="string" required="true">
-		
-		<cfset var data = "">
-		<cfset var loop = 1>
-		
-		<!--- first, excel files --->
-		<cfif fileExists(dataProviderName)>
-			<cfthrow message="File-Based Data Providers not yet implemented">
-		<cfelse>
-			<cfinvoke component="PublicProxyMaker" method="makePublic" ObjectUnderTest="#objectUnderTest#" privateMethodName="#dataProviderName#" proxyMethodName="#dataProvidername#">
-			<cfinvoke component="#objectUnderTest#" method="#dataProviderName#" returnvariable="data">
-			
-			<cfif isArray(data)>
-				<cfloop from="1" to="#ArrayLen(data)#" index="loop">
-					<cfinvoke component="#objectUnderTest#" method="#methodName#" providerData="#data#" providerIndex="#loop#" providerRemaining="#ArrayLen(data)-loop#">
-				</cfloop>
-			<cfelseif isQuery(data)>
-				<cfloop query="data">
-					<cfinvoke component="#objectUnderTest#" method="#methodName#" providerData="#data#" providerIndex="#data.CurrentRow#" providerRemaining="#data.RecordCount-data.CurrentRow#">
-				</cfloop>
-			<cfelse>
-				<cfthrow message="dataProvider [#dataProviderName#] must be a function that returns an Array or a Query">
-			</cfif>
-		</cfif>
-	</cffunction>
-	
-
-	
 	<cffunction name="suites" access="public" returntype="struct">
 		<cfreturn this.testSuites />
 	</cffunction>
@@ -193,10 +162,6 @@
 	
 	<cffunction name="enableRequestScopeDebugging" access="public" output="false" hint="enables creation of the request.debug function">
 		<cfset requestScopeDebuggingEnabled = true>
-	</cffunction>
-	
-	<cffunction name="_$snif" access="private" hint="Door into another component's variables scope">
-		<cfreturn variables />
 	</cffunction>
 	
 	<cffunction name="setMockingFramework" hint="Allows a developer to set the default Mocking Framework for this test suite.">
