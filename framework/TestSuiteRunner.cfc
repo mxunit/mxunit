@@ -94,30 +94,7 @@
 					</cfcatch>
 					
 					<cfcatch type="any">
-						<!--- paranoia --->
-						<cfset caughtException = rootOfException(cfcatch)>
-						
-						<cfif exceptionMatchesType(cfcatch, expectedException)>
-							<cfset  results.addSuccess('Passed') />
-							<cfset  results.addContent(outputOfTest) />
-							<cfset  o.debug(caughtException) />
-						<cfelseif expectedException NEQ "">
-							<cfset o.debug(caughtException) />
-							
-							<cftry>
-								<cfthrow message="Exception: #expectedException# expected but #cfcatch.type# was thrown">
-								
-								<cfcatch>
-									<cfset addFailureToResults(results=results,expected=expectedException,actual=cfcatch.type,exception=cfcatch,content=outputOfTest)>
-								</cfcatch>
-							</cftry>
-						<cfelse>
-							<cfset o.debug(caughtException) />
-							<cfset results.addError(caughtException) />
-							<cfset results.addContent(outputOfTest) />
-							
-							<cflog file="mxunit" type="error" application="false" text="#cfcatch.message#::#cfcatch.detail#" />
-						</cfif>
+						<cfset handleCaughtException(rootOfException(cfcatch), expectedException, results, outputOfTest, o)>
 					</cfcatch>
 				</cftry>
 				
@@ -197,7 +174,39 @@
 	
 	<cffunction name="_$snif" access="private" hint="Door into another component's variables scope">
 		<cfreturn variables />
-	</cffunction>           
+	</cffunction>                   
+	
+	
+	<cffunction name="handleCaughtException" access="private">      
+		 <cfargument name="caughtException"/>     
+		 <cfargument name="expectedException"/>    
+		 <cfargument name="results" />
+		 <cfargument name="outputOfTest" />      
+		 <cfargument name="o" />
+		 <cfif exceptionMatchesType(cfcatch, expectedException)>
+				<cfset  results.addSuccess('Passed') />
+				<cfset  results.addContent(outputOfTest) />
+				<cfset  o.debug(caughtException) />
+			<cfelseif expectedException NEQ "">
+				<cfset o.debug(caughtException) />
+				
+				<cftry>
+					<cfthrow message="Exception: #expectedException# expected but #cfcatch.type# was thrown">
+					
+					<cfcatch>
+						<cfset addFailureToResults(results=results,expected=expectedException,actual=cfcatch.type,exception=cfcatch,content=outputOfTest)>
+					</cfcatch>
+				</cftry>
+			<cfelse>
+				<cfset o.debug(caughtException) />
+				<cfset results.addError(caughtException) />
+				<cfset results.addContent(outputOfTest) />
+				
+				<cflog file="mxunit" type="error" application="false" text="#cfcatch.message#::#cfcatch.detail#" />
+			</cfif>
+		
+	</cffunction>
+	
 	
 	<cffunction name="exceptionMatchesType" access="private">
 		<cfargument name="actualException">
