@@ -97,7 +97,7 @@
 						<!--- paranoia --->
 						<cfset caughtException = rootOfException(cfcatch)>
 						
-						<cfif expectedException NEQ "" and (listFindNoCase(expectedException, cfcatch.type) OR listFindNoCase(expectedException, getMetaData(cfcatch).getName()) )>
+						<cfif exceptionMatchesType(cfcatch, expectedException)>
 							<cfset  results.addSuccess('Passed') />
 							<cfset  results.addContent(outputOfTest) />
 							<cfset  o.debug(caughtException) />
@@ -197,6 +197,16 @@
 	
 	<cffunction name="_$snif" access="private" hint="Door into another component's variables scope">
 		<cfreturn variables />
+	</cffunction>           
+	
+	<cffunction name="exceptionMatchesType" access="private">
+		<cfargument name="actualException">
+		<cfargument name="expectedExceptionType"/>   
+		<cfif expectedExceptionType eq "">
+			<cfreturn false/>
+		</cfif>          
+
+		<cfreturn listFindNoCase(expectedExceptionType, actualException.type) OR listFindNoCase(expectedExceptionType, getMetaData(actualException).getName())>
 	</cffunction>
 
 </cfcomponent>
