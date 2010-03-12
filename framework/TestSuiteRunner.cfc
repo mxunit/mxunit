@@ -7,8 +7,7 @@
 		
 		<cfset var methods = ArrayNew(1)>
 		<cfset var o = "">
-		<cfset var start = "">
-		<cfset var end = "">
+		<cfset var tickCountAtStart = 0>
 		<cfset var componentIndex = 0>
 		<cfset var methodIndex = 0>
 		<cfset var methodName = "">
@@ -50,7 +49,7 @@
 			<cfloop from="1" to="#arrayLen(methods)#" index="methodIndex">
 				<cfset methodName = methods[methodIndex] />
 				<cfset outputOfTest = "">
-				<cfset  start = getTickCount() />
+				<cfset  tickCountAtStart = getTickCount() />
 				
 				<cfset expectedExceptionType = o.getAnnotation(methodName,"expectedException") />
 				
@@ -101,8 +100,7 @@
 				
 				<!--- reset the trace message.Bill 6.10.07 --->
 				<cfset o.traceMessage="" />
-				<cfset end = getTickCount() />
-				<cfset results.addProcessingTime(end-start) />
+				<cfset results.addProcessingTime(getTickCount()-tickCountAtStart) />
 				<cfset results.endTest(methodName) />
 			</cfloop>
 			
