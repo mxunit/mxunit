@@ -23,15 +23,15 @@
 		
 		<cfloop collection="#allSuites#" item="currentTestSuiteName">
 	
-			<cfset suite.suites = allSuites[currentTestSuiteName] />
+			<cfset currentSuite = allSuites[currentTestSuiteName] />
 			
 			<cfif len(arguments.testMethod)>
 				<cfset methods[1] = arguments.testMethod />
 			<cfelse>
-				<cfset methods = suite.suites["methods"] />
+				<cfset methods = currentSuite["methods"] />
 			</cfif>
 			
-			<cfset componentObject = suite.suites.ComponentObject />
+			<cfset componentObject = currentSuite.ComponentObject />
 			
 			<cfif isSimpleValue(componentObject)>
 				<cfset o = createObject("component", currentTestSuiteName).TestCase(componentObject) />
