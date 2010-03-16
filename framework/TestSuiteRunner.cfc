@@ -24,15 +24,15 @@
 		
 		<cfloop collection="#originalSuites#" item="currentTestSuiteName">
 	
-			<cfset suite.suites = structFind(originalSuites, currentTestSuiteName ) />
+			<cfset suite.suites = originalSuites[currentTestSuiteName] />
 			
 			<cfif len(arguments.testMethod)>
 				<cfset methods[1] = arguments.testMethod />
 			<cfelse>
-				<cfset methods = structFind(suite.suites, "methods") />
+				<cfset methods = suite.suites["methods"] />
 			</cfif>
 			
-			<cfset componentObject = structFind(suite.suites,"ComponentObject") />
+			<cfset componentObject = suite.suites.ComponentObject />
 			
 			<cfif isSimpleValue(componentObject)>
 				<cfset o = createObject("component", currentTestSuiteName).TestCase(componentObject) />
