@@ -15,16 +15,15 @@
 		<cfset var outputOfTest = "" />    
 		<cfset var currentTestSuiteName = "" />
 		   
-
 		<!---  Returns a structure corresponding to the key/componentName --->
-		<cfset var originalSuites = suite.suites() />
+		<cfset var allSuites = suite.suites() />
 		
 		<!--- top-level exception is always event name / expression for Application.cfc (but not fusebox5.cfm) --->
 		<cfset var caughtException = "" />
 		
-		<cfloop collection="#originalSuites#" item="currentTestSuiteName">
+		<cfloop collection="#allSuites#" item="currentTestSuiteName">
 	
-			<cfset suite.suites = originalSuites[currentTestSuiteName] />
+			<cfset suite.suites = allSuites[currentTestSuiteName] />
 			
 			<cfif len(arguments.testMethod)>
 				<cfset methods[1] = arguments.testMethod />
