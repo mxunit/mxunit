@@ -1,6 +1,6 @@
 <cfcomponent>
 	<cffunction name="run" returntype="WEB-INF.cftags.component" access="public" output="true" hint="Primary method for running TestSuites and individual tests.">
-		<cfargument name="suite" />
+		<cfargument name="allSuites" hint="a structure corresponding to the key/componentName"/>
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
 		<cfargument name="requestScopeDebuggingEnabled" />  
@@ -16,10 +16,6 @@
 		<cfset var expectedExceptionType = "" />
 		<cfset var outputOfTest = "" />    
 		<cfset var currentTestSuiteName = "" />
-		   
-		<!---  Returns a structure corresponding to the key/componentName --->
-		<cfset var allSuites = suite.suites() />
-		
 		<!--- top-level exception is always event name / expression for Application.cfc (but not fusebox5.cfm) --->
 		<cfset var caughtException = "" />
 		
