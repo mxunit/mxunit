@@ -109,7 +109,7 @@
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
 		
-		<cfreturn createObject("component", "TestSuiteRunner").run(this, results, testMethod, variables.requestScopeDebuggingEnabled)>
+		<cfreturn createObject("component", "TestSuiteRunner").run(this, results, testMethod, variables.requestScopeDebuggingEnabled, this.mockingFramework, this.dataProviderHandler)>
 		
 	</cffunction>
 	

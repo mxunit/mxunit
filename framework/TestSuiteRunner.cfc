@@ -3,8 +3,10 @@
 		<cfargument name="suite" />
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
-		<cfargument name="requestScopeDebuggingEnabled" />    
-		
+		<cfargument name="requestScopeDebuggingEnabled" />  
+		<cfargument name="mockingFramework"/> 
+		<cfargument name="dataproviderHandler"/>  
+		       
 		<cfset var methods = ArrayNew(1)>
 		<cfset var o = "">
 		<cfset var tickCountAtStart = 0>
@@ -40,8 +42,8 @@
 			</cfif>
 			
 			<!--- set the MockingFramework if one has been set for the TestSuite --->
-			<cfif len(suite.MockingFramework)>
-				<cfset o.setMockingFramework(suite.MockingFramework) />
+			<cfif len(arguments.MockingFramework)>
+				<cfset o.setMockingFramework(arguments.MockingFramework) />
 			</cfif>
 			
 			<!--- Invoke prior to tests. Class-level setUp --->
@@ -68,7 +70,7 @@
 					<!--- 
 						ATTENTION: This is where the test method is run. The following line is the center of the MXUnit universe.
 					--->
-					<cfset outputOfTest = runTest(o, methodName, suite.dataProviderHandler) />
+					<cfset outputOfTest = runTest(o, methodName, arguments.dataProviderHandler) />
 					            
 					<cfset assertExpectedExceptionTypeWasThrown(expectedExceptionType) />
 	
