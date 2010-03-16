@@ -12,17 +12,19 @@
 		<cfset var methodIndex = 0>
 		<cfset var methodName = "">
 		<cfset var expectedExceptionType = "" />
-		<cfset var components = structKeyArray(suite.suites()) />    
-		<cfset var outputOfTest = "" />
-		
+		<cfset var outputOfTest = "" />    
+		<cfset var currentTestSuiteName = "" />
+		   
+
 		<!---  Returns a structure corresponding to the key/componentName --->
 		<cfset var originalSuites = suite.suites() />
 		
 		<!--- top-level exception is always event name / expression for Application.cfc (but not fusebox5.cfm) --->
 		<cfset var caughtException = "" />
 		
-		<cfloop from="1" to="#arrayLen(components)#" index="componentIndex">
-			<cfset suite.suites = structFind(originalSuites, components[componentIndex] ) />
+		<cfloop collection="#originalSuites#" item="currentTestSuiteName">
+	
+			<cfset suite.suites = structFind(originalSuites, currentTestSuiteName ) />
 			
 			<cfif len(arguments.testMethod)>
 				<cfset methods[1] = arguments.testMethod />
@@ -33,7 +35,7 @@
 			<cfset componentObject = structFind(suite.suites,"ComponentObject") />
 			
 			<cfif isSimpleValue(componentObject)>
-				<cfset o = createObject("component", components[componentIndex]).TestCase(componentObject) />
+				<cfset o = createObject("component", currentTestSuiteName).TestCase(componentObject) />
 			<cfelse>
 				<cfset o = componentObject.TestCase(componentObject) />
 			</cfif>
@@ -54,7 +56,7 @@
 				<cfset expectedExceptionType = o.getAnnotation(methodName,"expectedException") />
 				
 				<cftry>
-					<cfset  results.startTest(methodName,components[componentIndex]) />
+					<cfset  results.startTest(methodName,currentTestSuiteName) />
 					
 					<cfset o.clearClassVariables() />
 					<cfset o.initDebug() />
