@@ -1,4 +1,4 @@
-<cfparam name="url.output" default="js" />
+<cfparam name="url.print_js_resources" type="boolean" default="true" />
 
 <cfinclude template="resources/theme/header.cfm" />
 
