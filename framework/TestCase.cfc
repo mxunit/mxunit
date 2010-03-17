@@ -250,7 +250,8 @@
 		
 		<cfif ListFindNoCase("package,private",TestStruct.access)
 			 OR ListFindNoCase("setUp,tearDown,beforeTests,afterTests",TestStruct.name)
-			 OR reFindNoCase("_cffunccfthread",TestStruct.Name)>
+			 OR reFindNoCase("_cffunccfthread",TestStruct.Name)
+			 OR ( (structKeyExists(TestStruct, "test") AND isBoolean(TestStruct.test) AND NOT TestStruct.test))>
 			
 			<cfset isAcceptable = false>
 		</cfif>

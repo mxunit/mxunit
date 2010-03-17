@@ -17,8 +17,8 @@
     	<cfset var methods = this.getRunnableMethods()>
 		<cfset var thesemethods = getMetadata(this)>
 		<!--- the 5 is the twos private function plus the setup and teardown functions --->
-		<cfset var expectedMethodCount = Arraylen(thesemethods.functions) - 5>
-		<cfset assertEquals(ArrayLen(methods),expectedMethodCount,"returned methods should be 5 less than total methods in this test case (excludes setup/teardown/private/package)")>
+		<cfset var expectedMethodCount = Arraylen(thesemethods.functions) - 7>
+		<cfset assertEquals(ArrayLen(methods),expectedMethodCount,"returned methods should be 7 less than total methods in this test case (excludes setup/teardown/private/package)")>
 	</cffunction>
 
 	<cffunction name="testGetRunnableMethodsInheritance">
@@ -72,6 +72,19 @@
 		<cfset s_test.access = "package">
 		<cfset result = this.testIsAcceptable(s_test)>
 		<cfset assertFalse(result,"package test should not be acceptable")>
+	</cffunction>
+	
+	<cffunction name="falseTestAttribute_IsNotAcceptableTest">
+		<cfset var s_test = "" />
+		<cfset var result = "" />
+		<!--- <cfset makePublic(this,"testIsAcceptable")> --->
+
+		<cfset s_test = structnew()>
+		<cfset s_test.name = "someTestGoesHere">
+		<cfset s_test.access = "public">
+		<cfset s_test.test = false>
+		<cfset result = this.testIsAcceptable(s_test)>
+		<cfset assertFalse(result,"test=false test should not be acceptable")>
 	</cffunction>
 
 	<cffunction name="cfthreadsInTestAreNotAcceptableTests">
