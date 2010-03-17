@@ -8,7 +8,7 @@
 		<cfargument name="dataproviderHandler"/>  
 		       
 		<cfset var methods = ArrayNew(1)>
-		<cfset var o = "">
+		<cfset var testCase = "">
 		<cfset var tickCountAtStart = 0>
 		<cfset var componentIndex = 0>
 		<cfset var methodIndex = 0>
@@ -32,41 +32,41 @@
 			<cfset componentObject = currentSuite.ComponentObject />
 			
 			<cfif isSimpleValue(componentObject)>
-				<cfset o = createObject("component", currentTestSuiteName).TestCase(componentObject) />
+				<cfset testCase = createObject("component", currentTestSuiteName).TestCase(componentObject) />
 			<cfelse>
-				<cfset o = componentObject.TestCase(componentObject) />
+				<cfset testCase = componentObject.TestCase(componentObject) />
 			</cfif>
 			
 			<!--- set the MockingFramework if one has been set for the TestSuite --->
 			<cfif len(arguments.MockingFramework)>
-				<cfset o.setMockingFramework(arguments.MockingFramework) />
+				<cfset testCase.setMockingFramework(arguments.MockingFramework) />
 			</cfif>
 			
 			<!--- Invoke prior to tests. Class-level setUp --->
-			<cfset o.beforeTests() />
+			<cfset testCase.beforeTests() />
 			
 			<cfloop from="1" to="#arrayLen(methods)#" index="methodIndex">
 				<cfset methodName = methods[methodIndex] />
 				<cfset outputOfTest = "">
 				<cfset  tickCountAtStart = getTickCount() />
 				
-				<cfset expectedExceptionType = o.getAnnotation(methodName,"expectedException") />
+				<cfset expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
 				
 				<cftry>
 					<cfset  results.startTest(methodName,currentTestSuiteName) />
 					
-					<cfset o.clearClassVariables() />
-					<cfset o.initDebug() />
+					<cfset testCase.clearClassVariables() />
+					<cfset testCase.initDebug() />
 					<cfif requestScopeDebuggingEnabled OR structKeyExists(url,"requestdebugenable")>
-						<cfset o.createRequestScopeDebug() />
+						<cfset testCase.createRequestScopeDebug() />
 					</cfif>
 					
-					<cfset o.setUp()/>
+					<cfset testCase.setUp()/>
 					                                                       
 					<!--- 
 						ATTENTION: This is where the test method is run. The following line is the center of the MXUnit universe.
 					--->
-					<cfset outputOfTest = runTest(o, methodName, arguments.dataProviderHandler) />
+					<cfset outputOfTest = runTest(testCase, methodName, arguments.dataProviderHandler) />
 					            
 					<cfset assertExpectedExceptionTypeWasThrown(expectedExceptionType) />
 	
@@ -75,16 +75,16 @@
 					<cfset  results.addContent(outputOfTest) /> 
   			
 					<cfcatch type="mxunit.exception.AssertionFailedError">
-						<cfset addFailureToResults(results=results,expected=expectedExceptionType,actual=o.actual,exception=cfcatch,content=outputOfTest)>
+						<cfset addFailureToResults(results=results,expected=expectedExceptionType,actual=testCase.actual,exception=cfcatch,content=outputOfTest)>
 					</cfcatch>
 					
 					<cfcatch type="any">
-						<cfset handleCaughtException(rootOfException(cfcatch), expectedExceptionType, results, outputOfTest, o)>
+						<cfset handleCaughtException(rootOfException(cfcatch), expectedExceptionType, results, outputOfTest, testCase)>
 					</cfcatch>
 				</cftry>
 				
 				<cftry>
-					<cfset o.tearDown() />
+					<cfset testCase.tearDown() />
 					
 					<cfcatch type="any">
 						<cfset results.addError(cfcatch)>
@@ -92,19 +92,19 @@
 				</cftry>
 				
 				<!--- add the deubg array to the test result item --->
-				<cfset  results.setDebug( o.getDebug()) />
+				<cfset results.setDebug( testCase.getDebug() ) />
 				
 				<!---  make sure the debug buffer is reset for the next text method  --->
-				<cfset  o.clearDebug()  />
+				<cfset testCase.clearDebug()  />
 				
 				<!--- reset the trace message.Bill 6.10.07 --->
-				<cfset o.traceMessage="" />
+				<cfset testCase.traceMessage="" />
 				<cfset results.addProcessingTime(getTickCount()-tickCountAtStart) />
 				<cfset results.endTest(methodName) />
 			</cfloop>
 			
 			<!--- Invoke prior to tests. Class-level setUp --->
-			<cfset o.afterTests()>
+			<cfset testCase.afterTests()>
 		</cfloop>
 		
 		<cfset results.closeResults() /><!--- Get correct time run for suite --->
@@ -113,20 +113,20 @@
 	</cffunction>   
 	                  
 	<cffunction name="runTest" access="private">
-		<cfargument name="o" /> 
+		<cfargument name="testCase" /> 
 		<cfargument name="methodName"/>
 		<cfargument name="dataproviderHandler" />
 		<cfset var outputOfTest = "" />       
 		<cfset var dpName = "" />
 		<cfsavecontent variable="outputOfTest">
-				<cfset dpName = o.getAnnotation(methodName,"dataprovider") />
+				<cfset dpName = testCase.getAnnotation(methodName,"dataprovider") />
 				
 				<cfif len(dpName) gt 0>
-					<cfset o._$snif = _$snif />
-					<cfset dataProviderHandler.init(o._$snif()) />
-					<cfset dataProviderHandler.runDataProvider(o,methodName,dpName)>
+					<cfset testCase._$snif = _$snif />
+					<cfset dataProviderHandler.init(testCase._$snif()) />
+					<cfset dataProviderHandler.runDataProvider(testCase,methodName,dpName)>
 				<cfelse>
-					<cfinvoke component="#o#" method="#methodName#">
+					<cfinvoke component="#testCase#" method="#methodName#">
 				</cfif>
 		</cfsavecontent>
 		<cfreturn outputOfTest />
@@ -175,23 +175,21 @@
 		 <cfargument name="expectedExceptionType"/>    
 		 <cfargument name="results" />
 		 <cfargument name="outputOfTest" />      
-		 <cfargument name="o" />
+		 <cfargument name="testCase" />
 		 <cfif exceptionMatchesType(cfcatch, expectedExceptionType)>
 				<cfset  results.addSuccess('Passed') />
 				<cfset  results.addContent(outputOfTest) />
-				<cfset  o.debug(caughtException) />
+				<cfset  testCase.debug(caughtException) />
 			<cfelseif expectedExceptionType NEQ "">
-				<cfset o.debug(caughtException) />
-				
+				<cfset testCase.debug(caughtException) />
 				<cftry>
 					<cfthrow message="Exception: #expectedExceptionType# expected but #cfcatch.type# was thrown">
-					
 					<cfcatch>
 						<cfset addFailureToResults(results=results,expected=expectedExceptionType,actual=cfcatch.type,exception=cfcatch,content=outputOfTest)>
 					</cfcatch>
 				</cftry>
 			<cfelse>
-				<cfset o.debug(caughtException) />
+				<cfset testCase.debug(caughtException) />
 				<cfset results.addError(caughtException) />
 				<cfset results.addContent(outputOfTest) />
 				
