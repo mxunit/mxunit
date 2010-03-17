@@ -110,8 +110,9 @@
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
 		
 		<cfset var testRunner = createObject("component", "TestSuiteRunner") />    
-		<cfset testRunner.setDataProviderHandler(this.dataProviderHandler) />
-		<cfreturn testRunner.run(this.suites(), results, testMethod, variables.requestScopeDebuggingEnabled, this.mockingFramework)>
+		<cfset testRunner.setMockingFramework(this.mockingFramework) />
+		<cfset testRunner.setDataProviderHandler(this.dataProviderHandler) />  
+		<cfreturn testRunner.run(this.suites(), results, testMethod, variables.requestScopeDebuggingEnabled)>
 		
 	</cffunction>
 	

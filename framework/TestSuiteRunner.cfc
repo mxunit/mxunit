@@ -3,15 +3,18 @@
   <cffunction name="setDataProviderHandler">         
     <cfargument name="dph" />
     <cfset variables.dataProviderHandler = arguments.dph />
-    
   </cffunction>
+
+  <cffunction name="setMockingFramework">         
+     <cfargument name="mf" />
+     <cfset variables.mockingFramework = arguments.mf />
+   </cffunction>
   
 	<cffunction name="run" returntype="WEB-INF.cftags.component" access="public" output="true" hint="Primary method for running TestSuites and individual tests.">
 		<cfargument name="allSuites" hint="a structure corresponding to the key/componentName"/>
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
 		<cfargument name="requestScopeDebuggingEnabled" />  
-		<cfargument name="mockingFramework"/> 
 		       
 		<cfset var methods = ArrayNew(1)>
 		<cfset var testCase = "">
@@ -44,8 +47,8 @@
 			</cfif>
 			
 			<!--- set the MockingFramework if one has been set for the TestSuite --->
-			<cfif len(arguments.MockingFramework)>
-				<cfset testCase.setMockingFramework(arguments.MockingFramework) />
+			<cfif len(variables.MockingFramework)>
+				<cfset testCase.setMockingFramework(variables.MockingFramework) />
 			</cfif>
 			
 			<!--- Invoke prior to tests. Class-level setUp --->
