@@ -19,19 +19,17 @@
 	
 	
 
-	<!--- bill : 3.4.10
+	<!--- bill : 3.7.10
 			
-			Todo: Still some issue with the links to TestCases - don't include correct context
 			Todo: Make sure it works with no external CSS or JavaScript. Maybe redirect to old XMLResult if JS is not enabled?
-			todo: Still need to format to display on solo page and home page
-			Todo: Combine all suite results so  filter works with all
-			Todo: Add <title>[Component or Suite or MXUnit Test Results]
-			Todo: Maybe display as tree?
+			Todo: Filter should work with components. That is, when filtering results of a TestSuite, if suite
+			      doesn't contain filter items (empty) it should not display.
 			
    --->
 
 	<cffunction name="printResources" access="public" output="true" hint="Prints CSS and JavaScript refs for stylizing">
  		<cfargument name="mxunit_root" required="no" default="mxunit" hint="Location in the webroot where MXUnit is installed." />
+		<cfargument name="test_title" required="false" default="MXUnit Test Results" hint="An HTML title to display for this test" />
 			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/styles.css">
 			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tablesorter/blue/style.css">
 			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/results.css">
@@ -40,15 +38,17 @@
 			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.runner.js"></script>
+			<title>#test_title#</title>
 	</cffunction>
 
 
    <cffunction name="getHtmlResults" access="public" returntype="string" output="false" hint="Returns a stylized HTML representation of the TestResult">
  		<cfargument name="mxunit_root" required="no" default="#this.installRoot#" hint="Location in the webroot where MXUnit is installed." />
-        <cfset var result = "" />
+        <cfargument name="test_title" required="false" default="MXUnit Test Results" hint="An HTML title to display for this test">
+		<cfset var result = "" />
 		<cfset var temp = "" />
 		<cfsavecontent variable="result">
-			<cfset printResources() />
+			<cfset printResources(mxunit_root,test_title) />
 			<cfset temp = trim(getRawHtmlResults(mxunit_root))>
 			<cfoutput>#temp#</cfoutput>
 		</cfsavecontent>
