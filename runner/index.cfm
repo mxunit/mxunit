@@ -2,7 +2,7 @@
 
 <cfparam name="url.test" default="" />
 <cfparam name="url.componentPath" default="" />
-<cfparam name="url.output" default="js" />
+<cfparam name="url.output" default="html" />
 
 <cfset pathBase = '../' />
 <cfset title = 'Runner' />

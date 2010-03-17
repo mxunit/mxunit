@@ -34,8 +34,8 @@
 			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tablesorter/blue/style.css">
 			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/results.css">
 
-			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-			<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.min.js"></script>
+			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery-ui.min.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.runner.js"></script>
 			<title>#test_title#</title>
