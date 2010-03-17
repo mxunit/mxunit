@@ -1,11 +1,17 @@
-<cfcomponent>
+<cfcomponent>    
+  
+  <cffunction name="setDataProviderHandler">         
+    <cfargument name="dph" />
+    <cfset variables.dataProviderHandler = arguments.dph />
+    
+  </cffunction>
+  
 	<cffunction name="run" returntype="WEB-INF.cftags.component" access="public" output="true" hint="Primary method for running TestSuites and individual tests.">
 		<cfargument name="allSuites" hint="a structure corresponding to the key/componentName"/>
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
 		<cfargument name="requestScopeDebuggingEnabled" />  
 		<cfargument name="mockingFramework"/> 
-		<cfargument name="dataproviderHandler"/>  
 		       
 		<cfset var methods = ArrayNew(1)>
 		<cfset var testCase = "">
@@ -66,7 +72,7 @@
 					<!--- 
 						ATTENTION: This is where the test method is run. The following line is the center of the MXUnit universe.
 					--->
-					<cfset outputOfTest = runTest(testCase, methodName, arguments.dataProviderHandler) />
+					<cfset outputOfTest = runTest(testCase, methodName) />
 					            
 					<cfset assertExpectedExceptionTypeWasThrown(expectedExceptionType) />
 	
@@ -115,7 +121,6 @@
 	<cffunction name="runTest" access="private">
 		<cfargument name="testCase" /> 
 		<cfargument name="methodName"/>
-		<cfargument name="dataproviderHandler" />
 		<cfset var outputOfTest = "" />       
 		<cfset var dpName = "" />
 		<cfsavecontent variable="outputOfTest">
