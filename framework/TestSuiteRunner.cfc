@@ -23,12 +23,8 @@
 		       
 		<cfset var methods = ArrayNew(1)>
 		<cfset var testCase = "">
-		<cfset var tickCountAtStart = 0>
 		<cfset var componentIndex = 0>
 		<cfset var methodIndex = 0>
-		<cfset var methodName = "">
-		<cfset var expectedExceptionType = "" />
-		<cfset var outputOfTest = "" />    
 		<cfset var currentTestSuiteName = "" />
 		<!--- top-level exception is always event name / expression for Application.cfc (but not fusebox5.cfm) --->
 		<cfset var caughtException = "" />
@@ -60,64 +56,10 @@
 			<cfset testCase.beforeTests() />
 			
 			<cfloop from="1" to="#arrayLen(methods)#" index="methodIndex">
-				<cfset methodName = methods[methodIndex] />
-				<cfset outputOfTest = "">
-				<cfset  tickCountAtStart = getTickCount() />
-				
-				<cfset expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
-				
-				<cftry>
-					<cfset  results.startTest(methodName,currentTestSuiteName) />
-					
-					<cfset testCase.clearClassVariables() />
-					<cfset testCase.initDebug() />
-					<cfif requestScopeDebuggingEnabled>
-						<cfset testCase.createRequestScopeDebug() />
-					</cfif>
-					
-					<cfset testCase.setUp()/>
-					                                                       
-					<!--- 
-						ATTENTION: This is where the test method is run. The following line is the center of the MXUnit universe.
-					--->
-					<cfset outputOfTest = runTest(testCase, methodName) />
-					            
-					<cfset assertExpectedExceptionTypeWasThrown(expectedExceptionType) />
-	
-	 				<cfset  results.addSuccess('Passed') />
-					<!--- Add the trace message from the TestCase instance --->
-					<cfset  results.addContent(outputOfTest) /> 
-  			
-					<cfcatch type="mxunit.exception.AssertionFailedError">
-						<cfset addFailureToResults(results=results,expected=expectedExceptionType,actual=testCase.actual,exception=cfcatch,content=outputOfTest)>
-					</cfcatch>
-					
-					<cfcatch type="any">
-						<cfset handleCaughtException(rootOfException(cfcatch), expectedExceptionType, results, outputOfTest, testCase)>
-					</cfcatch>
-				</cftry>
-				
-				<cftry>
-					<cfset testCase.tearDown() />
-					
-					<cfcatch type="any">
-						<cfset results.addError(cfcatch)>
-					</cfcatch>
-				</cftry>
-				
-				<!--- add the deubg array to the test result item --->
-				<cfset results.setDebug( testCase.getDebug() ) />
-				
-				<!---  make sure the debug buffer is reset for the next text method  --->
-				<cfset testCase.clearDebug()  />
-				
-				<!--- reset the trace message.Bill 6.10.07 --->
-				<cfset testCase.traceMessage="" />
-				<cfset results.addProcessingTime(getTickCount()-tickCountAtStart) />
-				<cfset results.endTest(methodName) />
+				<cfset runTestMethod(testCase, methods[methodIndex], results, currentTestSuiteName) />
 			</cfloop>
 			
-			<!--- Invoke prior to tests. Class-level setUp --->
+			<!--- Invoke after tests. Class-level tearDown --->
 			<cfset testCase.afterTests()>
 		</cfloop>
 		
@@ -125,7 +67,70 @@
 		
 		<cfreturn results />
 	</cffunction>   
-	                  
+	                         
+	<cffunction name="runTestMethod" access="private">
+		<cfargument name="testCase" />
+		<cfargument name="methodName" /> 
+		<cfargument name="results" />
+		<cfargument name="currentTestSuiteName"/> 
+		 
+		<cfset var tickCountAtStart = getTickCount() />                  
+		<cfset var outputOfTest = "" />
+ 		<cfset var expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
+		
+		<cftry>
+			<cfset  results.startTest(methodName,currentTestSuiteName) />
+			
+			<cfset testCase.clearClassVariables() />
+			<cfset testCase.initDebug() />
+			<cfif requestScopeDebuggingEnabled>
+				<cfset testCase.createRequestScopeDebug() />
+			</cfif>                           s
+			
+			<cfset testCase.setUp()/>
+			                                                       
+			<!--- 
+				ATTENTION: This is where the test method is run. The following line is the center of the MXUnit universe.
+			--->
+			<cfset outputOfTest = runTest(testCase, methodName) />
+			            
+			<cfset assertExpectedExceptionTypeWasThrown(expectedExceptionType) />
+
+			<cfset  results.addSuccess('Passed') />
+			<!--- Add the trace message from the TestCase instance --->
+			<cfset  results.addContent(outputOfTest) /> 
+		
+			<cfcatch type="mxunit.exception.AssertionFailedError">
+				<cfset addFailureToResults(results=results,expected=expectedExceptionType,actual=testCase.actual,exception=cfcatch,content=outputOfTest)>
+			</cfcatch>
+			
+			<cfcatch type="any">
+				<cfset handleCaughtException(rootOfException(cfcatch), expectedExceptionType, results, outputOfTest, testCase)>
+			</cfcatch>
+		</cftry>
+		
+		<cftry>
+			<cfset testCase.tearDown() />
+			
+			<cfcatch type="any">
+				<cfset results.addError(cfcatch)>
+			</cfcatch>
+		</cftry>
+		
+	  <!--- add the debug array to the test result item --->
+		<cfset results.setDebug( testCase.getDebug() ) />
+		
+		<!---  make sure the debug buffer is reset for the next text method  --->
+		<cfset testCase.clearDebug()  />
+		
+		<!--- reset the trace message.Bill 6.10.07 --->
+		<cfset testCase.traceMessage="" />
+		<cfset results.addProcessingTime(getTickCount()-tickCountAtStart) />
+		
+		<cfset results.endTest(methodName) />
+		
+	</cffunction>
+	
 	<cffunction name="runTest" access="private">
 		<cfargument name="testCase" /> 
 		<cfargument name="methodName"/>
