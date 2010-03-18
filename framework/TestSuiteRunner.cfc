@@ -1,20 +1,25 @@
 <cfcomponent>    
-  <cfset variables.requestScopeDebuggingEnabled = false />
+  
+	<cfset variables.requestScopeDebuggingEnabled = false />
+
 
   <cffunction name="setDataProviderHandler">         
     <cfargument name="dph" />
     <cfset variables.dataProviderHandler = arguments.dph />
   </cffunction>
+  
 
   <cffunction name="setMockingFramework">         
      <cfargument name="mf" />
      <cfset variables.mockingFramework = arguments.mf />
-   </cffunction>              
+  </cffunction>              
+
 
 	<cffunction name="enableRequestScopeDebugging">
 		<!--- TODO: Add a test for request scope debugging or get rid of it. --->
 		<cfset variables.requestScopeDebuggingEnabled = true />
 	</cffunction>
+
   
 	<cffunction name="run" returntype="WEB-INF.cftags.component" access="public" output="true" hint="Primary method for running TestSuites and individual tests.">
 		<cfargument name="allSuites" hint="a structure corresponding to the key/componentName"/>
@@ -22,17 +27,12 @@
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
 		       
 		<cfset var testCase = "">
-		<cfset var componentIndex = 0>
 		<cfset var methodIndex = 0>
 		<cfset var currentTestSuiteName = "" />
-		<!--- top-level exception is always event name / expression for Application.cfc (but not fusebox5.cfm) --->
-		<cfset var caughtException = "" />
 		
 		<cfloop collection="#allSuites#" item="currentTestSuiteName">
 	                             
 			<cfset currentSuite = allSuites[currentTestSuiteName] />
-			
-
 						
 			<cfset testCase = createTestCaseFromComponentOrComponentName(currentSuite.ComponentObject) />
 			
@@ -52,10 +52,9 @@
 				</cfloop>
 			</cfif>
 			
-  		
 			<!--- Invoke after tests. Class-level tearDown --->
 			<cfset testCase.afterTests()>
-		</cfloop>
+		</cfloop>                       
 		
 		<cfset results.closeResults() /><!--- Get correct time run for suite --->
 		
@@ -70,8 +69,8 @@
 		<cfelse>
 			<cfreturn componentObject.TestCase(componentObject) />
 		</cfif>
-		
 	</cffunction>
+
 	                         
 	<cffunction name="runTestMethod" access="private">
 		<cfargument name="testCase" />
@@ -132,6 +131,7 @@
 		<cfset results.endTest(methodName) />
 		
 	</cffunction>
+
 	
 	<cffunction name="runTest" access="private">
 		<cfargument name="testCase" /> 
@@ -150,9 +150,8 @@
 				</cfif>
 		</cfsavecontent>
 		<cfreturn outputOfTest />
-		
 	</cffunction>     
-	
+
 	
 	<cffunction name="assertExpectedExceptionTypeWasThrown">
 		<cfargument name="expectedExceptionType"/>
@@ -160,7 +159,7 @@
 			<cfthrow type="mxunit.exception.AssertionFailedError" message="Exception: #expectedExceptionType# expected but no exception was thrown" /> 
 		</cfif>
 	</cffunction>
-	
+
 	
 	<cffunction name="rootOfException" access="private">
 		<cfargument name="caughtException"/>
@@ -169,6 +168,7 @@
 		</cfif>        
 		<cfreturn caughtException />		
 	</cffunction>
+
 	
 	<cffunction name="addFailureToResults" access="private">
 		<cfargument name="results" required="true" hint="the results object">
@@ -184,11 +184,12 @@
 		
 		<cflog file="mxunit" type="error" application="false" text="#exception.message#::#exception.detail#">
 	</cffunction>   
+
 	
 	<cffunction name="_$snif" access="private" hint="Door into another component's variables scope">
 		<cfreturn variables />
 	</cffunction>                   
-	
+
 	
 	<cffunction name="handleCaughtException" access="private">      
 		 <cfargument name="caughtException"/>     
@@ -212,10 +213,8 @@
 				<cfset testCase.debug(caughtException) />
 				<cfset results.addError(caughtException) />
 				<cfset results.addContent(outputOfTest) />
-				
 				<cflog file="mxunit" type="error" application="false" text="#cfcatch.message#::#cfcatch.detail#" />
 			</cfif>
-		
 	</cffunction>
 	
 	
@@ -225,7 +224,6 @@
 		<cfif expectedExceptionType eq "">
 			<cfreturn false/>
 		</cfif>          
-
 		<cfreturn listFindNoCase(expectedExceptionType, actualException.type) OR listFindNoCase(expectedExceptionType, getMetaData(actualException).getName())>
 	</cffunction>
 
