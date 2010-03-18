@@ -1,5 +1,6 @@
 <cfcomponent>    
-  
+  <cfset variables.requestScopeDebuggingEnabled = false />
+
   <cffunction name="setDataProviderHandler">         
     <cfargument name="dph" />
     <cfset variables.dataProviderHandler = arguments.dph />
@@ -8,13 +9,17 @@
   <cffunction name="setMockingFramework">         
      <cfargument name="mf" />
      <cfset variables.mockingFramework = arguments.mf />
-   </cffunction>
+   </cffunction>              
+
+	<cffunction name="enableRequestScopeDebugging">
+		<!--- TODO: Add a test for request scope debugging or get rid of it. --->
+		<cfset variables.requestScopeDebuggingEnabled = true />
+	</cffunction>
   
 	<cffunction name="run" returntype="WEB-INF.cftags.component" access="public" output="true" hint="Primary method for running TestSuites and individual tests.">
 		<cfargument name="allSuites" hint="a structure corresponding to the key/componentName"/>
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
-		<cfargument name="requestScopeDebuggingEnabled" />  
 		       
 		<cfset var methods = ArrayNew(1)>
 		<cfset var testCase = "">
@@ -29,7 +34,7 @@
 		<cfset var caughtException = "" />
 		
 		<cfloop collection="#allSuites#" item="currentTestSuiteName">
-	
+	                             
 			<cfset currentSuite = allSuites[currentTestSuiteName] />
 			
 			<cfif len(arguments.testMethod)>
@@ -66,7 +71,7 @@
 					
 					<cfset testCase.clearClassVariables() />
 					<cfset testCase.initDebug() />
-					<cfif requestScopeDebuggingEnabled OR structKeyExists(url,"requestdebugenable")>
+					<cfif requestScopeDebuggingEnabled>
 						<cfset testCase.createRequestScopeDebug() />
 					</cfif>
 					

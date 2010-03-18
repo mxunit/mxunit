@@ -111,8 +111,11 @@
 		
 		<cfset var testRunner = createObject("component", "TestSuiteRunner") />    
 		<cfset testRunner.setMockingFramework(this.mockingFramework) />
-		<cfset testRunner.setDataProviderHandler(this.dataProviderHandler) />  
-		<cfreturn testRunner.run(this.suites(), results, testMethod, variables.requestScopeDebuggingEnabled)>
+		<cfset testRunner.setDataProviderHandler(this.dataProviderHandler) /> 
+		<cfif variables.requestScopeDebuggingEnabled OR structKeyExists(url,"requestdebugenable")>
+			<cfset testRunner.enableRequestScopeDebugging() />
+		</cfif>                 
+		<cfreturn testRunner.run(this.suites(), results, testMethod)>
 		
 	</cffunction>
 	
