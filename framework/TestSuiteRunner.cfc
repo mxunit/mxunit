@@ -21,7 +21,6 @@
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
 		       
-		<cfset var methods = ArrayNew(1)>
 		<cfset var testCase = "">
 		<cfset var componentIndex = 0>
 		<cfset var methodIndex = 0>
@@ -33,11 +32,7 @@
 	                             
 			<cfset currentSuite = allSuites[currentTestSuiteName] />
 			
-			<cfif len(arguments.testMethod)>
-				<cfset methods[1] = arguments.testMethod />
-			<cfelse>
-				<cfset methods = currentSuite["methods"] />
-			</cfif>
+
 						
 			<cfset testCase = createTestCaseFromComponentOrComponentName(currentSuite.ComponentObject) />
 			
@@ -48,11 +43,16 @@
 			
 			<!--- Invoke prior to tests. Class-level setUp --->
 			<cfset testCase.beforeTests() />
+
+			<cfif len(arguments.testMethod)>
+				<cfset runTestMethod(testCase, currentSuite.methods[methodIndex], results, currentTestSuiteName) />
+			<cfelse>                                    
+				<cfloop from="1" to="#arrayLen(currentSuite.methods)#" index="methodIndex">
+					<cfset runTestMethod(testCase, currentSuite.methods[methodIndex], results, currentTestSuiteName) />
+				</cfloop>
+			</cfif>
 			
-			<cfloop from="1" to="#arrayLen(methods)#" index="methodIndex">
-				<cfset runTestMethod(testCase, methods[methodIndex], results, currentTestSuiteName) />
-			</cfloop>
-			
+  		
 			<!--- Invoke after tests. Class-level tearDown --->
 			<cfset testCase.afterTests()>
 		</cfloop>
