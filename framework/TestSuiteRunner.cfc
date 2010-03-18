@@ -38,14 +38,8 @@
 			<cfelse>
 				<cfset methods = currentSuite["methods"] />
 			</cfif>
-			
-			<cfset componentObject = currentSuite.ComponentObject />
-			
-			<cfif isSimpleValue(componentObject)>
-				<cfset testCase = createObject("component", currentTestSuiteName).TestCase(componentObject) />
-			<cfelse>
-				<cfset testCase = componentObject.TestCase(componentObject) />
-			</cfif>
+						
+			<cfset testCase = createTestCaseFromComponentOrComponentName(currentSuite.ComponentObject) />
 			
 			<!--- set the MockingFramework if one has been set for the TestSuite --->
 			<cfif len(variables.MockingFramework)>
@@ -66,7 +60,18 @@
 		<cfset results.closeResults() /><!--- Get correct time run for suite --->
 		
 		<cfreturn results />
-	</cffunction>   
+	</cffunction>                                 
+	
+	
+	<cffunction name="createTestCaseFromComponentOrComponentName">
+		<cfargument name="componentObject"/>
+		<cfif isSimpleValue(componentObject)>
+			<cfreturn createObject("component", currentTestSuiteName).TestCase(componentObject) />
+		<cfelse>
+			<cfreturn componentObject.TestCase(componentObject) />
+		</cfif>
+		
+	</cffunction>
 	                         
 	<cffunction name="runTestMethod" access="private">
 		<cfargument name="testCase" />
@@ -85,13 +90,10 @@
 			<cfset testCase.initDebug() />
 			<cfif requestScopeDebuggingEnabled>
 				<cfset testCase.createRequestScopeDebug() />
-			</cfif>                           s
+			</cfif>                           
 			
 			<cfset testCase.setUp()/>
-			                                                       
-			<!--- 
-				ATTENTION: This is where the test method is run. The following line is the center of the MXUnit universe.
-			--->
+			                                   
 			<cfset outputOfTest = runTest(testCase, methodName) />
 			            
 			<cfset assertExpectedExceptionTypeWasThrown(expectedExceptionType) />
