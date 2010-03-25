@@ -20,8 +20,8 @@
 	<!---
 		Constructor
 	--->
-	<cffunction name="JUnitXMLTestResult" access="public" returntype="TestResult">
-		<cfargument name="testResults" type="TestResult" required="false" />
+	<cffunction name="JUnitXMLTestResult" access="public" returntype="component">
+		<cfargument name="testResults" type="component" required="false" />
 		
 		<cfset this.testRuns = arguments.testResults.testRuns />
 		<cfset this.failures = arguments.testResults.testFailures />
@@ -33,6 +33,25 @@
 		<cfset buildXmlresults(arguments.testResults.getResults()) />
 		
 		<cfreturn this />
+	</cffunction>
+	
+	<cffunction name="generateStacktrace" access="private" returntype="string" output="false">
+		<cfargument name="catchResult" type="any" required="true" />
+		
+		<cfset var i = '' />
+		<cfset var context = '' />
+		<cfset var stacktrace = '' />
+		
+		<!--- Prime the stacktrace --->
+		<cfset stacktrace = arguments.catchResult.message />
+		
+		<cfloop from="1" to="#arrayLen(arguments.catchResult.tagContext)#" index="i">
+			<cfset context = arguments.catchResult.tagContext[i] />
+			
+			<cfset stacktrace = stacktrace & ' at ' & context.template & ':' & context.line />
+		</cfloop>
+		
+		<cfreturn stacktrace />
 	</cffunction>
 	
 	<!---
@@ -87,9 +106,9 @@
 				this.resultsXML = this.resultsXML & '<testcase classname="#testResults.component#" name="#testResults.testname#" time="#testResults.time/1000#">';
 				
 				if( listFindNoCase("Failed",testResults.testStatus)){
-					this.resultsXML = this.resultsXML & '<failure message="#xmlformat(testResults.error.message)#"><![CDATA[#testResults.error.stacktrace#]]></failure>';
+					this.resultsXML = this.resultsXML & '<failure message="#xmlformat(testResults.error.message)#"><![CDATA[#generateStacktrace(testResults.error)#]]></failure>';
 				} else if( listFindNoCase("Error",testResults.testStatus)) {
-					this.resultsXML = this.resultsXML & '<error message="#testResults.error.type#"><![CDATA[#testResults.error.stacktrace#]]></error>';
+					this.resultsXML = this.resultsXML & '<error message="#testResults.error.type#"><![CDATA[#generateStacktrace(testResults.error)#]]></error>';
 				}
 				
 				this.resultsXML = this.resultsXML & '</testcase>';

@@ -7,14 +7,6 @@
 		<div class="clear"><!-- clear --></div>
 	</div>
 	
-	<!--- Check if doing js enhancement --->
-	<cfif structKeyExists(url, 'print_js_resources') and url.print_js_resources> <!--- just a flag to load resources? --->
-		<cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.min.js') />
-		<cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery-ui.min.js') />
-		<cfset arrayAppend(scripts, pathBase & 'resources/jquery/tablesorter/jquery.tablesorter.js') />
-		<cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.runner.js') />
-	</cfif>
-	
 	<!--- Check for custom scripts --->
 	<cfif arrayLen(scripts)>
 		<cfoutput>

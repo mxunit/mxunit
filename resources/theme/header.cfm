@@ -1,6 +1,11 @@
 <cfparam name="title" default="Unit Test Framework and Eclipse Plugin for CFML engines" />
 <cfparam name="pathBase" default="./" />
-<cfparam name="scripts" default="#arrayNew(1)#" />
+
+<cfset scripts = arrayNew(1) />
+<cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.min.js') />
+<cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery-ui.min.js') />
+<cfset arrayAppend(scripts, pathBase & 'resources/jquery/tablesorter/jquery.tablesorter.js') />
+<cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.runner.js') />
 
 <cfset context = getDirectoryFromPath(expandPath(pathBase)) />
 
@@ -39,7 +44,7 @@
 			<div class="grid_9">
 				<ul class="nav horizontal">
 					<li><a href="<cfoutput>#pathBase#</cfoutput>doc/api/index.cfm" title="Local API Documentation">API</a></li>
-					<li><a href="http://mxunit.org/doc/index.cfm" title="Documentation, Tutorials, etc...">Docs</a></li>
+					<li><a href="http://wiki.mxunit.org/" title="Documentation, Tutorials, etc...">Docs</a></li>
 					<li><a href="<cfoutput>#pathBase#</cfoutput>samples/samples.cfm">Samples</a></li>
 					<li><a href="http://mxunit.org/blog">Blog</a></li>
 					<li><a href="<cfoutput>#pathBase#</cfoutput>runner/index.cfm" title="Simple HTML Test Runner">Test Runner</a></li>
