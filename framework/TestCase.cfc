@@ -430,5 +430,11 @@
 		</cfif>
 		
 		<cfreturn returnVal />
+	</cffunction> 
+	
+	<cffunction name="expectException">
+		<cfargument name="expectedExceptionType" />
+		<cfset this.expectedExceptionType = arguments.expectedExceptionType />
 	</cffunction>
+	
 </cfcomponent>

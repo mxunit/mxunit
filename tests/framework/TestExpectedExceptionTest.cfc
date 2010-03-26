@@ -13,7 +13,13 @@
 	
 	<cffunction name="expectedExpressionExceptionShouldBeCaught" mxunit:expectedException="Expression">
 	 <cfset foo=bar />
-	</cffunction>
+	</cffunction>                          
+	
+	<cffunction name="expectedExpressionExceptionShouldBeCaught_MethodStyle"> 
+	 <cfset expectException("Expression") />
+	 <cfset foo=bar />
+	</cffunction>                          
+	
 	
 	<cffunction name="makeSureFailureHappensAndOldStyleWorks">
 		   

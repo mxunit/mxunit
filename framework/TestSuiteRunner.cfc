@@ -80,7 +80,7 @@
 		 
 		<cfset var tickCountAtStart = getTickCount() />                  
 		<cfset var outputOfTest = "" />
- 		<cfset var expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
+ 		<cfset testCase.expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
 		
 		<cftry>
 			<cfset  results.startTest(methodName,currentTestSuiteName) />
@@ -89,24 +89,24 @@
 			<cfset testCase.initDebug() />
 			<cfif requestScopeDebuggingEnabled>
 				<cfset testCase.createRequestScopeDebug() />
-			</cfif>                           
-			
+			</cfif>                                      
+						
 			<cfset testCase.setUp()/>
-			                                   
+			                                                                               
 			<cfset outputOfTest = runTest(testCase, methodName) />
-			            
-			<cfset assertExpectedExceptionTypeWasThrown(expectedExceptionType) />
+			                                           
+			<cfset assertExpectedExceptionTypeWasThrown(testCase.expectedExceptionType) />			
 
 			<cfset  results.addSuccess('Passed') />
 			<!--- Add the trace message from the TestCase instance --->
 			<cfset  results.addContent(outputOfTest) /> 
 		
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfset addFailureToResults(results=results,expected=expectedExceptionType,actual=testCase.actual,exception=cfcatch,content=outputOfTest)>
+				<cfset addFailureToResults(results=results,expected=testCase.expectedExceptionType,actual=testCase.actual,exception=cfcatch,content=outputOfTest)>
 			</cfcatch>
 			
 			<cfcatch type="any">
-				<cfset handleCaughtException(rootOfException(cfcatch), expectedExceptionType, results, outputOfTest, testCase)>
+				<cfset handleCaughtException(rootOfException(cfcatch), testCase.expectedExceptionType, results, outputOfTest, testCase)>
 			</cfcatch>
 		</cftry>
 		
