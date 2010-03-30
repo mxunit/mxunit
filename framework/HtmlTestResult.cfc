@@ -6,7 +6,6 @@
 	
 	<cffunction name="HTMLTestResult" hint="Constructor" access="public" returntype="HTMLTestResult">
 		<cfargument name="testResults" type="TestResult" required="false" />
-		
 		<cfset this.testRuns = arguments.testResults.testRuns />
 		<cfset this.failures = arguments.testResults.testFailures />
 		<cfset this.errors = arguments.testResults.testErrors />
@@ -155,9 +154,9 @@
 				
 			</cfoutput>
 		</cfsavecontent>
-		
 		<cfreturn Trim(result) />
 	</cffunction>
+	
 	
 	<cffunction name="renderErrorStruct" output="false" returntype="string" access="private" hint="I render a coldfusion error struct as HTML">
 		<cfargument name="ErrorCollection" required="true" type="any">

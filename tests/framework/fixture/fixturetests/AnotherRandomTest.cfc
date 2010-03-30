@@ -33,6 +33,19 @@
     </cfscript>
 </cffunction>
 
+<cffunction name="thisPublicFunctionShouldBeInvisible" mxunit:test="false">
+	<cfthrow message="I should not run!">
+</cffunction>
+
+<cffunction name="privateFunctionShouldBeInvisible" access="private">
+	<cfthrow message="I should not run!">
+</cffunction>
+
+<cffunction name="packageFunctionShouldBeInvisible" access="package">
+	<cfthrow message="I should not run!">
+</cffunction>
+
+
 
   <!---End Specific Test Cases --->
 

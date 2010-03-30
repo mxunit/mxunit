@@ -365,7 +365,9 @@
 		
 		<cfloop collection="#URLScope#" item="key">
 			<cfif key neq "output">
-				<cfset qs = listAppend(qs,"#lcase(key)#=#URLScope[key]#","&") />
+				<cfif isSimpleValue(arguments.URLScope[key])>
+				  <cfset qs = listAppend(qs,"#lcase(key)#=#URLScope[key]#","&") />
+				</cfif>
 			</cfif>
 		</cfloop>
 		
