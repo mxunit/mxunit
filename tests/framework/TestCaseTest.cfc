@@ -289,6 +289,18 @@
 		}
 	
 	
+	
+	function $expectedExceptionShouldSetPropertyInTestCase(){
+	 	expectException("my.funny.ValantineException");		
+	 	assertEquals( "my.funny.ValantineException", this.expectedException );
+	 }
+	
+	 function $expectedExceptionTest(){
+	 	expectException("mxunit.exception.AssertionFailedError");		
+	 	fail("catch me if you can!");
+	 }
+	
+	
 	</cfscript>
 
 

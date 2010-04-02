@@ -156,8 +156,15 @@
 				<cfset this.c = "">
 				<cfset  start = getTickCount() />
 				
-				<cfset exception = o.getAnnotation(methodName,"expectedException") />
-				
+				<cfif o.getAnnotation(methodName,"expectedException") is ''>
+				  <cfset exception = o.expectedException />
+				<cfelse>
+				  <cfset exception = o.getAnnotation(methodName,"expectedException") />
+			    </cfif>
+			    
+			    <cfset exception = o.getAnnotation(methodName,"expectedException") />
+			    <cfset writeoutput(exception) >
+			   	 
 				<cftry>
 					<cfset  results.startTest(methodName,components[i]) />
 					

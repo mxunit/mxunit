@@ -46,6 +46,7 @@
 		<cfparam name="this.result" type="any" default="#createObject("component","TestResult")#" />
 		<cfparam name="this.metadata" type="struct" default="#getMetaData(this)#" />
 		<cfparam name="this.package" type="string" default="" />
+		<cfparam name="this.expectedException" type="string" default="" />
 		
 		<cfset setMockingFramework("") />
 		
@@ -409,6 +410,11 @@
 	   <cfscript>
 		return createObject("component","mightymock.OrderedExpectation").init(mocks);
 	   </cfscript>
+	</cffunction>
+	
+	<cffunction name="expectException" access="public" hint="Method for setting an expected exception. This is a scripting alternative to realted annotation.">
+	  <cfargument name="expectedException" type="String" required="true" hint="The exception we expect to be thrown." />
+	  <cfset this.expectedException = arguments.expectedException />
 	</cffunction>
 	
 	<!--- annotation stuff --->
