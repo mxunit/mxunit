@@ -437,4 +437,11 @@
 		<cfset this.expectedExceptionType = arguments.expectedExceptionType />
 	</cffunction>
 	
+	 <cffunction name="orderedExpectation" access="public" hint="Method for mocking. Creates an OrderedExpectation object used for verify the order in which mocks have been called">
+		<cfargument name="mocks" required="true" type="any" hint="One or more mocks in which to verify order" />
+		<cfscript>
+		return createObject("component","mightymock.OrderedExpectation").init(mocks);
+		</cfscript>
+	</cffunction>
+	
 </cfcomponent>
