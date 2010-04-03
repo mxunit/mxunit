@@ -156,15 +156,9 @@
 				<cfset this.c = "">
 				<cfset  start = getTickCount() />
 				
-				<cfif o.getAnnotation(methodName,"expectedException") is ''>
-				  <cfset exception = o.expectedException />
-				<cfelse>
-				  <cfset exception = o.getAnnotation(methodName,"expectedException") />
-			    </cfif>
-			    
-			    <cfset exception = o.getAnnotation(methodName,"expectedException") />
-			    <cfset writeoutput(exception) >
-			   	 
+				<!--- what we expect from the method --->
+				<cfset exception = o.getAnnotation(methodName,"expectedException") />
+
 				<cftry>
 					<cfset  results.startTest(methodName,components[i]) />
 					
@@ -187,28 +181,32 @@
 							<cfset this.dataProviderHandler.init(o._$snif()) />
 							<cfset this.dataProviderHandler.runDataProvider(o,methodName,dpName)>
 						<cfelse>
-							<cfinvoke component="#o#" method="#methodName#">
+						  <cftry>
+							<cfinvoke component="#o#" method="#methodName#" />
+						  <cfcatch type="any">
+							  <cfif o.expectedException eq cfcatch.type>
+							      <cfset exception = cfcatch.type />
+							      <cfset o.expectedException = '' />
+								<cfelse>
+								   <cfrethrow />
+								</cfif>
+						  </cfcatch>
+						  </cftry>
 						</cfif>
-					 </cfsavecontent>
+					</cfsavecontent>
 					
 					<!--- Were we expecting an error or not? --->
-					<cfif exception EQ "">
+					<cfif exception eq "">
 						<cfset  results.addSuccess('Passed') />
-						
 						<!--- Add the trace message from the TestCase instance --->
 						<cfset  results.addContent(this.c) />
 					<cfelse>
-						 <cfthrow type="mxunit.exception.AssertionFailedError" message="Exception: #exception# expected but no exception was thrown" />
+						 <cfthrow type="#exception#" message="Exception: #exception# expected but no exception was thrown" />
 					</cfif>
-					
-					<cfcatch type="mxunit.exception.AssertionFailedError">
-						<cfset addFailureToResults(results=results,expected=o.expected,actual=o.actual,exception=cfcatch,content=this.c)>
-					</cfcatch>
 					
 					<cfcatch type="any">
 						<!--- paranoia --->
 						<cfset caughtException = cfcatch />
-						
 						<cfif structKeyExists(caughtException,"rootcause")>
 							<cfset caughtException = caughtException.rootcause />
 						</cfif>
@@ -219,10 +217,8 @@
 							<cfset  o.debug(caughtException) />
 						<cfelseif exception NEQ "">
 							<cfset o.debug(caughtException) />
-							
 							<cftry>
-								<cfthrow message="Exception: #exception# expected but #cfcatch.type# was thrown">
-								
+								<cfthrow type="mxunit.exception.AssertionFailedError" message="Exception: #exception# expected but #cfcatch.type# was thrown">
 								<cfcatch>
 									<cfset addFailureToResults(results=results,expected=exception,actual=cfcatch.type,exception=cfcatch,content=this.c)>
 								</cfcatch>
@@ -231,7 +227,6 @@
 							<cfset o.debug(caughtException) />
 							<cfset results.addError(caughtException) />
 							<cfset results.addContent(this.c) />
-							
 							<cflog file="mxunit" type="error" application="false" text="#cfcatch.message#::#cfcatch.detail#" />
 						</cfif>
 					</cfcatch>
@@ -275,22 +270,40 @@
 			var result = this.run();
 			
 			switch(arguments.output){
-			case 'xml':
-				writeoutput(result.getXmlresults());
+				case 'html':
+				  writeoutput(this.result.getHtmlresults());
 				break;
-			
-			case 'junitxml':
-				writeoutput(result.getJUnitXmlresults());
+				
+				case 'rawhtml':
+				  writeoutput(this.result.getHtmlresults());
 				break;
-			
-			case 'extjs': // TODO Depreciated
-			case 'jq':
-			case 'jqGrid':
-				writeoutput('<body>#this.result.getjqGridresults(this.name)#<div id="testresultsgrid" class="bodypad"></div></body>');
+				
+				case 'xml':
+					writeoutput(this.result.getXmlresults());
 				break;
-			
-			default:
-				writeoutput(result.getHtmlresults());
+				
+				case 'junitxml':
+					writeoutput(this.result.getJUnitXmlresults());
+				break;
+				
+				case 'json':
+					writeoutput(this.result.getJSONResults());
+				break;
+				
+				case 'query':
+					dump(this.result.getQueryresults());
+				break;
+				
+				case 'extjs': // TODO deprecated
+				 	writeoutput( this.result.getHtmlresults() );
+				break;		
+				
+				case 'text':
+					writeoutput( trim(this.result.getTextresults(this.name)));
+				break;
+				
+				default:
+					writeoutput(this.result.getHtmlresults());
 				break;
 			}
 		</cfscript>

@@ -68,8 +68,17 @@
 	});
 	
 	function toggleTests( type ) {
-		window.console.log('Toggling: ' + type);
+		debug('Toggling: ' + type);
 		
 		$('tr.' + type, container).toggle();
 	}
+	
+	function debug(s) {
+		if (typeof window !== "undefined" && typeof window.console !== "undefined" && typeof window.console.debug !== "undefined") {
+			window.console.log(s);
+		} else {
+			//alert(s);
+		}
+	}
+	
 })(jQuery);

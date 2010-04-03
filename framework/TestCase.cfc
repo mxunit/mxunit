@@ -413,8 +413,8 @@
 	</cffunction>
 	
 	<cffunction name="expectException" access="public" hint="Method for setting an expected exception. This is a scripting alternative to realted annotation.">
-	  <cfargument name="expectedException" type="String" required="true" hint="The exception we expect to be thrown." />
-	  <cfset this.expectedException = arguments.expectedException />
+		<cfargument name="expectedException" type="String" required="true" hint="The exception we expect to be thrown." />
+		<cfset this.expectedException = arguments.expectedException />
 	</cffunction>
 	
 	<!--- annotation stuff --->
