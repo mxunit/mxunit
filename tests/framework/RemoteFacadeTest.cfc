@@ -24,7 +24,6 @@
 		<cfset results = rf.executeTestCase(name,methods,"")>
 		<cfset assertExpectedKeysArePresent(results)>
 		<cfset methods = rf.getComponentMethods(name)>
-		<!--- <cfset debug(results)> --->
 		<cfset assertTrue(isStruct(results),"results should be struct")>
 		<cfset assertEquals(ArrayLen(methods),ArrayLen(StructKeyArray(results[name])),"")>
 	</cffunction>
@@ -37,7 +36,6 @@
 		<cfset results = rf.executeTestCase(name,methods,"")>
 		<cfset assertExpectedKeysArePresent(results)>
 		<cfset methods = rf.getComponentMethods(name)>
-		<!--- <cfset debug(results)> ---> 
 		<cfset assertTrue(isStruct(results),"results should be struct")>
 		<cfset assertEquals(ArrayLen(methods),ArrayLen(StructKeyArray(results[name])),"")>
 		<cfset assertTrue(StructKeyExists(results[name]["testFail"],"EXCEPTION"))>
@@ -52,7 +50,6 @@
 		<cfset var results = "">
 
 		<cfset results = rf.executeTestCase(name,"","")>
-		<!--- <cfset debug(results)> --->
 		<cfset assertTrue(isSimpleValue(results[name][method]["EXCEPTION"]))>
 		<cfset assertTrue( findNoCase("complex",  results[name][method]["EXCEPTION"]),"mxunit should convert the complex exception value into a string and prefix it with 'complexvalue' but didn't: #results[name][method]['EXCEPTION']#" )>
 		<cfset assertTrue(StructKeyExists(results[name][method],"TAGCONTEXT"))>		
@@ -66,7 +63,6 @@
 
 	<cffunction name="testGetServerType">
 		<cfset var type = rf.getServerType()>
-		<cfset debug(type)>
 		<cfset assertTrue(  len(type) GT 0  )>
 	</cffunction>
 	
@@ -77,14 +73,12 @@
 
 	<cffunction name="getFrameworkDateShouldReturnDateAndNotTime">
 		<cfset var dt = rf.getFrameworkDate()>
-		<cfset debug(dt)>
 		<cfset assertTrue(isDate(dt))>
 	</cffunction>
 	
 	<cffunction name="assertExpectedKeysArePresent" access="private">
 		<cfargument name="TestResult" type="struct" required="true"/>
 		<cfset var basicKeys = "actual,expected,message,output,result,time">
-		<cfset debug(TestResult)>
 		
 		<cfloop collection="#TestResult#" item="componentName">
 			<cfloop collection="#TestResult[componentName]#" item="methodName">

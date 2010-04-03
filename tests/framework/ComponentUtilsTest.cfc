@@ -5,7 +5,6 @@
 <cffunction name="testThatGetComponentRootImplementsOverrideOfMxunitConfigXml">
   <cfscript>
    var root = cu.getComponentRoot("override");
-   debug("Walking override path :: " & root);
    assertEquals("mxunit",root);
   </cfscript>
 </cffunction>
@@ -14,7 +13,6 @@
 <cffunction name="testGetComponentRootWhenGetMetaDataNameIsDot">
   <cfscript>
    var root = cu.getComponentRoot(".");
-   debug(root);
    assertEquals("mxunit",root);
   </cfscript>
 </cffunction>
@@ -22,7 +20,6 @@
 <cffunction name="testGetComponentRootWhenGetMetaDataNameIsComponentUtils">
     <cfscript>
      var root = cu.getComponentRoot("ComponentUtils");
-     debug(root);
      assertEquals("mxunit",root);
     </cfscript>
   </cffunction>
@@ -30,7 +27,6 @@
   <cffunction name="testGetComponentRootWhenGetMetaDataNameIsNull">
     <cfscript>
      var root = cu.getComponentRoot("");
-     debug(root);
      assertEquals("mxunit",root);
     </cfscript>
   </cffunction>
@@ -50,11 +46,9 @@
 		<cfset var root = expandPath("/mxunit")>
 
 		<cfset var template = "#root##sep#framework#sep#SomeFile.cfc">
-		<cfset debug("template is #template#")>
 		<cfset assertTrue(cu.isFrameworkTemplate(template),"#template# should be framework template")>
 
 		<cfset template = replace(template,".cfc",".cfm","one")>
-		<cfset debug("template is #template#")>
 		<cfset assertTrue(cu.isFrameworkTemplate(template),"#template# should be framework template")>
 
 		<cfset template = "c:/bluedragon/wwwroot/mxunit/framework/TestCase.cfc">
@@ -99,23 +93,18 @@
     //     method will be used by framework only
     //@post
    var root = cu.getInstallRoot("foo.bar.nanoo.mxunit.framework.TestResult");
-   debug(root);
    assertEquals("#getContextRootPath()#/foo/bar/nanoo/mxunit/", root);
 
    root = cu.getInstallRoot();
-   debug(root);
    assertEquals("#getContextRootPath()#/mxunit/",root);
 
    root = cu.getInstallRoot("mxunit.mxunit.framework.TestCase");
-   debug(root);
    assertEquals("#getContextRootPath()#/mxunit/mxunit/",root);
 
    root = cu.getInstallRoot("mxunit.framework.TestCase");
-   debug(root);
    assertEquals("#getContextRootPath()#/mxunit/",root);
 
    root = cu.getInstallRoot("mxunit.foo.bar.mxunit.framework.TestCase");
-   debug(root);
    assertEquals("#getContextRootPath()#/mxunit/foo/bar/mxunit/",root);
 
   </cfscript>
@@ -129,25 +118,20 @@
   //     method will be used by framework only
   //@post
    var root = cu.getComponentRoot("foo.bar.nanoo.mxunit.framework.TestResult");
-   debug(root);
    assertEquals("foo.bar.nanoo.mxunit", root);
 
 
    root = cu.getComponentRoot("mxunit.framework.TestResult");
-   debug(root);
    assertEquals("mxunit", root);
 
 
    root = cu.getComponentRoot("");
-   debug(root);
    assertEquals("mxunit", root);
 
    root = cu.getComponentRoot("mxunit.framework.Assert");
-   debug(root);
    assertEquals("mxunit", root);
 
    root = cu.getComponentRoot("mxunit.framework.ComponentUtils");
-   debug(root & ".MXunitInstallTest");
    assertEquals("mxunit.MXunitInstallTest", root & ".MXunitInstallTest");
 
   </cfscript>
@@ -166,7 +150,6 @@
    }
   }
 
-  debug(cu.hasJ2EEContext());
  </cfscript>
 </cffunction>
 

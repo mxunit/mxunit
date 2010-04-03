@@ -46,7 +46,6 @@
 		<cfparam name="this.result" type="any" default="#createObject("component","TestResult")#" />
 		<cfparam name="this.metadata" type="struct" default="#getMetaData(this)#" />
 		<cfparam name="this.package" type="string" default="" />
-		<cfparam name="this.expectedException" type="string" default="" />
 		
 		<cfset setMockingFramework("") />
 		
@@ -54,10 +53,12 @@
 	</cffunction>
 	
 	<cffunction name="initDebug" access="public" output="false">
-		<cfparam name="variables.debugArrayWrapper" type="struct" default="#StructNew()#" />
-		<cfparam name="variables.debugArrayWrapper.debugArray" type="array" default="#arrayNew(1)#" />
+		<cfparam name="debugArrayWrapper" type="struct" default="#StructNew()#" />
+		<cfparam name="debugArray" type="array" default="#arrayNew(1)#" />
 		
-		<cfreturn variables.debugArrayWrapper />
+		<cfset debugArrayWrapper.debugArray = debugArray />
+		
+		<cfreturn debugArrayWrapper />
 	</cffunction>
 	
 	<cffunction name="createRequestScopeDebug" access="public" output="false">
@@ -309,26 +310,26 @@
 		<cfargument name="debugData" type="any" required="true" />
 		
 		<cfif isDefined("request.debugArrayWrapper")>
-			<cfset variables.debugArrayWrapper = request.debugArrayWrapper>
+			<cfset debugArrayWrapper = request.debugArrayWrapper>
 		</cfif>
 		
-		<cfset arrayappend(variables.debugArrayWrapper.debugArray, arguments.debugData) />
+		<cfset arrayappend(debugArrayWrapper.debugArray, arguments.debugData) />
 	</cffunction>
 	
 	<cffunction name="clearDebug" access="public" returntype="void" hint="Clears the debug array">
-		<cfset arrayClear(variables.debugArrayWrapper.debugArray) />
+		<cfset arrayClear(debugArrayWrapper.debugArray) />
 	</cffunction>
 	
 	<cffunction name="getDebug" access="public" returntype="array" hint="Returns the debug array">
 		<cfif isDefined("request.debugArrayWrapper")>
-			<cfset variables.debugArrayWrapper = request.debugArrayWrapper>
+			<cfset debugArrayWrapper = request.debugArrayWrapper>
 		</cfif>
 		
-		<cfreturn variables.debugArrayWrapper.debugArray />
+		<cfreturn debugArrayWrapper.debugArray />
 	</cffunction>
 	
 	<cffunction name="getDebugWrapper" access="public" returntype="struct" hint="Returns the debug array">
-		<cfreturn variables.debugArrayWrapper />
+		<cfreturn debugArrayWrapper />
 	</cffunction>
 	
 	<cffunction name="setDebugWrapper" access="public" returntype="void" hint="">
@@ -405,18 +406,6 @@
 		<cfreturn theMock />
 	</cffunction>
 	
-	<cffunction name="orderedExpectation" access="public" hint="Method for mocking. Creates an OrderedExpectation object used for verify the order in which mocks have been called">
-	   <cfargument name="mocks" required="true" type="any" hint="One or more mocks in which to verify order" />
-	   <cfscript>
-		return createObject("component","mightymock.OrderedExpectation").init(mocks);
-	   </cfscript>
-	</cffunction>
-	
-	<cffunction name="expectException" access="public" hint="Method for setting an expected exception. This is a scripting alternative to realted annotation.">
-		<cfargument name="expectedException" type="String" required="true" hint="The exception we expect to be thrown." />
-		<cfset this.expectedException = arguments.expectedException />
-	</cffunction>
-	
 	<!--- annotation stuff --->
 	<cffunction name="getAnnotation" access="public" returntype="Any" hint="Returns the value for an annotation, allowing for an mxunit namespace or not">
 		<cfargument name="methodName" type="Any" required="true" hint="The name of the test method" />
@@ -441,5 +430,18 @@
 		</cfif>
 		
 		<cfreturn returnVal />
+	</cffunction> 
+	
+	<cffunction name="expectException">
+		<cfargument name="expectedExceptionType" />
+		<cfset this.expectedExceptionType = arguments.expectedExceptionType />
 	</cffunction>
+	
+	 <cffunction name="orderedExpectation" access="public" hint="Method for mocking. Creates an OrderedExpectation object used for verify the order in which mocks have been called">
+		<cfargument name="mocks" required="true" type="any" hint="One or more mocks in which to verify order" />
+		<cfscript>
+		return createObject("component","mightymock.OrderedExpectation").init(mocks);
+		</cfscript>
+	</cffunction>
+	
 </cfcomponent>

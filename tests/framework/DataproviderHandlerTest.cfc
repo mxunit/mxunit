@@ -43,7 +43,6 @@ function spyTest() {
     //debug( mock.debugMock() );
    // dpHandler.override('_invokeComponentForQueryProvider',override);
     cut = createObject('component', 'mxunit.tests.framework.fixture.DataProviderFixture');
-    debug(q);
 
   }
 

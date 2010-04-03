@@ -109,17 +109,13 @@
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
 		
-		<cfset var methods = ArrayNew(1)>
-		<cfset var o = "">
-		<cfset var start = "">
-		<cfset var end = "">
-		<cfset var i = "">
-		<cfset var j = "">
-		<cfset var methodName = "">
-		<cfset var exception = "" />
-		<cfset var dpName = "" />
-		<cfset var components = structKeyArray(this.suites()) />
-		
+		<cfset var testRunner = createObject("component", "TestSuiteRunner") />    
+		<cfset testRunner.setMockingFramework(this.mockingFramework) />
+		<cfset testRunner.setDataProviderHandler(this.dataProviderHandler) /> 
+		<cfif variables.requestScopeDebuggingEnabled OR structKeyExists(url,"requestdebugenable")>
+			<cfset testRunner.enableRequestScopeDebugging() />
+		</cfif>                 
+		<cfreturn testRunner.run(this.suites(), results, testMethod)>
 		<!---  Returns a structure corresponding to the key/componentName --->
 		<cfset var temp = this.suites() />
 		
@@ -262,6 +258,7 @@
 		<cfreturn results />
 	</cffunction>
 	
+	
 	<cffunction name="runTestRemote" access="remote" output="true">
 		<cfargument name="output" type="string" required="false" default="jqgrid" hint="Output format: html,xml,junitxml,jqgrid ">
 		<cfargument name="debug" type="boolean" required="false" default="false" hint="Flag to indicate whether or not to dump the test results to the screen.">
@@ -314,50 +311,6 @@
 		</cfif>
 	</cffunction>
 	
-	<cffunction name="runTestWithDataProvider" access="private" hint="runner for DataProvider-driven tests">
-		<cfargument name="objectUnderTest" type="any" required="true"/>
-		<cfargument name="methodName" type="string" required="true">
-		<cfargument name="dataProviderName" type="string" required="true">
-		
-		<cfset var data = "">
-		<cfset var loop = 1>
-		
-		<!--- first, excel files --->
-		<cfif fileExists(dataProviderName)>
-			<cfthrow message="File-Based Data Providers not yet implemented">
-		<cfelse>
-			<cfinvoke component="PublicProxyMaker" method="makePublic" ObjectUnderTest="#objectUnderTest#" privateMethodName="#dataProviderName#" proxyMethodName="#dataProvidername#">
-			<cfinvoke component="#objectUnderTest#" method="#dataProviderName#" returnvariable="data">
-			
-			<cfif isArray(data)>
-				<cfloop from="1" to="#ArrayLen(data)#" index="loop">
-					<cfinvoke component="#objectUnderTest#" method="#methodName#" providerData="#data#" providerIndex="#loop#" providerRemaining="#ArrayLen(data)-loop#">
-				</cfloop>
-			<cfelseif isQuery(data)>
-				<cfloop query="data">
-					<cfinvoke component="#objectUnderTest#" method="#methodName#" providerData="#data#" providerIndex="#data.CurrentRow#" providerRemaining="#data.RecordCount-data.CurrentRow#">
-				</cfloop>
-			<cfelse>
-				<cfthrow message="dataProvider [#dataProviderName#] must be a function that returns an Array or a Query">
-			</cfif>
-		</cfif>
-	</cffunction>
-	
-	<cffunction name="addFailureToResults" access="private">
-		<cfargument name="results" required="true" hint="the results object">
-		<cfargument name="expected" required="true">
-		<cfargument name="actual" required="true">
-		<cfargument name="exception" required="true" hint="the cfcatch struct">
-		<cfargument name="content" required="true">
-		
-		<cfset results.addFailure(exception) />
-		<cfset results.addExpected(expected)>
-		<cfset results.addActual(actual)>
-		<cfset results.addContent(this.c) />
-		
-		<cflog file="mxunit" type="error" application="false" text="#exception.message#::#exception.detail#">
-	</cffunction>
-	
 	<cffunction name="suites" access="public" returntype="struct">
 		<cfreturn this.testSuites />
 	</cffunction>
@@ -373,10 +326,6 @@
 	
 	<cffunction name="enableRequestScopeDebugging" access="public" output="false" hint="enables creation of the request.debug function">
 		<cfset requestScopeDebuggingEnabled = true>
-	</cffunction>
-	
-	<cffunction name="_$snif" access="private" hint="Door into another component's variables scope">
-		<cfreturn variables />
 	</cffunction>
 	
 	<cffunction name="setMockingFramework" hint="Allows a developer to set the default Mocking Framework for this test suite.">
