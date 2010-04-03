@@ -294,32 +294,6 @@
 		debug(before_tests_expected);
 	}
 	
-<<<<<<< HEAD:tests/framework/TestCaseTest.cfc
-		//beforeTest test
-		// function $invokeBeforeTestsShouldSetSimpleValue(){
-		//    debug(before_tests_expected);
-		// }                   
-		
-		// function $invokeAfterTestsShouldBeCalled(){
-		// 		  fail("how to test afterTests?");
-		// 		}
-=======
-	function $invokeAfterTestsShouldBeCalled(){
-		fail("how to test afterTests?");
-	}
->>>>>>> master:tests/framework/TestCaseTest.cfc
-	
-	function $expectedExceptionShouldSetPropertyInTestCase(){
-		expectException("my.funny.ValantineException");
-		assertEquals( "my.funny.ValantineException", this.expectedException );
-		
-		// Reset the exception or it will trigger the real expected exception
-		expectException('');
-	}
-	
-	function $expectedExceptionTest(){
-		expectException("mxunit.exception.AssertionFailedError");
-	}
 </cfscript>
 
 <!--- End Specific Test Cases --->

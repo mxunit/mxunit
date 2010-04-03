@@ -28,5 +28,10 @@
 		return false;
 	});
 	
-	$('input[type=submit]').before( $examples );
+	$('#btnRun').before( $examples );
+	
+	$('#btnClear').click( function(){
+		$('.mxunitResults').html('');
+	} );
+	
 })(jQuery);

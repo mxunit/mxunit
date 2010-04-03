@@ -16,10 +16,6 @@
    <cfthrow type="com.foo.MyCustomException">
 </cffunction>
 
-<cffunction name="testThrowBasicAssertionFailedErrorUsingAnnotation" expectedException="mxunit.exception.AssertionFailedError">
-  <cfthrow type="mxunit.exception.AssertionFailedError">
-</cffunction>
-
 <cffunction name="oldSkoolBasicError" expectedException="foo.bar.exception">
 	<cftry>
 	 <cfthrow type="asd.zxc" />
@@ -52,13 +48,8 @@
 	
 	function $expectedExceptionShouldSetPropertyInTestCase(){
 		expectException("my.funny.ValantineException");
-<<<<<<< HEAD:tests/framework/ExpectedExceptionTest.cfc
 		assertEquals( "my.funny.ValantineException", this.expectedExceptionType );
-=======
-		assertEquals( "my.funny.ValantineException", this.expectedException );
->>>>>>> master:tests/framework/ExpectedExceptionTest.cfc
-		// Reset the exception or it will trigger the real expected exception
-		expectException('');
+		expectException("");
 	}
 	
 </cfscript>
