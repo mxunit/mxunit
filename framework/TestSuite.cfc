@@ -258,6 +258,7 @@
 		<cfreturn results />
 	</cffunction>
 	
+	
 	<cffunction name="runTestRemote" access="remote" output="true">
 		<cfargument name="output" type="string" required="false" default="jqgrid" hint="Output format: html,xml,junitxml,jqgrid ">
 		<cfargument name="debug" type="boolean" required="false" default="false" hint="Flag to indicate whether or not to dump the test results to the screen.">
