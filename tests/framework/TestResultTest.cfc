@@ -5,19 +5,15 @@
 <cffunction name="testGetInstallRoot">
   <cfscript>
    var root = this.testResult.getInstallRoot("foo.bar.nanoo.mxunit.framework.TestResult");
-   debug(root);
    assertEquals("/foo/bar/nanoo/mxunit/", root);
 
    root = this.testResult.getInstallRoot();
-   debug(root);
    assertEquals("/mxunit/",root);
 
    root = this.testResult.getInstallRoot("mxunit.mxunit.framework.TestCase");
-   debug(root);
    assertEquals("/mxunit/mxunit/",root);
 
    root = this.testResult.getInstallRoot("mxunit.framework.TestCase");
-   debug(root);
    assertEquals("/mxunit/",root);
 
   </cfscript>
@@ -313,7 +309,6 @@
 	<cfset u.method = "runtestremote">
 	<cfset u.output = "extjs">
 	<cfset qs = this.testresult.normalizeQueryString(u,'html')>
-	<cfset debug("querystring is #qs#")>
 	<cfset assertEquals(1,ListValueCountNoCase(qs,"output=html","&"))>
 	<cfset assertEquals(1,ListValueCountNoCase(qs,"method=runtestremote","&"))>
 	<cfset assertEquals(0,ListValueCountNoCase(qs,"output=extjs","&"))>

@@ -2,18 +2,22 @@
 
 <cfparam name="url.test" default="" />
 <cfparam name="url.componentPath" default="" />
-<cfparam name="url.output" default="js" />
+<cfparam name="url.output" default="html" />
 
 <cfset pathBase = '../' />
-<cfset title = 'Runner' />
-
-<cfinclude template="#pathBase#resources/theme/header.cfm" />
 
 <cfset scripts = arrayNew(1) />
 <cfset arrayAppend(scripts, 'runner.js') />
 
 <cfset testIsPresent = cgi.path_info is not "" OR url.test is not "" />
 <cfset testToRun = iif(cgi.path_info is "", de(url.test), de(cgi.path_info)) />
+         
+<cfset title = "Runner" /> 
+<cfif len(testToRun)>
+	<cfset title = "#testToRun# - #title#" />
+</cfif>
+
+<cfinclude template="#pathBase#resources/theme/header.cfm" />
 
 <cfoutput>
 	<form id="runnerForm" action="index.cfm" method="get">

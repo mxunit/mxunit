@@ -3,12 +3,10 @@
 
 
   <cffunction name="testThatCallToSuperReturnsCorrectString">
- <cfset debug(super.getSomeValue())>
  <cfset assertEquals("Some TestCase Data To Read", super.getSomeValue())>
 
   </cffunction>
   <cffunction name="testThatThisExtendsTestCaseTest">
-  <cfset debug(this.md)>
   <cfscript>
     assertEquals("mxunit.tests.framework.TestCaseTest",this.md.extends.name);
   </cfscript>
@@ -27,7 +25,6 @@
    with var data. --->
 
    <cfset  super.setUp() />
-   <cfset debug("In TestCaseExtendedTest.setUp()") />
    <cfset this.md = getMetaData(this)>
   </cffunction>
 

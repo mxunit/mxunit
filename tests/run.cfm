@@ -11,12 +11,13 @@ NOTE: these tests take a long time to run. A lot of the time is in a subset of t
 <cfset dir = expandPath(".")>
 <cfset DTS = createObject("component","mxunit.runner.DirectoryTestSuite")>
 
+
 <cfset excludes = "fixture,samples">
 
 <cfinvoke component="#DTS#" 
 	method="run"
-	directory="#dir#"
-	componentpath="mxunit.tests" 
+	directory="/home/billy/software/railo/webroot/mxunit/tests/framework"
+	componentpath="mxunit.tests.framework" 
 	recurse="true" 
 	excludes="#excludes#"
 	returnvariable="Results">

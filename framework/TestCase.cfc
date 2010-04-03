@@ -163,34 +163,40 @@
 			this.result = runTest();
 			
 			switch(arguments.output){
-			case 'xml':
-				writeoutput(this.result.getXmlresults());
+				case 'html':
+				  writeoutput(this.result.getHtmlresults());
 				break;
-			
-			case 'junitxml':
-				writeoutput(this.result.getJUnitXmlresults());
+				
+				case 'rawhtml':
+				  writeoutput(this.result.getHtmlresults());
 				break;
-			
-			case 'json':
-				writeoutput(this.result.getJSONResults());
+				
+				case 'xml':
+					writeoutput(this.result.getXmlresults());
 				break;
-			
-			case 'query':
-				dump(this.result.getQueryresults());
+				
+				case 'junitxml':
+					writeoutput(this.result.getJUnitXmlresults());
 				break;
-			
-			case 'extjs': // TODO deprecated
-			case 'jqGrid':
-			case 'jq':
-				writeoutput('<body>#this.result.getjqGridresults(this.name)#<div id="testresultsgrid" class="bodypad"></div></body>');
+				
+				case 'json':
+					writeoutput(this.result.getJSONResults());
 				break;
-			
-			case 'text':
-				writeoutput( trim(this.result.getTextresults(this.name)));
+				
+				case 'query':
+					dump(this.result.getQueryresults());
 				break;
-			
-			default:
-				writeoutput(this.result.getHtmlresults());
+				
+				case 'extjs': // TODO deprecated
+				 	writeoutput( this.result.getHtmlresults() );
+				break;		
+				
+				case 'text':
+					writeoutput( trim(this.result.getTextresults(this.name)));
+				break;
+				
+				default:
+					writeoutput(this.result.getHtmlresults());
 				break;
 			}
 		</cfscript>
@@ -244,7 +250,8 @@
 		
 		<cfif ListFindNoCase("package,private",TestStruct.access)
 			 OR ListFindNoCase("setUp,tearDown,beforeTests,afterTests",TestStruct.name)
-			 OR reFindNoCase("_cffunccfthread",TestStruct.Name)>
+			 OR reFindNoCase("_cffunccfthread",TestStruct.Name)
+			 OR ( (structKeyExists(TestStruct, "test") AND isBoolean(TestStruct.test) AND NOT TestStruct.test))>
 			
 			<cfset isAcceptable = false>
 		</cfif>
@@ -423,5 +430,11 @@
 		</cfif>
 		
 		<cfreturn returnVal />
+	</cffunction> 
+	
+	<cffunction name="expectException">
+		<cfargument name="expectedExceptionType" />
+		<cfset this.expectedExceptionType = arguments.expectedExceptionType />
 	</cffunction>
+	
 </cfcomponent>

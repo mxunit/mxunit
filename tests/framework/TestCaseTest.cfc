@@ -17,8 +17,8 @@
     	<cfset var methods = this.getRunnableMethods()>
 		<cfset var thesemethods = getMetadata(this)>
 		<!--- the 5 is the twos private function plus the setup and teardown functions --->
-		<cfset var expectedMethodCount = Arraylen(thesemethods.functions) - 5>
-		<cfset assertEquals(ArrayLen(methods),expectedMethodCount,"returned methods should be 5 less than total methods in this test case (excludes setup/teardown/private/package)")>
+		<cfset var expectedMethodCount = Arraylen(thesemethods.functions) - 7>
+		<cfset assertEquals(ArrayLen(methods),expectedMethodCount,"returned methods should be 7 less than total methods in this test case (excludes setup/teardown/private/package)")>
 	</cffunction>
 
 	<cffunction name="testGetRunnableMethodsInheritance">
@@ -30,7 +30,6 @@
 		<cfset var md3 = getMetadata(obj1)>
 		<cfset var totalMethods = ArrayLen(md.functions) + ArrayLen(md2.functions) + ArrayLen(md.functions)>
 		<cfset var methods = obj2.getRunnableMethods()>
-		<cfset debug(totalMethods)>
 		<cfset assertEquals(totalMethods-1,ArrayLen(methods),"count of total returned methods should equal cumulative method count for all 3 objects minus 1, since one of the tests overrides a parent function")>
 	</cffunction>
 
@@ -38,7 +37,6 @@
 		<cfset var cfcWithHyphen = createObject("component","mxunit.tests.framework.fixture.mxunit-TestCase-Template")>
 		<cfset var methods = cfcWithHyphen.getRunnableMethods()>
 		<cfset var md = getMetadata(cfcWithHyphen)>
-		<cfset debug(methods)>
 		<cfset assertEquals(arraylen(md.functions)-2,arraylen(methods),"number of runnable methods should be 2 fewer than total number of methods (subtracting out setup and teardown)")>
 	</cffunction>
 
@@ -72,6 +70,19 @@
 		<cfset s_test.access = "package">
 		<cfset result = this.testIsAcceptable(s_test)>
 		<cfset assertFalse(result,"package test should not be acceptable")>
+	</cffunction>
+	
+	<cffunction name="falseTestAttribute_IsNotAcceptableTest">
+		<cfset var s_test = "" />
+		<cfset var result = "" />
+		<!--- <cfset makePublic(this,"testIsAcceptable")> --->
+
+		<cfset s_test = structnew()>
+		<cfset s_test.name = "someTestGoesHere">
+		<cfset s_test.access = "public">
+		<cfset s_test.test = false>
+		<cfset result = this.testIsAcceptable(s_test)>
+		<cfset assertFalse(result,"test=false test should not be acceptable")>
 	</cffunction>
 
 	<cffunction name="cfthreadsInTestAreNotAcceptableTests">
@@ -132,7 +143,6 @@
 		<cfset var newVal = "" />
 		<cfset var mycfc = createObject("component",this.fixtureTestPath)>
 		<cfset var orig = mycfc.callDoSomethingPrivate()>
-		<cfset debug(orig)>
 
 		<cfset injectMethod(mycfc,this,"doSomethingPrivate")>
 		<cfset newVal = mycfc.callDoSomethingPrivate()>
@@ -267,13 +277,13 @@
 	<cfscript>
 	
 		//beforeTest test
-		function $invokeBeforeTestsShouldSetSimpleValue(){
-		   debug(before_tests_expected);
-		}
+		// function $invokeBeforeTestsShouldSetSimpleValue(){
+		//    debug(before_tests_expected);
+		// }                   
 		
-		function $invokeAfterTestsShouldBeCalled(){
-		  fail("how to test afterTests?");
-		}
+		// function $invokeAfterTestsShouldBeCalled(){
+		// 		  fail("how to test afterTests?");
+		// 		}
 	
 	
 	</cfscript>
@@ -293,7 +303,6 @@
 
 	<cffunction name="setUp" access="public" returntype="void">
 		<cfset this.fixtureTestPath = "" />
-	    <cfset debug("In TestCaseTest.setUp()") />
 	
 		<cfset this.fixtureTestPath = "mxunit.tests.framework.fixture.NewCFComponent">
 	

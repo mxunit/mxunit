@@ -12,7 +12,6 @@
 		<cfset var new2 = "" />
 		<cfset var final = "" />
 		<cfset var initial = variables.cache.getSuitePoolCount()>
-		<cfset debug("initial: #initial#")>
 		<cfset new1 = variables.cache.startTestRun()>
 		<cfset new2 = variables.cache.startTestRun()>
 		<cfset final = variables.cache.getSuitePoolCount()>

@@ -43,7 +43,7 @@
      }
      catch(mxunit.exception.AssertionFailedError e){
       //ok we're good
-      debug("caught expected exception : assert(false)");
+      // caught expected exception : assert(false)
      }
 
      assert(1 eq 1);
@@ -52,21 +52,21 @@
      }
      catch(mxunit.exception.AssertionFailedError e){
       //ok we're good
-      debug("caught expected exception : assert(1 eq 0)");
+      // caught expected exception : assert(1 eq 0)
      }
 
      try{
       assert (foo);
      }
      catch(Application e){
-      debug("should not allow complex objects. But what's the exception type here, CF?'");
+       // should not allow complex objects. But what's the exception type here, CF?
      }
 
      try{
       assert ('some string');
      }
      catch(Expression e){
-      debug("should not allow strings, either");
+      // should not allow strings, either;
      }
 
      assert (MIN lt MAX , "@see setUp() for system MIN and MAX values.");
@@ -115,7 +115,6 @@
 			<!--- do something here to cause an error --->
 			<cfset failNotEquals(1,2,"my message",false)>
 		<cfcatch type="mxunit.exception.AssertionFailedError">
-			<cfset debug(cfcatch)>
 			<cfif not find("[1]",cfcatch.message)
 				OR not find("[2]",cfcatch.message)>
 					<cfset fail("Should've had [1] and [2] in the throw message but instead the message was #cfcatch.message#")>
@@ -129,7 +128,6 @@
 			<!--- do something here to cause an error --->
 			<cfset failNotEquals(1,2,"my message")>
 		<cfcatch type="mxunit.exception.AssertionFailedError">
-			<cfset debug(cfcatch)>
 			<cfif not find("[1]",cfcatch.message)
 				OR not find("[2]",cfcatch.message)>
 					<cfset fail("Should've had [1] and [2] in the throw message but instead the message was #cfcatch.message#")>
@@ -144,7 +142,6 @@
 			<!--- do something here to cause an error --->
 			<cfset failEquals(1,2,"my message")>
 		<cfcatch type="mxunit.exception.AssertionFailedError">
-			<cfset debug(cfcatch)>
 			<cfif not find("[1]",cfcatch.message)
 				OR not find("[2]",cfcatch.message)>
 					<cfset fail("Should've had [1] and [2] in the throw message but instead the message was #cfcatch.message#")>
@@ -159,7 +156,6 @@
 			<!--- do something here to cause an error --->
 			<cfset failEquals(1,2,false)>
 		<cfcatch type="mxunit.exception.AssertionFailedError">
-			<cfset debug(cfcatch)>
 			<cfif not find("[1]",cfcatch.message)
 				OR not find("[2]",cfcatch.message)>
 					<cfset fail("Should've had [1] and [2] in the throw message but instead the message was #cfcatch.message#")>
@@ -380,8 +376,6 @@
 		<cfset args.actual = "2">
 		<cfset args.message = "message">
 		<cfset newargs = normalizeArguments(asserttype,args)>
-		<cfset debug("Teststyle is " & getTestStyle())>
-		<cfset debug(newargs)>
 
 		<cfset assertTrue(args.expected eq newargs.expected)>
 		<cfset assertTrue(args.actual eq newargs.actual)>
@@ -397,8 +391,6 @@
 		<cfset args.condition = false>
 		<cfset args.message = "message">
 		<cfset newargs = normalizeArguments(asserttype,args)>
-		<cfset debug("Teststyle is " & getTestStyle())>
-		<cfset debug(newargs)>
 
 		<cfset assertTrue(args.condition eq newargs.condition)>
 		<cfset assertTrue(args.message eq newargs.message)>
@@ -411,8 +403,6 @@
 		<cfset args.xml = "<myxml>blah</myxml>">
 		<cfset args.message = "message">
 		<cfset newargs = normalizeArguments(asserttype,args)>
-		<cfset debug("Teststyle is " & getTestStyle())>
-		<cfset debug(newargs)>
 
 		<cfset assertTrue(args.xml eq newargs.xml)>
 		<cfset assertTrue(args.message eq newargs.message)>
@@ -425,8 +415,6 @@
 		<cfset args.a = ArrayNew(1)>
 		<cfset args.message = "message">
 		<cfset newargs = normalizeArguments(asserttype,args)>
-		<cfset debug("Teststyle is " & getTestStyle())>
-		<cfset debug(newargs)>
 
 		<cfset assertTrue(ArrayLen(args.a) eq ArrayLen(newargs.a))>
 		<cfset assertTrue(args.message eq newargs.message)>
@@ -442,8 +430,6 @@
 		<cfset args.message = false>
 		<cfset newargs = normalizeArguments(asserttype,args)>
 
-		<cfset debug("Teststyle is " & getTestStyle())>
-		<cfset debug(newargs)>
 
 		<cfset assertTrue(args.condition eq newargs.message)>
 		<cfset assertTrue(args.message eq newargs.condition)>
@@ -460,8 +446,6 @@
 		<cfset args.actual = "2">
 		<cfset args.message = "message">
 		<cfset newargs = normalizeArguments(asserttype,args)>
-		<cfset debug("Teststyle is " & getTestStyle())>
-		<cfset debug(newargs)>
 
 		<cfset assertTrue(args.expected neq newargs.expected)>
 		<cfset assertTrue(args.actual neq newargs.actual)>
