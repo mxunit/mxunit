@@ -17,15 +17,23 @@
 </cffunction>
 
 <cffunction name="testThrowBasicAssertionFailedErrorUsingAnnotation" expectedException="mxunit.exception.AssertionFailedError">
-  <cfset fail("asd") />
+  <cfthrow type="mxunit.exception.AssertionFailedError">
 </cffunction>
 
 <cffunction name="oldSkoolBasicError" expectedException="foo.bar.exception">
-     <cfthrow type="asd.zxc" />
+	<cftry>
+	 <cfthrow type="asd.zxc" />
+	<cfcatch type="asd.zxc">
+		<cfthrow type="foo.bar.exception" /> 
+	</cfcatch>
+	</cftry>   
+  
 </cffunction>
 
-<cffunction name="shouldThrowExceptionWhenNoneIsThrownInsideMethod" expectedException="foo.bar.exception">
 
+
+<cffunction access="public" name="shouldThrowException" expectedException="foo.bar.exception">
+   <cfthrow type="foo.bar.exception">	
 </cffunction>
 
 
@@ -50,7 +58,7 @@
 	
 	function $expectedExceptionShouldSetPropertyInTestCase(){
 		expectException("my.funny.ValantineException");
-		assertEquals( "my.funny.ValantineException", this.expectedException );
+		assertEquals( "my.funny.ValantineException", this.expectedExceptionType );
 		// Reset the exception or it will trigger the real expected exception
 		expectException('');
 	}
