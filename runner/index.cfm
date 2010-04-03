@@ -6,7 +6,6 @@
 
 <cfset pathBase = '../' />
 
-<cfset scripts = arrayNew(1) />
 <cfset arrayAppend(scripts, 'runner.js') />
 
 <cfset testIsPresent = cgi.path_info is not "" OR url.test is not "" />

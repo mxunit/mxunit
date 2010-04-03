@@ -303,6 +303,21 @@
   </cfinvoke>
 </cffunction>
 
+<cffunction name="normalizeQueryStringShouldIgnoreComplexObjects" hint="Bug and patch by Luis Majano - 3.23.10">
+	<cfscript>
+	var u = structnew(); //url rep
+	var o = structnew(); 
+	var o.foo = "bar";
+	u.method = "runtestremote";
+	u.output = "html";
+	u.a = [1,2,'123',o]; //add array to url
+	u.cfc = this; //add cfc obj to url
+	u.complex = o;  //add struct to url
+	qs = this.testresult.normalizeQueryString(u,'some_random_known_output'); //should ignore or err
+	assertEquals("method=runtestremote&output=some_random_known_output" ,qs);
+	</cfscript>
+</cffunction>
+
 <cffunction name="testNormalizeQueryString">
 	<cfset var qs = "" />
 	<cfset var u = structnew()>

@@ -9,7 +9,7 @@
 <cffunction name="run" access="remote" output="true">
  <cfargument name="test" type="string" required="true" hint="TestCase,TestSuite, or Dircetory to run"  />
  <cfargument name="componentPath" type="string" required="false" default="" hint="A dotted prefix mapping for the directory; e.g., com.foo.bar"  />
- <cfargument name="output" required="false"  default="extjs" hint="The type of output format" />
+ <cfargument name="output" required="false"  default="rawhtml" hint="The type of output format" />
  <cfset var dirrunner = "">
  <cfset var results = "">
  <cfif refind("[\\/]+", arguments.test)>
@@ -20,7 +20,7 @@
    }
    dirrunner = createObject("component","DirectoryTestSuite");
    results = dirrunner.run(test,componentPath,false);
-   writeoutput(results.getResultsOutput(arguments.output));
+   writeoutput(results.getResultsOutput("rawhtml"));
    </cfscript>
  <cfelse>
   <cfset localTest = createObject("component", arguments.test) />

@@ -6,7 +6,6 @@
 	
 	<cffunction name="HTMLTestResult" hint="Constructor" access="public" returntype="HTMLTestResult">
 		<cfargument name="testResults" type="TestResult" required="false" />
-		
 		<cfset this.testRuns = arguments.testResults.testRuns />
 		<cfset this.failures = arguments.testResults.testFailures />
 		<cfset this.errors = arguments.testResults.testErrors />
@@ -42,6 +41,14 @@
 	</cffunction>
 
 
+
+	<cffunction name="printNoScript" access="public" output="true" hint="Prints noscript JS alternative">
+ 	 &nbsp;<noscript>
+		 <h2 align="center">Enable JavaScript so the Failure/Error/Success buttons will work</h2>
+	  </noscript>
+	</cffunction>
+
+
    <cffunction name="getHtmlResults" access="public" returntype="string" output="false" hint="Returns a stylized HTML representation of the TestResult">
  		<cfargument name="mxunit_root" required="no" default="#this.installRoot#" hint="Location in the webroot where MXUnit is installed." />
         <cfargument name="test_title" required="false" default="MXUnit Test Results" hint="An HTML title to display for this test">
@@ -49,6 +56,7 @@
 		<cfset var temp = "" />
 		<cfsavecontent variable="result">
 			<cfset printResources(mxunit_root,test_title) />
+			<cfset printNoScript() />
 			<cfset temp = trim(getRawHtmlResults(mxunit_root))>
 			<cfoutput>#temp#</cfoutput>
 		</cfsavecontent>
@@ -155,9 +163,9 @@
 				
 			</cfoutput>
 		</cfsavecontent>
-		
 		<cfreturn Trim(result) />
 	</cffunction>
+	
 	
 	<cffunction name="renderErrorStruct" output="false" returntype="string" access="private" hint="I render a coldfusion error struct as HTML">
 		<cfargument name="ErrorCollection" required="true" type="any">

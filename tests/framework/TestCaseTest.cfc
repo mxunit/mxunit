@@ -7,6 +7,20 @@
 
 <cfcomponent  extends="mxunit.framework.TestCase">
 
+<cffunction name="_asd" expectedException="mxunit.exception.AssertionFailedError">
+    
+	
+ <cftry>
+  <cfset fail("asd") />
+<cfcatch type="any">
+  <cfset debug(cfcatch)>
+</cfcatch>
+ 	
+	</cftry>
+
+
+</cffunction>
+
   <cffunction name="getSomeValue" hint="Used by child test for testing inherited tests" returntype="string">
    <cfreturn "Some TestCase Data To Read" />
   </cffunction>
@@ -274,8 +288,13 @@
 	<cffunction name="testWithJustNameAnnotation" myAttribute="justName" hint="a fixture test used for testing getAnnotation">
 	</cffunction>
 	
-	<cfscript>
+<cfscript>
+	// beforeTest test
+	function $invokeBeforeTestsShouldSetSimpleValue(){
+		debug(before_tests_expected);
+	}
 	
+<<<<<<< HEAD:tests/framework/TestCaseTest.cfc
 		//beforeTest test
 		// function $invokeBeforeTestsShouldSetSimpleValue(){
 		//    debug(before_tests_expected);
@@ -284,22 +303,34 @@
 		// function $invokeAfterTestsShouldBeCalled(){
 		// 		  fail("how to test afterTests?");
 		// 		}
+=======
+	function $invokeAfterTestsShouldBeCalled(){
+		fail("how to test afterTests?");
+	}
+>>>>>>> master:tests/framework/TestCaseTest.cfc
 	
+	function $expectedExceptionShouldSetPropertyInTestCase(){
+		expectException("my.funny.ValantineException");
+		assertEquals( "my.funny.ValantineException", this.expectedException );
+		
+		// Reset the exception or it will trigger the real expected exception
+		expectException('');
+	}
 	
-	</cfscript>
-
+	function $expectedExceptionTest(){
+		expectException("mxunit.exception.AssertionFailedError");
+	}
+</cfscript>
 
 <!--- End Specific Test Cases --->
 
-    <cffunction name="beforeTests">
-	  <cfset variables.before_tests_expected = 123456789 />
-	</cffunction>
-	
-
-    <cffunction name="afterTests" >
-      <!--- not sure how to test this yet. tests have been run prior to this call --->
+	<cffunction name="beforeTests">
+		<cfset variables.before_tests_expected = 123456789 />
 	</cffunction>
 
+	<cffunction name="afterTests" >
+		<!--- not sure how to test this yet. tests have been run prior to this call --->
+	</cffunction>
 
 	<cffunction name="setUp" access="public" returntype="void">
 		<cfset this.fixtureTestPath = "" />
@@ -325,9 +356,4 @@
 	<cffunction name="aPrivateMethod" access="private">
 		<cfreturn "foo">
 	</cffunction>
-	
-	
-
 </cfcomponent>
-
-
