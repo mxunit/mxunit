@@ -8,7 +8,7 @@
 
 .mxunitResults table {
 	width: 100%;
-	border:1px dashed #eaeaea;
+	border:1px dotted gray;
 	padding:0px;
 }
 
@@ -65,19 +65,19 @@
 
 /* Mapped to the actual test status returned by MXUnit */
 
-.Failed,
-.Failed a {
+.failed,
+.failed a {
 	color:#101080;
 }
 
-.Error,
-.Error a {
+.error,
+.error a {
 	color: #c70000;
 }
 
 .success,
-.Passed,
+.passed,
 .success a, 
-.Passed a {
+.passed a {
 	color: #0d7008;
 }
