@@ -45,7 +45,7 @@
 
 	<cffunction name="printNoScript" access="public" output="true" hint="Prints noscript JS alternative">
  	 &nbsp;<noscript>
-		 <h2 align="center">Enable JavaScript so the Failure/Error/Success buttons will work</h2>
+		 <h2 align="center">If you enable JavaScript, many more UI features will be available.</h2>
 	  </noscript>
 	</cffunction>
 
@@ -97,9 +97,9 @@
 					
 							<div class="summary">
 								<ul class="nav horizontal">
-									<li class="failed"><a rel="tipsy" href="##" title="Show/Hide Failures">#this.failures# Failures</a></li>
-									<li class="error"><a rel="tipsy" href="##" title="Show/Hide Errors">#this.errors# Errors</a></li>
-									<li class="passed"><a rel="tipsy" href="##" title="Show/Hide Successes">#this.successes# Successes</a></li>
+									<li class="failed"><a rel="tipsy" href="##" title="Toggle Failures">#this.failures# Failures</a></li>
+									<li class="error"><a rel="tipsy" href="##" title="Toggle Errors">#this.errors# Errors</a></li>
+									<li class="passed"><a rel="tipsy" href="##" title="Toggle Successes">#this.successes# Successes</a></li>
 								</ul>
 								<div class="clear"><!-- clear --></div>
 							</div>

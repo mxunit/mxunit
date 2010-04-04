@@ -7,10 +7,10 @@ table.tablesorter {
 table.tablesorter th {
 	text-align: left;
 	padding: 5px;
-	background-color: #6E6E6E;
+	background-color: #545050;
+	color:whitesmoke;
 }
 table.tablesorter td {
-	
 	padding: 5px;
 }
 table.tablesorter .even {
@@ -20,22 +20,21 @@ table.tablesorter .odd {
 	background-color: #6E6E6E;
 }
 table.tablesorter .header {
-	background-image: url(bg.png);
-	background-repeat:x-repeat;
+	background-image: url(default.png);
+	background-repeat:no-repeat;
 	cursor: pointer; 
-	border-left: 1px solid #FFF;
-	border-right: 1px solid #000;
-	border-top: 1px solid #FFF;
-	padding-left: 30px;
+	border: 1px inset silver;
+	padding-left: 32px;
 	padding-top: 8px;
-	height: auto;
+	height: 32px;
 	
 }
-table.tablesorter .headerSortUp {
-	background-image: url(asc.png);
-	background-repeat:x-repeat;
-}
 table.tablesorter .headerSortDown {
-	background-image: url(desc.png);
-	background-repeat:x-repeat;
+  background-image: url(up.png);
+  background-repeat:no-repeat;
+}
+
+table.tablesorter .headerSortUp {
+	background-image: url(down.png);
+	background-repeat:no-repeat;
 }
