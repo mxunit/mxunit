@@ -33,7 +33,7 @@
 	</cffunction>
 
 	<cffunction name="listOfExpectedExceptionsShouldBeCaught" mxunit:expectedException="Database,Expression">
-		<cfset x = 5/0>
+		<cfset x = foo>
 	</cffunction>
 	
 	<!--- we need this b/c we can't otherwise test the case where an exception is expected but not thrown --->
@@ -58,6 +58,7 @@
 
 
 <cffunction name="shouldCatchMissingArgumentException" mxunit:expectedException="coldfusion.runtime.MissingArgumentException">
+  <cfthrow type="coldfusion.runtime.MissingArgumentException">
    <cfset throwMissingArgumentException() />
 </cffunction> 
 
