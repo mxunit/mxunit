@@ -36,6 +36,8 @@
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery-ui.min.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.runner.js"></script>
+			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tipsy/javascripts/jquery.tipsy.js"></script>
+			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tipsy/stylesheets/tipsy.css" />
 			<title>#test_title#</title>
 	</cffunction>
 
@@ -95,9 +97,9 @@
 					
 							<div class="summary">
 								<ul class="nav horizontal">
-									<li class="failed"><a href="##" title="Show/Hide Failures">#this.failures# Failures</a></li>
-									<li class="error"><a href="##" title="Show/Hide Errors">#this.errors# Errors</a></li>
-									<li class="passed"><a href="##" title="Show/Hide Successes">#this.successes# Successes</a></li>
+									<li class="failed"><a rel="tipsy" href="##" title="Show/Hide Failures">#this.failures# Failures</a></li>
+									<li class="error"><a rel="tipsy" href="##" title="Show/Hide Errors">#this.errors# Errors</a></li>
+									<li class="passed"><a rel="tipsy" href="##" title="Show/Hide Successes">#this.successes# Successes</a></li>
 								</ul>
 								<div class="clear"><!-- clear --></div>
 							</div>

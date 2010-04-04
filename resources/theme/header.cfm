@@ -6,6 +6,7 @@
 <cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery-ui.min.js') />
 <cfset arrayAppend(scripts, pathBase & 'resources/jquery/tablesorter/jquery.tablesorter.js') />
 <cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.runner.js') />
+<cfset arrayAppend(scripts, pathBase & 'resources/jquery/tipsy/javascripts/jquery.tipsy.js') />
 
 <cfset context = getDirectoryFromPath(expandPath(pathBase)) />
 
@@ -28,9 +29,10 @@
 	<meta name="keywords" value="coldfusion unit testing test cfml cfmx xunit developer framework quality assurance open source community free" />
 	
 	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/theme/960.css">
-	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/theme/styles.css">
 	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/jquery/tablesorter/green/style.css">
 	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/theme/results.css">
+	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/theme/styles.css">
+	<link rel="stylesheet" type="text/css" href="<cfoutput>#pathBase#</cfoutput>resources/jquery/tipsy/stylesheets/tipsy.css">
 </head>
 <body>
 	<div class="container_12">

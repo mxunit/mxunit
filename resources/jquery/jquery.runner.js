@@ -4,8 +4,12 @@
 ;(function($){
 	container = '';
 	
+	
+	
 	$(function(){
 		container = $('.mxunitResults');
+		
+		$('a[rel="tipsy"]').tipsy({fade:true,gravity:'s'});
 		
 		// Make the table into a grid
 		$('table.results', container).tablesorter({
