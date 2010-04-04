@@ -434,7 +434,10 @@
 	
 	<cffunction name="expectException">
 		<cfargument name="expectedExceptionType" />
+		<cfargument name="expectedExceptionMessage" />
+		
 		<cfset this.expectedExceptionType = arguments.expectedExceptionType />
+		<cfset this.expectedExceptionMessage = arguments.expectedExceptionMessage />
 	</cffunction>
 	
 	 <cffunction name="orderedExpectation" access="public" hint="Method for mocking. Creates an OrderedExpectation object used for verify the order in which mocks have been called">

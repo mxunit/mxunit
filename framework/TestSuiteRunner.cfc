@@ -20,7 +20,6 @@
 		<cfset variables.requestScopeDebuggingEnabled = true />
 	</cffunction>
 
-  
 	<cffunction name="run" returntype="WEB-INF.cftags.component" access="public" output="true" hint="Primary method for running TestSuites and individual tests.">
 		<cfargument name="allSuites" hint="a structure corresponding to the key/componentName"/>
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
@@ -31,9 +30,8 @@
 		<cfset var currentTestSuiteName = "" />
 		
 		<cfloop collection="#allSuites#" item="currentTestSuiteName">
-	                             
 			<cfset currentSuite = allSuites[currentTestSuiteName] />
-						
+			
 			<cfset testCase = createTestCaseFromComponentOrComponentName(currentSuite.ComponentObject) />
 			
 			<!--- set the MockingFramework if one has been set for the TestSuite --->
@@ -59,8 +57,7 @@
 		<cfset results.closeResults() /><!--- Get correct time run for suite --->
 		
 		<cfreturn results />
-	</cffunction>                                 
-	
+	</cffunction>
 	
 	<cffunction name="createTestCaseFromComponentOrComponentName">
 		<cfargument name="componentObject"/>
@@ -71,42 +68,45 @@
 		</cfif>
 	</cffunction>
 
-	                         
 	<cffunction name="runTestMethod" access="private">
 		<cfargument name="testCase" />
 		<cfargument name="methodName" /> 
 		<cfargument name="results" />
 		<cfargument name="currentTestSuiteName"/> 
-		 
-		<cfset var tickCountAtStart = getTickCount() />                  
+		
+		<cfset var tickCountAtStart = getTickCount() />
 		<cfset var outputOfTest = "" />
- 		<cfset testCase.expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
+		
+		<cfset testCase.expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
+		<cfset testCase.expectedExceptionMessage = '' />
 		
 		<cftry>
-			<cfset  results.startTest(methodName,currentTestSuiteName) />
+			<cfset results.startTest(methodName,currentTestSuiteName) />
 			
 			<cfset testCase.clearClassVariables() />
 			<cfset testCase.initDebug() />
+			
 			<cfif requestScopeDebuggingEnabled>
 				<cfset testCase.createRequestScopeDebug() />
-			</cfif>                                      
-						
+			</cfif>
+			
 			<cfset testCase.setUp()/>
-			                                                                               
+			
 			<cfset outputOfTest = runTest(testCase, methodName) />
-			                                           
-			<cfset assertExpectedExceptionTypeWasThrown(testCase.expectedExceptionType) />			
-
-			<cfset  results.addSuccess('Passed') />
+			
+			<cfset assertExpectedExceptionTypeWasThrown(testCase.expectedExceptionType, testCase.expectedExceptionMessage) />
+			
+			<cfset results.addSuccess('Passed') />
+			
 			<!--- Add the trace message from the TestCase instance --->
-			<cfset  results.addContent(outputOfTest) /> 
-		
+			<cfset results.addContent(outputOfTest) /> 
+			
 			<cfcatch type="mxunit.exception.AssertionFailedError">
 				<cfset addFailureToResults(results=results,expected=testCase.expectedExceptionType,actual=testCase.actual,exception=cfcatch,content=outputOfTest)>
 			</cfcatch>
 			
 			<cfcatch type="any">
-				<cfset handleCaughtException(rootOfException(cfcatch), testCase.expectedExceptionType, results, outputOfTest, testCase)>
+				<cfset handleCaughtException(rootOfException(cfcatch), testCase.expectedExceptionType, testCase.expectedExceptionMessage, results, outputOfTest, testCase)>
 			</cfcatch>
 		</cftry>
 		
@@ -118,7 +118,7 @@
 			</cfcatch>
 		</cftry>
 		
-	  <!--- add the debug array to the test result item --->
+		<!--- add the debug array to the test result item --->
 		<cfset results.setDebug( testCase.getDebug() ) />
 		
 		<!---  make sure the debug buffer is reset for the next text method  --->
@@ -129,10 +129,8 @@
 		<cfset results.addProcessingTime(getTickCount()-tickCountAtStart) />
 		
 		<cfset results.endTest(methodName) />
-		
 	</cffunction>
 
-	
 	<cffunction name="runTest" access="private">
 		<cfargument name="testCase" /> 
 		<cfargument name="methodName"/>
@@ -150,8 +148,7 @@
 				</cfif>
 		</cfsavecontent>
 		<cfreturn outputOfTest />
-	</cffunction>     
-
+	</cffunction>
 	
 	<cffunction name="assertExpectedExceptionTypeWasThrown">
 		<cfargument name="expectedExceptionType"/>
@@ -159,7 +156,6 @@
 			<cfthrow type="mxunit.exception.AssertionFailedError" message="Exception: #expectedExceptionType# expected but no exception was thrown" /> 
 		</cfif>
 	</cffunction>
-
 	
 	<cffunction name="rootOfException" access="private">
 		<cfargument name="caughtException"/>
@@ -168,7 +164,6 @@
 		</cfif>        
 		<cfreturn caughtException />		
 	</cffunction>
-
 	
 	<cffunction name="addFailureToResults" access="private">
 		<cfargument name="results" required="true" hint="the results object">
@@ -184,47 +179,54 @@
 		
 		<cflog file="mxunit" type="error" application="false" text="#exception.message#::#exception.detail#">
 	</cffunction>   
-
 	
 	<cffunction name="_$snif" access="private" hint="Door into another component's variables scope">
 		<cfreturn variables />
-	</cffunction>                   
-
-	
-	<cffunction name="handleCaughtException" access="private">      
-		 <cfargument name="caughtException"/>     
-		 <cfargument name="expectedExceptionType"/>    
-		 <cfargument name="results" />
-		 <cfargument name="outputOfTest" />      
-		 <cfargument name="testCase" />
-		 <cfif exceptionMatchesType(cfcatch, expectedExceptionType)>
-				<cfset  results.addSuccess('Passed') />
-				<cfset  results.addContent(outputOfTest) />
-				<cfset  testCase.debug(caughtException) />
-			<cfelseif expectedExceptionType NEQ "">
-				<cfset testCase.debug(caughtException) />
-				<cftry>
-					<cfthrow message="Exception: #expectedExceptionType# expected but #cfcatch.type# was thrown">
-					<cfcatch>
-						<cfset addFailureToResults(results=results,expected=expectedExceptionType,actual=cfcatch.type,exception=cfcatch,content=outputOfTest)>
-					</cfcatch>
-				</cftry>
-			<cfelse>
-				<cfset testCase.debug(caughtException) />
-				<cfset results.addError(caughtException) />
-				<cfset results.addContent(outputOfTest) />
-				<cflog file="mxunit" type="error" application="false" text="#cfcatch.message#::#cfcatch.detail#" />
-			</cfif>
 	</cffunction>
 	
+	<cffunction name="handleCaughtException" access="private">
+		<cfargument name="caughtException"/>
+		<cfargument name="expectedExceptionType" type="string" required="true" />
+		<cfargument name="expectedExceptionMessage" type="string" required="true" />
+		<cfargument name="results" />
+		<cfargument name="outputOfTest" />
+		<cfargument name="testCase" />
+		
+		<cfif arguments.expectedExceptionMessage eq ''>
+			<cfset arguments.expectedExceptionMessage = 'Exception: #expectedExceptionType# expected but #cfcatch.type# was thrown' />
+		</cfif>
+		
+		<cfif exceptionMatchesType(cfcatch, expectedExceptionType)>
+			<cfset results.addSuccess('Passed') />
+			<cfset results.addContent(outputOfTest) />
+			<cfset testCase.debug(caughtException) />
+		<cfelseif expectedExceptionType NEQ "">
+			<cfset testCase.debug(caughtException) />
+			
+			<cftry>
+				<cfthrow message="#arguments.expectedExceptionMessage#">
+				
+				<cfcatch>
+					<cfset addFailureToResults(results=results, expected=expectedExceptionType, actual=cfcatch.type, exception=cfcatch, content=outputOfTest)>
+				</cfcatch>
+			</cftry>
+		<cfelse>
+			<cfset testCase.debug(caughtException) />
+			<cfset results.addError(caughtException) />
+			<cfset results.addContent(outputOfTest) />
+			
+			<cflog file="mxunit" type="error" application="false" text="#cfcatch.message#::#cfcatch.detail#" />
+		</cfif>
+	</cffunction>
 	
 	<cffunction name="exceptionMatchesType" access="private">
-		<cfargument name="actualException">
-		<cfargument name="expectedExceptionType"/>   
+		<cfargument name="actualException" type="string" required="true" />
+		<cfargument name="expectedExceptionType" type="string" required="true" />
+		
 		<cfif expectedExceptionType eq "">
 			<cfreturn false/>
-		</cfif>          
-		<cfreturn listFindNoCase(expectedExceptionType, actualException.type) OR listFindNoCase(expectedExceptionType, getMetaData(actualException).getName())>
+		</cfif>
+		
+		<cfreturn arguments.expectedExceptionType eq 'any' or listFindNoCase(expectedExceptionType, actualException.type) or listFindNoCase(expectedExceptionType, getMetaData(actualException).getName())>
 	</cffunction>
-
 </cfcomponent>
