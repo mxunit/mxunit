@@ -74,21 +74,6 @@ input {
 	float: left;
 }
 
-.error,
-.failed,
-.error a,
-.failed a {
-	font-weight: bold;
-	color: #DD3C10;
-}
-
-.success,
-.passed,
-.success a, 
-.passed a {
-	color: #006400;
-}
-
 .message,
 .failure a {
 	color: #083772;
