@@ -27,7 +27,7 @@
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
 		       
 		<cfset var testCase = "">
-		<cfset var methodIndex = 0>
+		<cfset var methodIndex = 1>
 		<cfset var currentTestSuiteName = "" />
 		
 		<cfloop collection="#allSuites#" item="currentTestSuiteName">
@@ -45,10 +45,10 @@
 			<cfset testCase.beforeTests() />
 
 			<cfif len(arguments.testMethod)>
-				<cfset runTestMethod(testCase, currentSuite.methods[methodIndex], results, currentTestSuiteName) />
+				<cfset runTestMethod(testCase, testMethod, results, currentTestSuiteName) />
 			<cfelse>                                    
 				<cfloop from="1" to="#arrayLen(currentSuite.methods)#" index="methodIndex">
-					<cfset runTestMethod(testCase, currentSuite.methods[methodIndex], results, currentTestSuiteName) />
+					<cfset runTestMethod(testCase, currentSuite.methods[methodIndex++], results, currentTestSuiteName) />
 				</cfloop>
 			</cfif>
 			
