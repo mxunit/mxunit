@@ -426,7 +426,7 @@
 	
 	<cffunction name="expectException">
 		<cfargument name="expectedExceptionType" />
-		<cfargument name="expectedExceptionMessage" />
+		<cfargument name="expectedExceptionMessage" default="" />
 		
 		<cfset this.expectedExceptionType = arguments.expectedExceptionType />
 		<cfset this.expectedExceptionMessage = arguments.expectedExceptionMessage />
