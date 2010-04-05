@@ -14,7 +14,6 @@
      <cfset variables.mockingFramework = arguments.mf />
   </cffunction>              
 
-
 	<cffunction name="enableRequestScopeDebugging">
 		<!--- TODO: Add a test for request scope debugging or get rid of it. --->
 		<cfset variables.requestScopeDebuggingEnabled = true />
@@ -24,7 +23,7 @@
 		<cfargument name="allSuites" hint="a structure corresponding to the key/componentName"/>
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
-		       
+		
 		<cfset var testCase = "">
 		<cfset var methodIndex = 1>
 		<cfset var currentTestSuiteName = "" />
@@ -41,10 +40,10 @@
 			
 			<!--- Invoke prior to tests. Class-level setUp --->
 			<cfset testCase.beforeTests() />
-
+			
 			<cfif len(arguments.testMethod)>
 				<cfset runTestMethod(testCase, testMethod, results, currentTestSuiteName) />
-			<cfelse>                                    
+			<cfelse>
 				<cfloop from="1" to="#arrayLen(currentSuite.methods)#" index="methodIndex">
 					<cfset runTestMethod(testCase, currentSuite.methods[methodIndex++], results, currentTestSuiteName) />
 				</cfloop>
@@ -52,7 +51,7 @@
 			
 			<!--- Invoke after tests. Class-level tearDown --->
 			<cfset testCase.afterTests()>
-		</cfloop>                       
+		</cfloop>
 		
 		<cfset results.closeResults() /><!--- Get correct time run for suite --->
 		

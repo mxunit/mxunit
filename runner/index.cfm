@@ -2,16 +2,17 @@
 
 <cfparam name="url.test" default="" />
 <cfparam name="url.componentPath" default="" />
-<cfparam name="url.output" default="html" />
 
 <cfset pathBase = '../' />
 <cfset title = 'Runner' />
 
 <cfinclude template="#pathBase#resources/theme/header.cfm" />
 
-
 <cfset testIsPresent = cgi.path_info is not "" OR url.test is not "" />
 <cfset testToRun = iif(cgi.path_info is "", de(url.test), de(cgi.path_info)) />
+
+<!--- Add the js for the runner --->
+<cfset arrayAppend(scripts, 'runner.js') />
 
 <cfoutput>
 	<form id="runnerForm" action="index.cfm" method="get">
@@ -41,21 +42,9 @@
 		<div class="clear"><!-- clear --></div>
 	</form>
 </cfoutput>
-	
+
 <cfif testToRun NEQ "">
-	<cfinvoke component="HtmlRunner" method="run" test="#testToRun#" componentPath="#url.componentPath#" output="#url.output#" />
+	<cfinvoke component="HtmlRunner" method="run" test="#testToRun#" componentPath="#url.componentPath#" />
 </cfif>
 
-
-<div class="grid_12 pageFooter">
-	<a href="MIT-License.txt" title="MIT License">
-		&copy;<cfoutput>#year(now())# MXUnit.org - v<cfoutput>#version#</cfoutput></cfoutput>
-	</a>
-</div>
-
-<script type="text/javascript" src="../resources/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="runner.js"></script>
-
-<!--- 
 <cfinclude template="#pathBase#resources/theme/footer.cfm" />
- --->

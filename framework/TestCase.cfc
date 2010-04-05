@@ -163,39 +163,31 @@
 			this.result = runTest();
 			
 			switch(arguments.output){
-				case 'html':
-				  writeoutput(this.result.getHtmlresults());
+			case 'rawhtml':
+					writeoutput(this.result.getRawHtmlresults());
 				break;
 				
-				case 'rawhtml':
-				  writeoutput(this.result.getHtmlresults());
-				break;
-				
-				case 'xml':
+			case 'xml':
 					writeoutput(this.result.getXmlresults());
 				break;
 				
-				case 'junitxml':
+			case 'junitxml':
 					writeoutput(this.result.getJUnitXmlresults());
 				break;
 				
-				case 'json':
+			case 'json':
 					writeoutput(this.result.getJSONResults());
 				break;
 				
-				case 'query':
+			case 'query':
 					dump(this.result.getQueryresults());
 				break;
 				
-				case 'extjs': // TODO deprecated
-				 	writeoutput( this.result.getHtmlresults() );
-				break;		
-				
-				case 'text':
+			case 'text':
 					writeoutput( trim(this.result.getTextresults(this.name)));
 				break;
 				
-				default:
+			default:
 					writeoutput(this.result.getHtmlresults());
 				break;
 			}

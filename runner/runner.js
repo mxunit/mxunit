@@ -33,5 +33,4 @@
 	$('#btnClear').click( function(){
 		$('.mxunitResults').html('');
 	} );
-	
 })(jQuery);

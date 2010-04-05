@@ -129,37 +129,39 @@
 			var result = this.run();
 			
 			switch(arguments.output){
-				case 'xml':
-					writeoutput(this.result.getXmlresults());
+			case 'xml':
+					writeoutput(result.getXmlresults());
 				break;
 				
-				case 'junitxml':
-					writeoutput(this.result.getJUnitXmlresults());
+			case 'junitxml':
+					writeoutput(result.getJUnitXmlresults());
 				break;
 				
-				case 'json':
-					writeoutput(this.result.getJSONResults());
+			case 'json':
+					writeoutput(result.getJSONResults());
 				break;
 				
-				case 'query':
-					dump(this.result.getQueryresults());
+			case 'query':
+					dump(result.getQueryresults());
 				break;
 				
-				case 'text':
-					writeoutput( trim(this.result.getTextresults(this.name)));
+			case 'text':
+					writeoutput( trim(result.getTextresults(name)));
 				break;
 				
-				case 'html':
-				case 'rawhtml':
-				case 'extjs': // TODO deprecated
-				default:
-					writeoutput(this.result.getHtmlresults());
+			case 'rawhtml':
+					writeoutput(result.getRawHtmlresults());
+				break;
+				
+			default:
+					writeoutput(result.getHtmlresults());
 				break;
 			}
 		</cfscript>
 		
 		<cfif arguments.debug>
 			<p>&nbsp;</p>
+			
 			<cfdump var="#result.getResults()#" label="Raw Results Dump">
 		</cfif>
 	</cffunction>
