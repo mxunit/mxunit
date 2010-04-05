@@ -13,7 +13,6 @@
 <cffunction name="dataproviderShouldAcceptSimpleNumericLoops" mxunit:dataprovider="simple">
   <cfargument name="cnt">
 <cfset r=randrange(cnt,1000+cnt)>
-  <cfset debug(r)	>
 </cffunction>
 
 <cfset _2dA = [
@@ -25,10 +24,6 @@
   <cfargument name="myArray" />
   <cfscript>
 
-	  debug(myarray[1] &  ' LOOP: ' & arguments.index);
-	  debug(myarray[2] &  '  ' & arguments.index);
-	  debug(myarray[3] &  '  ' & arguments.index);
-	  debug(myarray[4] &  '  ' & arguments.index);
 
 	  if(arguments.index == 1){
 	   	assertEquals( myarray[1] , _2dA[1][1] );
@@ -99,7 +94,6 @@ FILE-BASED DATAPROVIDERS
 <cfset simpleExcel = getDirectoryFromPath(getCurrentTemplatePath()) & "/fixture/dataproviders/SimpleExcel.xls">
 <cffunction name="dataProviderShouldRunExcelFileAsQuery" mxunit:dataprovider="simpleExcel">
 	<cfargument name="myQuery">
-	<cfset debug(myQuery)>
 	<cfset taxPercent = myQuery.TaxRate/100>
 	<cfset assertEquals(myQuery.ExpectedResult, (myQuery.ItemCost*1) + (myQuery.ItemCost*taxPercent) )>
 </cffunction>
@@ -118,7 +112,6 @@ FILE-BASED DATAPROVIDERS
 <cfset ExcelToArrayWithoutColumns = createArrayFromHeaderlessExcel()>
 <cffunction name="ExcelToArray_Should_Create2DArrayForDataProvider" returntype="void" mxunit:dataprovider="ExcelToArrayWithoutColumns">
 	 <cfargument name="myArray" />
-	 <cfset debug(myArray)>
 	<cfset taxPercent = myArray[1]/100>
 	<cfset assertEquals(myArray[3], (myArray[2]*1) + (myArray[2]*taxPercent) )>
 </cffunction>
@@ -138,7 +131,6 @@ FILE-BASED DATAPROVIDERS
 <cfset ExcelQueryWithoutColumns = createQueryFromHeaderlessExcel()>
 <cffunction name="poiUtilityShouldBeAccessibleForAllTests" returntype="void" mxunit:dataprovider="ExcelQueryWithoutColumns">
 	<cfargument name="myQuery">
-	<cfset debug(myQuery)>
 	<cfset assertEquals("Column1,Column2,Column3",myQuery.ColumnList,"Without a header column, we expect the default derived column list that POIUtility will create")>
 </cffunction>
 
@@ -147,7 +139,6 @@ FILE-BASED DATAPROVIDERS
 <cfset simpleCSV = getDirectoryFromPath(getCurrentTemplatePath()) & "/fixture/dataproviders/SimpleCSV.csv">
 <cffunction name="dataProviderShouldRunCSVFileAsQuery" mxunit:dataprovider="simpleCSV">
 	<cfargument name="myQuery">
-	<cfset debug(myQuery)>
 	<cfset taxPercent = myQuery.TaxRate/100>
 	<cfset assertEquals(myQuery.ExpectedResult, (myQuery.ItemCost*1) + (myQuery.ItemCost*taxPercent) )>
 </cffunction>
@@ -166,7 +157,6 @@ FILE-BASED DATAPROVIDERS
 <!--- and this test uses that function above --->
 <cffunction name="CSVToArray_Should_Create2DArrayForDataProvider" returntype="void" mxunit:dataprovider="CSVToArrayWithoutColumns">
 	 <cfargument name="myArray" />
-	 <cfset debug(myArray)>
 	<cfset taxPercent = myArray[1]/100>
 	<cfset assertEquals(myArray[3], (myArray[2]*1) + (myArray[2]*taxPercent) )>
 </cffunction>
@@ -189,7 +179,6 @@ FILE-BASED DATAPROVIDERS
    scope.setScopeType(0);
    scope.put('asd','123');
    scope.bind('asd');
-   //debug(asd);
    dump(scope);
   </cfscript>
  </cffunction>
@@ -217,9 +206,6 @@ FILE-BASED DATAPROVIDERS
  <cffunction name="shouldIterateOverQueryAndExecCUTDouble" mxunit:dataprovider="q">
    <cfargument name="myQuery" />
    <cfscript>
-     //debug( getSomeData() );cool doesn't break the test
-     debug( myQuery );
-     debug( q );
      retVal = cut.double( myQuery.col1 );
      //i know, we're duplicating production code logic... that's OK. we're just testing the dataprovider stuff
      assertEquals(myQuery.col1*2,retVal);
@@ -245,7 +231,6 @@ FILE-BASED DATAPROVIDERS
   function setUp(){
      cut = createObject('component' ,'mxunit.tests.framework.fixture.DataProviderFixture');
      q = getSomeData();
-     //debug(q);
   }
 
 

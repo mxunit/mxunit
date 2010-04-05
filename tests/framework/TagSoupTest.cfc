@@ -38,16 +38,13 @@
 	   //can also use inputstream ...?
 	  // doc = builder.build("http://mxunit.org");
 	   doc = builder.build(bais);
-	   debug("Maybe we can skip the cf dom parser altogether ....");
+	   // Maybe we can skip the cf dom parser altogether ....
 	   xpath = "/html/body/h1";
 	   //Hmmm.... not finding anything ...
 	   elements = doc.query(xpath);
-	   debug(elements);
-	   debug(doc.toXml());
 	   dom = xmlParse(doc.toXml());
 	   //debug(dom);
 	    el = xmlsearch(dom,"/html/body/h1");
-	    debug(el);
 </cfscript>
 <!--- <cfdump var="#doc#"> --->
 </cffunction>

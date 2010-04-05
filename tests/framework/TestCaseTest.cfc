@@ -30,7 +30,6 @@
 		<cfset var md3 = getMetadata(obj1)>
 		<cfset var totalMethods = ArrayLen(md.functions) + ArrayLen(md2.functions) + ArrayLen(md.functions)>
 		<cfset var methods = obj2.getRunnableMethods()>
-		<cfset debug(totalMethods)>
 		<cfset assertEquals(totalMethods-1,ArrayLen(methods),"count of total returned methods should equal cumulative method count for all 3 objects minus 1, since one of the tests overrides a parent function")>
 	</cffunction>
 
@@ -38,7 +37,6 @@
 		<cfset var cfcWithHyphen = createObject("component","mxunit.tests.framework.fixture.mxunit-TestCase-Template")>
 		<cfset var methods = cfcWithHyphen.getRunnableMethods()>
 		<cfset var md = getMetadata(cfcWithHyphen)>
-		<cfset debug(methods)>
 		<cfset assertEquals(arraylen(md.functions)-2,arraylen(methods),"number of runnable methods should be 2 fewer than total number of methods (subtracting out setup and teardown)")>
 	</cffunction>
 
@@ -145,7 +143,6 @@
 		<cfset var newVal = "" />
 		<cfset var mycfc = createObject("component",this.fixtureTestPath)>
 		<cfset var orig = mycfc.callDoSomethingPrivate()>
-		<cfset debug(orig)>
 
 		<cfset injectMethod(mycfc,this,"doSomethingPrivate")>
 		<cfset newVal = mycfc.callDoSomethingPrivate()>
@@ -277,36 +274,25 @@
 	<cffunction name="testWithJustNameAnnotation" myAttribute="justName" hint="a fixture test used for testing getAnnotation">
 	</cffunction>
 	
-	<cfscript>
-	
-		//beforeTest test
-		function $invokeBeforeTestsShouldSetSimpleValue(){
-		   debug(before_tests_expected);
-		}
-		
-		function $invokeAfterTestsShouldBeCalled(){
-		  fail("how to test afterTests?");
-		}
-	
-	
-	</cfscript>
-
+<cfscript>
+	// beforeTest test
+	function $invokeBeforeTestsShouldSetSimpleValue(){
+		debug(before_tests_expected);
+	}
+</cfscript>
 
 <!--- End Specific Test Cases --->
 
-    <cffunction name="beforeTests">
-	  <cfset variables.before_tests_expected = 123456789 />
-	</cffunction>
-	
-
-    <cffunction name="afterTests" >
-      <!--- not sure how to test this yet. tests have been run prior to this call --->
+	<cffunction name="beforeTests">
+		<cfset variables.before_tests_expected = 123456789 />
 	</cffunction>
 
+	<cffunction name="afterTests" >
+		<!--- not sure how to test this yet. tests have been run prior to this call --->
+	</cffunction>
 
 	<cffunction name="setUp" access="public" returntype="void">
 		<cfset this.fixtureTestPath = "" />
-	    <cfset debug("In TestCaseTest.setUp()") />
 	
 		<cfset this.fixtureTestPath = "mxunit.tests.framework.fixture.NewCFComponent">
 	
@@ -329,9 +315,4 @@
 	<cffunction name="aPrivateMethod" access="private">
 		<cfreturn "foo">
 	</cffunction>
-	
-	
-
 </cfcomponent>
-
-

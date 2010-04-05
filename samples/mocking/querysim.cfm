@@ -47,20 +47,20 @@ function parse(input){
    var row = '';
 
   for(i; i <=  arrayLen(lines); i ++ ){
-     line = lines[i];
+     line = trim(lines[i]);
 
      //to do: simply ignore blank lines or lines with only whitespace.
      //if ( refind ( line, '^[[:space:]]*$' ) ) continue;
 
      if(line != '' && queryName == '') {
-         queryName = lines[i];
+         queryName = line;
          setQueryName(queryName);
          columnListLine = i+1;
          continue;
      }
 
      if(i == columnListLine) {
-       columnList = lines[i];
+       columnList = line;
        q = queryNew(columnList);
        continue;
      }

@@ -39,6 +39,14 @@ this runs a test directly, through a test suite, and through the RemoteFacade ur
 
 <!--- now run that same component using the remote facade --->
 <h1>running test through remote facade</h1>
-<cfinvoke webservice="#remoteURL#" method="executeTestCase" componentName="#mycomponent#" methodNames="#myfunction#" TestRunKey="" returnvariable="remoteRunResults">
+<cfinvoke webservice="#remoteURL#" method="ping" returnvariable="pingResults" refreshwsdl="true">
+<cfoutput>Ping result: #pingResults#</cfoutput><br>
+
+<cfinvoke webservice="#remoteURL#" method="getServerType" returnvariable="serverTypeResults">
+<cfoutput>Server Type: #serverTypeResults#</cfoutput><br>
+
+
+
+<cfinvoke   webservice="#remoteURL#" method="executeTestCase" componentName="#mycomponent#" methodNames="#myfunction#" TestRunKey="" returnvariable="remoteRunResults">
 
 <cfdump var="#remoteRunResults#" label="remoteRunResults" expand="false">

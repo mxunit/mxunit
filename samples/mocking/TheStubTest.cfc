@@ -38,11 +38,11 @@
   creation of test data.
  --->
 <cffunction name="stubData" access="private">
-    <cf_querysim>
-   data
-   id,name,email
-   1|mocked_bill|mocked_bill@bill.com
-   2|mocked_bill2|mocked_bill2@bill.com
+  <cf_querysim>
+    data
+    id,name,email
+    1|mocked_bill|mocked_bill@bill.com
+    2|mocked_bill2|mocked_bill2@bill.com
   </cf_querysim>
   <cfreturn data />
 </cffunction>

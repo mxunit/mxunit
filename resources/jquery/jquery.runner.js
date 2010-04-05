@@ -4,8 +4,12 @@
 ;(function($){
 	container = '';
 	
+	
+	
 	$(function(){
 		container = $('.mxunitResults');
+		
+		$('a[rel="tipsy"]').tipsy({fade:true,gravity:'s'});
 		
 		// Make the table into a grid
 		$('table.results', container).tablesorter({
@@ -68,8 +72,17 @@
 	});
 	
 	function toggleTests( type ) {
-		window.console.log('Toggling: ' + type);
+		debug('Toggling: ' + type);
 		
 		$('tr.' + type, container).toggle();
 	}
+	
+	function debug(s) {
+		if (typeof window !== "undefined" && typeof window.console !== "undefined" && typeof window.console.debug !== "undefined") {
+			window.console.log(s);
+		} else {
+			//alert(s);
+		}
+	}
+	
 })(jQuery);

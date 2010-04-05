@@ -2,21 +2,17 @@
 
 <cfparam name="url.test" default="" />
 <cfparam name="url.componentPath" default="" />
-<cfparam name="url.output" default="html" />
 
 <cfset pathBase = '../' />
+<cfset title = 'Runner' />
 
-<cfset arrayAppend(scripts, 'runner.js') />
+<cfinclude template="#pathBase#resources/theme/header.cfm" />
 
 <cfset testIsPresent = cgi.path_info is not "" OR url.test is not "" />
 <cfset testToRun = iif(cgi.path_info is "", de(url.test), de(cgi.path_info)) />
-         
-<cfset title = "Runner" /> 
-<cfif len(testToRun)>
-	<cfset title = "#testToRun# - #title#" />
-</cfif>
 
-<cfinclude template="#pathBase#resources/theme/header.cfm" />
+<!--- Add the js for the runner --->
+<cfset arrayAppend(scripts, 'runner.js') />
 
 <cfoutput>
 	<form id="runnerForm" action="index.cfm" method="get">
@@ -39,16 +35,16 @@
 		</div>
 		
 		<div class="grid_12 align-center">
-			<input type="submit" value="Run Tests">
-			<input type="reset" value="Clear" />
+			<input type="submit" value="Run Tests" id="btnRun">
+			<input type="reset" value="Clear" id="btnClear" />
 		</div>
 		
 		<div class="clear"><!-- clear --></div>
 	</form>
 </cfoutput>
-	
+
 <cfif testToRun NEQ "">
-	<cfinvoke component="HtmlRunner" method="run" test="#testToRun#" componentPath="#url.componentPath#" output="#url.output#" />
+	<cfinvoke component="HtmlRunner" method="run" test="#testToRun#" componentPath="#url.componentPath#" />
 </cfif>
 
 <cfinclude template="#pathBase#resources/theme/footer.cfm" />

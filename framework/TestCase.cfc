@@ -53,10 +53,12 @@
 	</cffunction>
 	
 	<cffunction name="initDebug" access="public" output="false">
-		<cfparam name="variables.debugArrayWrapper" type="struct" default="#StructNew()#" />
-		<cfparam name="variables.debugArrayWrapper.debugArray" type="array" default="#arrayNew(1)#" />
+		<cfparam name="debugArrayWrapper" type="struct" default="#StructNew()#" />
+		<cfparam name="debugArray" type="array" default="#arrayNew(1)#" />
 		
-		<cfreturn variables.debugArrayWrapper />
+		<cfset debugArrayWrapper.debugArray = debugArray />
+		
+		<cfreturn debugArrayWrapper />
 	</cffunction>
 	
 	<cffunction name="createRequestScopeDebug" access="public" output="false">
@@ -161,39 +163,31 @@
 			this.result = runTest();
 			
 			switch(arguments.output){
-				case 'html':
-				  writeoutput(this.result.getHtmlresults());
+			case 'rawhtml':
+					writeoutput(this.result.getRawHtmlresults());
 				break;
 				
-				case 'rawhtml':
-				  writeoutput(this.result.getHtmlresults());
-				break;
-				
-				case 'xml':
+			case 'xml':
 					writeoutput(this.result.getXmlresults());
 				break;
 				
-				case 'junitxml':
+			case 'junitxml':
 					writeoutput(this.result.getJUnitXmlresults());
 				break;
 				
-				case 'json':
+			case 'json':
 					writeoutput(this.result.getJSONResults());
 				break;
 				
-				case 'query':
+			case 'query':
 					dump(this.result.getQueryresults());
 				break;
 				
-				case 'extjs': // TODO deprecated
-				 	writeoutput( this.result.getHtmlresults() );
-				break;		
-				
-				case 'text':
+			case 'text':
 					writeoutput( trim(this.result.getTextresults(this.name)));
 				break;
 				
-				default:
+			default:
 					writeoutput(this.result.getHtmlresults());
 				break;
 			}
@@ -308,26 +302,26 @@
 		<cfargument name="debugData" type="any" required="true" />
 		
 		<cfif isDefined("request.debugArrayWrapper")>
-			<cfset variables.debugArrayWrapper = request.debugArrayWrapper>
+			<cfset debugArrayWrapper = request.debugArrayWrapper>
 		</cfif>
 		
-		<cfset arrayappend(variables.debugArrayWrapper.debugArray, arguments.debugData) />
+		<cfset arrayappend(debugArrayWrapper.debugArray, arguments.debugData) />
 	</cffunction>
 	
 	<cffunction name="clearDebug" access="public" returntype="void" hint="Clears the debug array">
-		<cfset arrayClear(variables.debugArrayWrapper.debugArray) />
+		<cfset arrayClear(debugArrayWrapper.debugArray) />
 	</cffunction>
 	
 	<cffunction name="getDebug" access="public" returntype="array" hint="Returns the debug array">
 		<cfif isDefined("request.debugArrayWrapper")>
-			<cfset variables.debugArrayWrapper = request.debugArrayWrapper>
+			<cfset debugArrayWrapper = request.debugArrayWrapper>
 		</cfif>
 		
-		<cfreturn variables.debugArrayWrapper.debugArray />
+		<cfreturn debugArrayWrapper.debugArray />
 	</cffunction>
 	
 	<cffunction name="getDebugWrapper" access="public" returntype="struct" hint="Returns the debug array">
-		<cfreturn variables.debugArrayWrapper />
+		<cfreturn debugArrayWrapper />
 	</cffunction>
 	
 	<cffunction name="setDebugWrapper" access="public" returntype="void" hint="">
@@ -428,5 +422,21 @@
 		</cfif>
 		
 		<cfreturn returnVal />
+	</cffunction> 
+	
+	<cffunction name="expectException">
+		<cfargument name="expectedExceptionType" />
+		<cfargument name="expectedExceptionMessage" />
+		
+		<cfset this.expectedExceptionType = arguments.expectedExceptionType />
+		<cfset this.expectedExceptionMessage = arguments.expectedExceptionMessage />
 	</cffunction>
+	
+	 <cffunction name="orderedExpectation" access="public" hint="Method for mocking. Creates an OrderedExpectation object used for verify the order in which mocks have been called">
+		<cfargument name="mocks" required="true" type="any" hint="One or more mocks in which to verify order" />
+		<cfscript>
+		return createObject("component","mightymock.OrderedExpectation").init(mocks);
+		</cfscript>
+	</cffunction>
+	
 </cfcomponent>

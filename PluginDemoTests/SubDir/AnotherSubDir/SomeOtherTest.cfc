@@ -14,6 +14,8 @@
 		
 	</cffunction>
 	
-
+	<cffunction name="thisShouldThrowAnError">
+		<cfinvoke component="SomeComponentWithStuff" method="throwError2">
+	</cffunction>
 
 </cfcomponent>

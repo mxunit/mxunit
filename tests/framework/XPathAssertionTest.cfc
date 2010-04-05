@@ -26,7 +26,6 @@
     <cfscript>
       //addAssertDecorator("mxunit.framework.XPathAssert");
       a = assertXpath('/html/head/title', "http://mxunit.org", "MXUnit - Unit Test Framework and Eclipse Plugin for Adobe ColdFusion");
-      debug(a);
      </cfscript>
   </cffunction>
 
@@ -41,7 +40,6 @@
     <cffile action="read" file="#expandPath("/mxunit/tests/framework/fixture/xpath/mxunit.org.html")#" variable="mxunit">
     <cfscript>
     newMxunit = wrapScriptTagInCDATA(mxunit);
-    debug(newMxunit);
   </cfscript>
 
   </cffunction>

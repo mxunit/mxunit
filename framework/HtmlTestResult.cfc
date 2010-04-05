@@ -3,7 +3,7 @@
 --->
 <cfcomponent displayname="HTMLTestResult" output="true"	extends="TestResult" hint="Responsible for generating HTML representation of a TestResult">
 	<cfparam name="this.testResults" type="any" default="" />
-	
+		
 	<cffunction name="HTMLTestResult" hint="Constructor" access="public" returntype="HTMLTestResult">
 		<cfargument name="testResults" type="TestResult" required="false" />
 		<cfset this.testRuns = arguments.testResults.testRuns />
@@ -30,14 +30,23 @@
  		<cfargument name="mxunit_root" required="no" default="mxunit" hint="Location in the webroot where MXUnit is installed." />
 		<cfargument name="test_title" required="false" default="MXUnit Test Results" hint="An HTML title to display for this test" />
 			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/styles.css">
-			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tablesorter/blue/style.css">
+			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tablesorter/green/style.css">
 			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/results.css">
-
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.min.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery-ui.min.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
 			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.runner.js"></script>
+			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tipsy/javascripts/jquery.tipsy.js"></script>
+			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tipsy/stylesheets/tipsy.css" />
 			<title>#test_title#</title>
+	</cffunction>
+
+
+
+	<cffunction name="printNoScript" access="public" output="true" hint="Prints noscript JS alternative">
+ 	 &nbsp;<noscript>
+		 <h2 align="center">If you enable JavaScript, many more UI features will be available.</h2>
+	  </noscript>
 	</cffunction>
 
 
@@ -48,6 +57,7 @@
 		<cfset var temp = "" />
 		<cfsavecontent variable="result">
 			<cfset printResources(mxunit_root,test_title) />
+			<cfset printNoScript() />
 			<cfset temp = trim(getRawHtmlResults(mxunit_root))>
 			<cfoutput>#temp#</cfoutput>
 		</cfsavecontent>
@@ -87,9 +97,9 @@
 					
 							<div class="summary">
 								<ul class="nav horizontal">
-									<li class="failed"><a href="##" title="Filter by Failures">#this.failures# Failures</a></li>
-									<li class="error"><a href="##" title="Filter by Errors">#this.errors# Errors</a></li>
-									<li class="passed"><a href="##" title="Filter by Successes">#this.successes# Successes</a></li>
+									<li class="failed"><a rel="tipsy" href="##" title="Toggle Failures">#this.failures# Failures</a></li>
+									<li class="error"><a rel="tipsy" href="##" title="Toggle Errors">#this.errors# Errors</a></li>
+									<li class="passed"><a rel="tipsy" href="##" title="Toggle Successes">#this.successes# Successes</a></li>
 								</ul>
 								<div class="clear"><!-- clear --></div>
 							</div>
@@ -111,14 +121,16 @@
 							
 							<h3><a href="#classtesturl#" title="Run all tests in #this.testResults[i].component#">#this.testResults[i].component#</a></h3>
 							
-							<table class="results tablesorter #theme#">
+							<table class="results tablesorter #theme#" cellpadding="0" cellspacing="0">
 								#tableHead#
 								<tbody>
 						</cfif>
 						
+						
+						
 						<tr class="#lCase(this.testResults[i].TestStatus)#">
 							<td>
-								<a href="#classtesturl#&amp;testmethod=#this.testResults[i].TestName#" title="only run the #this.testResults[i].TestName# test">#this.testResults[i].TestName#</a>
+								<a class="#lCase(this.testResults[i].TestStatus)#" href="#classtesturl#&amp;testmethod=#this.testResults[i].TestName#" title="only run the #this.testResults[i].TestName# test">#this.testResults[i].TestName#</a>
 							</td>
 							<td>
 								#this.testResults[i].TestStatus#
@@ -181,7 +193,7 @@
 							<cfset template = arguments.ErrorCollection.TagContext[i].template /> 
 							<cfset line = arguments.ErrorCollection.TagContext[i].line />
 							<tr>
-								<td>      
+								<td  class="stacktrace">      
 									#template# (<a href="txmt://open/?url=file://#template#&line=#line#" title="Open this in TextMate">#line#</a>)
 								</td>
 							</tr>

@@ -3,11 +3,13 @@
 }
 
 .mxunitResults .summary .active {
-	background: #e5e5e5;
+	background: #ffe77f; 
 }
 
 .mxunitResults table {
 	width: 100%;
+	border:1px dotted gray;
+	padding:0px;
 }
 
 .mxunitResults th {
@@ -28,8 +30,15 @@
 }
 
 .mxunitResults tbody tr:nth-child(even) {
-	background: #e5e5e5;
+	background: whitesmoke;
 }
+
+.stacktrace{
+	font-size:1em;
+	font-family:monospace;
+	line-height:.75em;
+}
+
 
 .mxunitResults .summary .nav a {
 	border: 1px solid #D0D0D0;
@@ -39,6 +48,7 @@
 	margin-right: 1em;
 }
 
+
 .mxunitResults pre {
 	white-space: pre-wrap; /* css-3 */
 	white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
@@ -47,6 +57,27 @@
 	word-wrap: break-word; /* Internet Explorer 5.5+ */
 }                
 
-.mxunitResults .tagcontext a {
+
+.mxunitResults .tagcontext a  {
     color: gray;
+}
+
+
+/* Mapped to the actual test status returned by MXUnit */
+
+.failed,
+.failed a {
+	color:#101080;
+}
+
+.error,
+.error a {
+	color: #c70000;
+}
+
+.success,
+.passed,
+.success a, 
+.passed a {
+	color: #0d7008;
 }

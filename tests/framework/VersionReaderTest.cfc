@@ -11,7 +11,6 @@
 	
 	<cffunction name="getVersionInfoShouldReturnStructWithBuildNumberAndDate" returntype="void" access="public">
 		<cfset var result = vr.getVersionInfo()>
-		<cfset debug(result)>
 		<cfset assertTrue(isDate(result.VersionDate))>
 		<cfset assertEquals(3,listLen(result.VersionNumber,"."))>
 	</cffunction>

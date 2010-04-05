@@ -29,9 +29,6 @@
 	<cffunction name="testMixinPrivate" returntype="void" access="public">
 		<cfset var actual = "" />
 		 <cfset blender._mixinAll(blender,mycfc)>
-
-		 <cfset debug( getMetadata(mycfc) )>
-
 		 <cfset actual = blender.doSomethingPrivate()>
 		<cfset assertEquals("poo",actual,"")>
 	</cffunction>
@@ -98,7 +95,6 @@
 	<cffunction name="testGetComponentVariables">
 		<cfset blender._mixinAll(mycfc,blender,"_getComponentVariables")>
 		<cfset vars = mycfc._getComponentVariables()>
-		<cfset debug(vars)>
 		
 		<cfset assertTrue(StructKeyExists(vars,"internalvar"),"internalvar should exist")>
 		<cfset assertTrue(StructKeyExists(vars,"internalvar2"),"internalvar2 should exist")>
