@@ -130,7 +130,7 @@
 						
 						<tr class="#lCase(this.testResults[i].TestStatus)#">
 							<td>
-								<a class="#lCase(this.testResults[i].TestStatus)#" href="#classtesturl#&amp;testmethod=#this.testResults[i].TestName#" title="only run the #this.testResults[i].TestName# test">#this.testResults[i].TestName#</a>
+								<a class="#lCase(this.testResults[i].TestStatus)#" href="#classtesturl#&amp;testmethod=#this.testResults[i].TestName#" rel="tipsy" title="Run just #this.testResults[i].TestName#">#this.testResults[i].TestName#</a>
 							</td>
 							<td>
 								#this.testResults[i].TestStatus#

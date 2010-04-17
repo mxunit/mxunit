@@ -8,7 +8,7 @@
     
    <property name="mxunit.jar" value="../ant/lib/mxunit-ant.jar" />
    <property name="server.name" value="localhost" />
-   <property name="server.port" value="8888" />
+   <property name="server.port" value="8301" />
 	<property name="component.path" value="/home/billy/software/railo/webroot" />
 
 	
