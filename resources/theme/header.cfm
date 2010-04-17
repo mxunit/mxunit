@@ -5,8 +5,8 @@
 <cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.min.js') />
 <cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery-ui.min.js') />
 <cfset arrayAppend(scripts, pathBase & 'resources/jquery/tablesorter/jquery.tablesorter.js') />
-<cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.runner.js') />
 <cfset arrayAppend(scripts, pathBase & 'resources/jquery/tipsy/javascripts/jquery.tipsy.js') />
+<cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.runner.js') />
 
 <cfset context = getDirectoryFromPath(expandPath(pathBase)) />
 

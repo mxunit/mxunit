@@ -10,7 +10,7 @@
 		<cfargument name="template" type="string" required="true">
 		<cfset var isIt = false>
 		<!--- braindead simple.... is anything more than this necessary? --->
-		<cfif refindNoCase("mxunit[/\\](trunk[/\\])?(framework|tests)",template)>
+		<cfif refindNoCase("mxunit(.*)[/\\](trunk[/\\])?(framework|tests)",template)>
 			<cfset isIt = true>
 		</cfif>
 		<cfreturn isIt>
