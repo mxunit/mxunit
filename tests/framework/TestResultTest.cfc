@@ -307,7 +307,7 @@
 	<cfscript>
 	var u = structnew(); //url rep
 	var o = structnew(); 
-	var o.foo = "bar";
+	o.foo = "bar";
 	u.method = "runtestremote";
 	u.output = "html";
 	u.a = [1,2,'123',o]; //add array to url
