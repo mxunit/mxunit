@@ -82,7 +82,7 @@
 
 */
 
-     		proxy.RETURNS = RETURNS ;
+     	proxy.RETURNS = RETURNS ;
 			proxy._$SETSTATE = _$SETSTATE;
 			proxy.variables._$SETSTATE = _$SETSTATE;
 			proxy.DEBUGMOCK =  DEBUGMOCK;

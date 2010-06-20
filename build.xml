@@ -46,7 +46,7 @@
 	<target name="package" depends="clean,version" description="--> packages the appropriate files into the deployment-ready zip file. use this for testing; otherwise, use publish">
 		<echo message="building ${zipfile}. basedir is  ${basedir}" />
 		<zip destfile="${zipfile}" casesensitive="false">
-			<zipfileset dir="${basedir}" includes="*.*,ant/,buildprops/,cfeclipse/,doc/,framework/,generator/,images/,PluginDemoTests/,resources/,runner/,samples/,tests/,lib/ant-contrib**" excludes="MXUnitInstallTest.cfc,**/testresults/,**/stats/,**/junithtml/,.project,.deployment,**/unames.properties,tests/tmp/,ftp.listing,**/*.db,**/copysnippets.properties,**/copydictionary**,**/*.bak,buildprops/nightlyversion.properties" prefix="mxunit" casesensitive="false" />
+			<zipfileset dir="${basedir}" includes="*.*,ant/,buildprops/,eclipse/,doc/,framework/,generator/,images/,PluginDemoTests/,resources/,runner/,samples/,tests/,lib/ant-contrib**" excludes=".gitignore,MXUnitInstallTest.cfc,**/testresults/,**/stats/,**/junithtml/,.project,.deployment,**/unames.properties,tests/tmp/,ftp.listing,**/*.db,**/copysnippets.properties,**/copydictionary**,**/*.bak,buildprops/nightlyversion.properties" prefix="mxunit" casesensitive="false" />
 		</zip>
 	</target>
 	

@@ -55,24 +55,12 @@ function spyTest() {
 </cfscript>
 
 
-<cffunction name="genSomeData" access="private">
-<cfscript>
- var generator = createObject( 'component', 'sandbox.randomizer.Randomizer' );
- var rows = 10;
- var colDef = { id='int', data='string',isok='boolean',salary='money' };
- var q = generator.genRandomQuery(rows,colDef);
- return q;
-</cfscript>
-</cffunction>
-
 
 <cf_querysim>
-<cfoutput>
 q
 col1,col2,col3,col4
 1|1.2|1.3|1.4
 2|2.2|2.3|2.4
 3|3.2|3.3|3.4
-</cfoutput>
 </cf_querysim>
 </cfcomponent>

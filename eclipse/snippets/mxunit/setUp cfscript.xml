@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="">
+<name>setUp cfscript</name>
+<help></help>
+<starttext><![CDATA[function setUp(){
+
+}]]></starttext>
+<endtext><![CDATA[]]></endtext>
+</snippet>

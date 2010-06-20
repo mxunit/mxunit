@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="">
+<name>new test function cfscript</name>
+<help></help>
+<starttext><![CDATA[function $${Name your test:}(){
+	var XX = "";
+	fail("$${Name your test:} not yet implemented");]]></starttext>
+<endtext><![CDATA[}]]></endtext>
+</snippet>

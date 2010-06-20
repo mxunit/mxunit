@@ -212,6 +212,7 @@
 		if(not localQuery.RecordCount) _$throw(message="Query DataProvider #dataProvider# did not contain any rows");
 		while( localQuery.next() ) {
 		  invokeComponentForQueryProvider(objectUnderTest, methodName,  getTopRow(localQuery));
+		  //This fails on Railo-different Java interface than ColdFusion
 		  localQuery.removeRows(javacast('int',localQuery.getRow()-1), javacast('int',1));
 		  localQuery.beforefirst();
 		}

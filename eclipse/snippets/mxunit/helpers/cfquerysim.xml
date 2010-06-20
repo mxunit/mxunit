@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>cfquerysim</name>
+<help></help>
+<starttext><![CDATA[<cfset var q = "">
+<cfoutput>
+<cf_querysim>
+q
+]]></starttext>
+<endtext><![CDATA[
+one,two
+val1|val2
+</cf_querysim>
+</cfoutput>
+<cfreturn q>]]></endtext>
+</snippet>

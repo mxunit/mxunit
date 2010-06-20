@@ -63,6 +63,16 @@
      </cfscript>
   </cffunction>
 
+  <cffunction name="testFindNode1_WithPreBuiltXMLObject">
+	<cfset var nodes = "" />
+	<cfset var xml = "">
+ 	<cffile action="read" file="#expandPath("/mxunit/tests/framework/fixture/xpath/nodes.html")#" variable="nodes">
+    <cfset xml = xmlParse(nodes)>
+	<cfset assertXPath('/ul/li',xml)>
+  </cffunction>	
+
+
+
   <cffunction name="testFindNode2">
 	<cfset var mxunit = "" />
    <cffile action="read" file="#expandPath("/mxunit/tests/framework/fixture/xpath/mxunit.org.html")#" variable="mxunit">

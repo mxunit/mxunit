@@ -1,41 +1,50 @@
 <cfcomponent hint="Assertions for XML and well formed HTML" output="false">
 
 
-  <cffunction name="assertXpath" access="public" returntype="any">
-    <cfargument name="xpath" type="String" hint="string representing an xpath expression" required="true" />
-    <cfargument name="data" hint="String or URL to search" required="true" type="any"  />
-    <!--- To Do: Maybe TEXT can also accepts regular expressions? --->
-    <cfargument name="text" type="string" required="false" default="" hint="The text to match against the xpath expression. If omitted, this assertion returns true if any elements of the xpath epxression are found." />
-    <cfargument name="message" type="string" required="false" hint="The mssage to display when this assertion fails" default="The XPath expression, #arguments.xpath#, did not match the data." />
-    <cfset var dom = javacast("null","java.lang.Object") />
-    <cfset var isUrl= "" />
-    <cfset var results = javacast("null","java.lang.Object") />
-    <cfif not isXMLDoc(arguments.data)>
+ <cffunction name="assertXpath" access="public" returntype="any">
+   <cfargument name="xpath" type="String" hint="string representing an
+xpath expression" required="true" />
+   <cfargument name="data" hint="String or URL to search" required="true"
+type="any"  />
+   <!--- To Do: Maybe TEXT can also accepts regular expressions? --->
+   <cfargument name="text" type="string" required="false" default=""
+hint="The text to match against the xpath expression. If omitted, this
+assertion returns true if any elements of the xpath epxression are found." />
+   <cfargument name="message" type="string" required="false" hint="The
+mssage to display when this assertion fails" default="The XPath expression,
+#arguments.xpath#, did not match the data." />
+   <cfset var dom = javacast("null","java.lang.Object") />
+   <cfset var isUrl= "" />
+   <cfset var results = javacast("null","java.lang.Object") />
+
       <cftry>
-        <!---
-         Note:
-         SSL Not supported. Workaround is to use another http client
-         and pass in a string.
+       <!---
+        Note:
+        SSL Not supported. Workaround is to use another http client
+        and pass in a string.
 
-         To Do: allow pass in of org.xml.sax.InputSource
-        --->
+        To Do: allow pass in of org.xml.sax.InputSource
+       --->
 
-        <cfset isUrl = refindNoCase("^(http[s]*|file)://.+",data)>
-        <cfset dom = buildXmlDom(arguments.data,isUrl) />
-        <cfset results = xmlSearch(dom,arguments.xpath)>
-        <cfif len(arguments.text) gt 0>
-          <cfset assertEquals(arguments.text, results[1].xmlText, message) /> <!---  --->
-        </cfif>
-        <cfif arrayLen(results) lt 1>
-          <cfset fail(message) />
-        </cfif>
-        <cfreturn results />
-       <cfcatch type="any">
+       <cfset isUrl = refindNoCase("^(http[s]*|file)://.+",data)>
+       <cfif isXMLDoc(arguments.data)>
+               <cfset dom = arguments.data />
+       <cfelse>
+               <cfset dom = buildXmlDom(arguments.data,isUrl) />
+       </cfif>
+       <cfset results = xmlSearch(dom,arguments.xpath)>
+       <cfif len(arguments.text) gt 0>
+         <cfset assertEquals(arguments.text, results[1].xmlText, message) />
+       </cfif>
+       <cfif arrayLen(results) lt 1>
+         <cfset fail(message) />
+       </cfif>
+       <cfreturn results />
+      <cfcatch type="any">
        <cfthrow object="#cfcatch#">
-       </cfcatch>
-      </cftry>
-    </cfif>
-  </cffunction>
+      </cfcatch>
+     </cftry>
+ </cffunction>
 
 
    <cffunction name="buildXmlDom" access="public" static="true" returntype="any" hint="Experimental!">
