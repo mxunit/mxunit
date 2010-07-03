@@ -12,7 +12,9 @@
 	
 		
 		$('a[rel="tipsy"]').tipsy({fade:true,gravity:'s'});
-		$('#bug').tipsy({fade:true,gravity:'w'});
+		$('.menu_item').tipsy({fade:true,gravity:'n'});
+		$('#bug').tipsy({fade:true,gravity:'e'});
+		$('#sparkcontainer').tipsy({fade:true,gravity:'n'});
 		$('.mxunittestsparks').sparkline( 'html', {type: 'tristate', barWidth: 1.25, colorMap: {'1': "#50B516", '-1': "#0781FA", '-2': "#DB1414"} } );
 
 		
@@ -69,7 +71,7 @@
 						return false;
 					},
 					href: '#',
-					text: 'Toggle Stack Trace'
+					text: 'Toggle Stack Traces'
 				}));
 		
 		// Append the toggle option

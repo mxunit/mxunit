@@ -1,28 +1,31 @@
  #sparkcontainer {
- float:right;
- border: thin silver dotted ;
- padding-top:.5em;
- max-width:700px;
+ border: thin #eaeaea dotted ;
+ padding: .5em 2em .5em 2em ;
  text-align:center;
- position:relative;
- top:-40;
- margin-right:6em;
+ float:left;
+ -moz-border-radius: .5em;
+ -webkit-border-radius: .5em;
+}
+
+.mxunittestsparks{
+ color:white;
 }
 
 #sparkcontainer p{
   color:silver;
-  text-decoration:italics;idid
+  text-decoration:italics;
 }
 
 #bugjar{
   padding:.5em;
   border:none;
   margin-right:2em;
+  float:right;
 }
 
 
-.mxunittestsparks {
- 
+.sparkline-caption {
+  /*border:1px dotted navy;*/
 }
 
 
@@ -61,12 +64,33 @@
 	background: whitesmoke;
 }
 
-.stacktrace{
+.stacktrace, .tagcontext td{
 	font-size:1em;
 	font-family:monospace;
-	line-height:.75em;
+	line-height:.65em;
 }
 
+
+.summary{
+  margin:0,0,0,0;
+  overflow:hidden;
+}
+
+.summary .failed{
+  float: left;
+}
+
+.summary #bug{
+  float: left;
+}
+
+.summary #sparkcontanier{
+  float: left;
+}
+
+.mxunitResults {
+ padding: .5em;
+}
 
 .mxunitResults .summary .nav a {
 	border: 1px solid #D0D0D0;

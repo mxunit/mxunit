@@ -15,6 +15,23 @@
 		<cfset this.totalExecutionTime = arguments.testResults.totalExecutionTime />
 		<cfset this.testResults = arguments.testResults.results />
 		<cfset this.installRoot = createObject("component","ComponentUtils").getComponentRoot() />
+    <cfset totalBad = this.failures+this.errors />
+    <cfif totalBad eq 0 >
+      <cfset this.sucessRatio = 1 />
+     <cfelse>
+      <cfset this.sucessRatio = 1-(totalBad/this.testRuns) />
+    </cfif>
+    
+    <!--- 
+    iif( this.failures+this.errors eq 0, 1, this.failures+this.errors )
+    double prod = 0.0;
+        double errorsAndFailures = (double) this.totalErrors + (double) this.totalFailures;
+        if (this.totalTestRuns > 0) {
+            prod = (errorsAndFailures / (double) this.totalTestRuns);
+        }
+        return (1 - prod);
+
+     --->
 		<cfreturn this />
 	</cffunction>
 	
@@ -92,8 +109,9 @@
 		
 		<cfsavecontent variable="result">
 			<cfoutput>
-				<div class="mxunitResults" style="padding:20px">
+				<div class="mxunitResults">
               <div class="summary">
+              
                 <ul class="nav horizontal">
                   <li class="failed"><a href="##" rel="tipsy" title="Filter by Failures">#this.failures# Failures</a></li>
                   <li class="error"><a href="##" rel="tipsy" title="Filter by Errors">#this.errors# Errors</a></li>
@@ -117,11 +135,9 @@
                 <span id="bugjar">
                <a id="bug" href="#toggledUrl#" rel="tipsy" title="#bugMessage#"><img border="0" height="24" align="absmiddle" src="/#mxunit_root#/images/bug_green.gif"></a>              
                 </span>
-               <br/>
                
-               <div id="sparkcontainer">
-                 
-               <span align="right" class="mxunittestsparks">
+               <div id="sparkcontainer" rel="tipsy" title="#this.testRuns# tests in #this.totalExecutionTime#ms. Success ratio #int(this.sucessRatio*100)#%">
+               <span class="mxunittestsparks">
                  <cfscript>
                   //generate data for sparkline
                   for(i=1;i<=this.failures;i=i+1){
@@ -136,9 +152,8 @@
                   i=1;
                  </cfscript>
                 </span>
-              <p>Sparkline</p>
               </div>
-              <div class="clear"></div>
+              
 							</div>
 	
 					<cfloop from="1" to="#ArrayLen(this.testResults)#" index="i">

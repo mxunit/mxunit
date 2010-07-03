@@ -7,11 +7,10 @@
 <div class="grid_12">
 	<h2>Samples</h2>
 	
-	<p>
+	<p style="font-size:1.5em">
 		Note that these samples assume installation of MXUnit <strong>directly under the web root</strong>.
-		The MXUnit Framework and Eclipse Plugin will still work, but the samples will not. You can also
-		change the <code>extends="mxunit.framework.TestCase"</code> to the path of your installation and
-		the samples will run correctly.
+		If MXUnit is installed in another location theses samples will not work, but the framework and Eclipse plugin will still work. 
+    
 	</p>
 	
 	
@@ -20,7 +19,7 @@
 	<h4>Unit Testing</h4>
 	<ul>
 		<cfoutput query="samples">
-			<cfset excludes = ".svn,.,MyComponent.cfc,samples.cfm,ScheduledRun.cfm,tests,mocking,RemoteFacadeTester.cfm" >
+			<cfset excludes = ".svn,.,PluginSimulator.cfm,HttpAntRunner.cfc,MyComponent.cfc,samples.cfm,ScheduledRun.cfm,tests,mocking,RemoteFacadeTester.cfm" >
 			
 			<cfif not listfind(excludes,name)>
 				<cfset isCfc = find(".cfc",name) />

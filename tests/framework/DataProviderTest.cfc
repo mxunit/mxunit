@@ -239,14 +239,11 @@ FILE-BASED DATAPROVIDERS
 <cfset n = 'q' />
 
 <!--- Just keep it in variables by default for testing --->
-<cf_querysim>
-<cfoutput>
-q
+<cf_querysim>q
 col1,col2,col3,col4
 1|1.2|1.3|1.4
 2|2.2|2.3|2.4
 3|3.2|3.3|3.4
-</cfoutput>
 </cf_querysim>
 
 

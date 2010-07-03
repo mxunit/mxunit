@@ -28,7 +28,7 @@
 	
 	<p><hr color="#eaeaea" noshade="true" size="1" /></p>
 	
-	<cfset testCase = '<cfcomponent displayname="MxunitInstallVerificationTest" extends="#pathbase#framework/TestCase">
+	<cfset testCase = '<cfcomponent displayname="MxunitInstallVerificationTest" extends="#pathbase#framework.TestCase">
 			<cffunction name="testThis" >
 				<cfset assertEquals("this","this") />
 			</cffunction>
