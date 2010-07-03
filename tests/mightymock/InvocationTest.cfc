@@ -48,8 +48,8 @@ function testNamedArgsException() {
    mock.reset();
    r1 = mock.foo();
    r2 = mock.foo();
-   debug(r1);
-   debug(r2);
+  // debug(r1);
+  // debug(r2);
 
  }
 
@@ -58,7 +58,7 @@ function $shouldThrowRegisteredException(){
   debug( mock.debugMock() );
   try{
    res = mock.foo(1);
-    debug(res);
+    //debug(res);
     fail('should not get here');
    }
    catch(YouSuckAtUnitTestingException e){

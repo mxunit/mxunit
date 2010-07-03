@@ -2,7 +2,7 @@
 <cfscript>
   
   function testAbstractMockMetaData(){
-    debug( getMetaData(mock) );
+    //debug( getMetaData(mock) );
   }
   
   function setUp(){

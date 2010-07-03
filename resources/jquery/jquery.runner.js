@@ -9,7 +9,12 @@
 	$(function(){
 		container = $('.mxunitResults');
 		
+	
+		
 		$('a[rel="tipsy"]').tipsy({fade:true,gravity:'s'});
+		$('#bug').tipsy({fade:true,gravity:'w'});
+		$('.mxunittestsparks').sparkline( 'html', {type: 'tristate', barWidth: 1.25, colorMap: {'1': "#50B516", '-1': "#0781FA", '-2': "#DB1414"} } );
+
 		
 		// Make the table into a grid
 		$('table.results', container).tablesorter({
@@ -51,7 +56,7 @@
 					return false;
 				},
 				href: '#',
-				text: 'Toggle Error Context'
+				text: 'Toggle Stack Trace'
 			}))
 			.insertBefore(contexts);
 		
@@ -64,7 +69,7 @@
 						return false;
 					},
 					href: '#',
-					text: 'Toggle Error Contexts'
+					text: 'Toggle Stack Trace'
 				}));
 		
 		// Append the toggle option
@@ -84,5 +89,9 @@
 			//alert(s);
 		}
 	}
+	
+	
+	
+	
 	
 })(jQuery);

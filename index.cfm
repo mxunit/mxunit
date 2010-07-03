@@ -1,7 +1,7 @@
 <cfparam name="url.print_js_resources" type="boolean" default="true" />
+<cfparam name="url.toggledebug" type="boolean" default="true" />
 
 <cfinclude template="resources/theme/header.cfm" />
-
 <cftry>
 	<!--- TODO This will probably break once past CF 9 --->
 	<cfset cfMajorVersion = left(server.coldfusion.productversion, 1) />
@@ -28,7 +28,7 @@
 	
 	<p><hr color="#eaeaea" noshade="true" size="1" /></p>
 	
-	<cfset testCase = '<cfcomponent displayname="MxunitInstallVerificationTest" extends="framework.TestCase">
+	<cfset testCase = '<cfcomponent displayname="MxunitInstallVerificationTest" extends="#pathbase#framework/TestCase">
 			<cffunction name="testThis" >
 				<cfset assertEquals("this","this") />
 			</cffunction>
@@ -66,7 +66,7 @@
 	
 	<div>
 		<cfoutput>
-			#results.getResultsOutput("rawhtml")#
+			#results.getResultsOutput('rawhtml')#
 		</cfoutput>
 	</div>
 	

@@ -30,7 +30,7 @@
     order = '';
     order = orderedExpectation(myMock);
     order.one().four().verify();
-    debug( myMock.debugMock() );
+    //debug( myMock.debugMock() );
   }
  
 

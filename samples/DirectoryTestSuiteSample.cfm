@@ -13,7 +13,7 @@
   recurse="true"
   excludes="#excludes#"
   returnvariable="Results"
-  componentPath="mxunit.plugindemotests" />
+  componentPath="mxunit.PluginDemoTests" />
 
 <cfif NOT URL.quiet>
   <cfif NOT StructIsEmpty(DTS.getCatastrophicErrors())>

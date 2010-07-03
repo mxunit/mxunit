@@ -4,7 +4,7 @@
   
   function testSingleLiteralParameter(){
     nuMock.sendNotifications('asd');
-    debug( nuMock.debugMock() );
+    //debug( nuMock.debugMock() );
     nuMock.verify().sendNotifications('asd');
   }
   
@@ -15,7 +15,7 @@
     nuMock.sendNotifications('ruioty','fg','ghjghjghj','ghjghjghjghj7ghjghj');
     nuMock.sendNotifications('dffgg','ghj','ghjghjghj','ghjghjgh6jghjghjghj');
     nuMock.sendNotifications('uio','ghj','ghj4ghjghj','gh5jghjghjghjghlljghj');
-    debug( nuMock.debugMock() );
+    //debug( nuMock.debugMock() );
     nuMock.verifyTimes(5).sendNotifications("{string}","{string}","{string}","{string}");
   }
   

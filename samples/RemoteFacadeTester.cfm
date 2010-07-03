@@ -1,7 +1,14 @@
-<!--- 
+<!---
 PURPOSE: for help with debugging test cases when things go hairy.
 
 this runs a test directly, through a test suite, and through the RemoteFacade url (how eclipse sends the tests to CF for running)
+
+
+
+!!!!!            NOTE            !!!!!!!!!
+
+If you're using this to test code that depends on setup in  your Application.cfc -- especially ORM-related functionality,
+then you'll need to copy this file into your application
 
  --->
 
@@ -34,7 +41,7 @@ this runs a test directly, through a test suite, and through the RemoteFacade ur
 <cfset obj = createObject("component",mycomponent)>
 <cfset testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite()>
 <cfset testSuite.add(mycomponent,myfunction,obj)>
-<cfset results = testSuite.run()>  
+<cfset results = testSuite.run()>
 <cfdump var="#results.getResults()#" expand="false" label="results when running through test suite">
 
 <!--- now run that same component using the remote facade --->
@@ -47,6 +54,12 @@ this runs a test directly, through a test suite, and through the RemoteFacade ur
 
 
 
-<cfinvoke   webservice="#remoteURL#" method="executeTestCase" componentName="#mycomponent#" methodNames="#myfunction#" TestRunKey="" returnvariable="remoteRunResults">
+<cfinvoke
+			webservice="#remoteURL#"
+			method="executeTestCase"
+			componentName="#mycomponent#"
+			methodNames="#myfunction#"
+			TestRunKey=""
+			returnvariable="remoteRunResults">
 
 <cfdump var="#remoteRunResults#" label="remoteRunResults" expand="false">

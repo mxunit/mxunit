@@ -7,6 +7,7 @@
 <cfset arrayAppend(scripts, pathBase & 'resources/jquery/tablesorter/jquery.tablesorter.js') />
 <cfset arrayAppend(scripts, pathBase & 'resources/jquery/tipsy/javascripts/jquery.tipsy.js') />
 <cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.runner.js') />
+<cfset arrayAppend(scripts, pathBase & 'resources/jquery/jquery.sparkline.min.js') />
 
 <cfset context = getDirectoryFromPath(expandPath(pathBase)) />
 

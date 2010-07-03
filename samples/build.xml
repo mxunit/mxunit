@@ -65,8 +65,6 @@
 	</target>
 
 	<target name="clean" depends="init">
-		<delete dir="${test.output}" failonerror="false" />
-		<delete dir="${dist.dir}" failonerror="false" />
 		<mkdir dir="${test.output.xml}" />
 		<mkdir dir="${test.junitoutput}" />
 		<mkdir dir="${dist.dir}" />
@@ -81,6 +79,8 @@
 	</target>
 
 	<target name="runtests" description="Make output directories and run the MXUnit task" depends="init,clean">
+		<delete dir="${test.output}" failonerror="false" />
+		<delete dir="${dist.dir}" failonerror="false" />
 		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpathref="project.classpath" />
 		<mxunittask server="${test.server}" port="${test.serverport}" defaultrunner="${test.runner}" outputdir="${test.output.xml}" verbose="true">
 			<directory path="${test.dir.location}" recurse="true" packageName="${test.cfcpath}" componentPath="${test.cfcpath}" />
@@ -90,7 +90,7 @@
 		<antcall target="junitreport" />
 	</target>
 
-	<target name="junitreport" depends="init,clean" description="Runs the report without running the tests">
+	<target name="junitreport" depends="init" description="Runs the report without running the tests">
 		<junitreport todir="${test.junitoutput}">
 			<fileset dir="${test.output.xml}">
 				<include name="*.xml" />
@@ -99,7 +99,7 @@
 		</junitreport>
 	</target>
 
-	<target name="dist" depends="init,clean" description="Builds the zip file for deployment">
+	<target name="dist" depends="init" description="Builds the zip file for deployment">
 		<zip destfile="${dist.dir}/${dist.zip}">
 			<zipfileset dir="." excludes="${test.dir.name}/, deploy/, lib/, .apptacular/, .project, build.xml, settings.xml, .settings" prefix="${dist.prefixInZip}" casesensitive="false" />
 		</zip>

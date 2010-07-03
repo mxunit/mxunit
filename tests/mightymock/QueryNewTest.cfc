@@ -39,14 +39,14 @@
  function createQueryFromJava(){
   q = createObject('java','coldfusion.sql.QueryTable');
   q.addColumn('asd');
-  debug(q);
+  //debug(q);
 
  }
 
 
   function testCreateAndAlterQuery() {
      querySetCell(q, 'returns', 'foo',1);
-     debug(q);
+    // debug(q);
 
   }
 
