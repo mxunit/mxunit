@@ -225,7 +225,7 @@
 
 		<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpathref="project.classpath" name="gcupload" />
 
-		<gcupload username="${gc.username}" password="${gc.password}" projectname="mxunit" filename="${zipfile}" targetfilename="mxunit-${build.version}.zip" summary="${build.summary}" />
+		<gcupload username="${gc.username}" password="${gc.password}" projectname="" filename="${zipfile}" targetfilename="mxunit-${build.version}.zip" summary="${build.summary}" />
 	</target>
 
 	<!--
@@ -307,6 +307,7 @@
 		<mxunittask server="${server}" port="${port}" defaultrunner="/mxunit/runner/HttpAntRunner.cfc" outputdir="${output.dir}" verbose="true" testResultsSummary="my.summary" failureproperty="testsfailed">
 			<!-- componentPath is not required, but it results in a much faster test run -->
 			<directory remoteMethod="run" path="${webroot}/mxunit/tests/framework/" packageName="mxunit.tests.framework" componentPath="mxunit.tests.framework" recurse="false" includes="*.cfc" excludes="" />
+			<directory remoteMethod="run" path="${webroot}/mxunit/tests/framework/mightymock" packageName="mxunit.tests.mightymock" componentPath="mxunit.tests.framework.mightymock" recurse="false" includes="*.cfc" excludes="" />
 			<directory remoteMethod="run" path="${webroot}/mxunit/tests/runner" packageName="mxunit.tests.runner" componentPath="mxunit.tests.runner" recurse="false" includes="*.cfc" excludes="" />
 		</mxunittask>
 

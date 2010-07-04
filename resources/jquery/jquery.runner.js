@@ -11,10 +11,11 @@
 		
 	
 		
+		$('#bug').tipsy({fade:false,gravity:'e'});
 		$('a[rel="tipsy"]').tipsy({fade:true,gravity:'s'});
-		$('.menu_item').tipsy({fade:true,gravity:'n'});
-		$('#bug').tipsy({fade:true,gravity:'e'});
-		$('#sparkcontainer').tipsy({fade:true,gravity:'n'});
+		$('.menu_item').tipsy({fade:true,gravity:'n',delayIn:2400});
+		
+				$('#sparkcontainer').tipsy({fade:true,gravity:'n'});
 		$('.mxunittestsparks').sparkline( 'html', {type: 'tristate', barWidth: 1.25, colorMap: {'1': "#50B516", '-1': "#0781FA", '-2': "#DB1414"} } );
 
 		

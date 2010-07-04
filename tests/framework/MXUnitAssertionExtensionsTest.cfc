@@ -6,7 +6,6 @@
       //itself
       assertIsTypeOf(this,"mxunit.tests.framework.MXUnitAssertionExtensionsTest");
       //immediate parent
-      debug(getMetaData(this));
       assertIsTypeOf(this,"mxunit.framework.TestCase");
       // grandparent
       assertIsTypeOf(this,"mxunit.framework.Assert");

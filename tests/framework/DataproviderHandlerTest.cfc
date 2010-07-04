@@ -54,8 +54,6 @@ function spyTest() {
 
 </cfscript>
 
-
-
 <cf_querysim>
 q
 col1,col2,col3,col4
@@ -63,4 +61,5 @@ col1,col2,col3,col4
 2|2.2|2.3|2.4
 3|3.2|3.3|3.4
 </cf_querysim>
+
 </cfcomponent>

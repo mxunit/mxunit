@@ -46,7 +46,7 @@
     //To Do (bill): Need to run /mxunit/index.cfm to create mxunit.MXunitInstallTest
     proxy = CreateObject("java", "coldfusion.cfc.CFCProxy").init(ExpandPath("/mxunit/framework/TestSuite.cfc"));
     args = arrayNew(1);
-    args[1] = "mxunit.MXunitInstallTest";
+    args[1] = "mxunit.MXUnitInstallTest";
     s = structNew();
     s = proxy.invoke("addAll",args);
     results = s.run();

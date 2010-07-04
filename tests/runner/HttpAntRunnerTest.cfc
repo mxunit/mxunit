@@ -6,10 +6,10 @@
  Tests the AntRunner and makes sure the generated content is aok
   <cfset var found = "" />
   <cfset var rsDom = xmlParse(actual) />
-  <cfset assertisXmlDoc(rsDom) />
+  <cfset assertIsXmlDoc(rsDom) />
   <cfset debug(rsDom.xmlroot.xmlAttributes) />
 
-  <cfset assertEquals(10,rsDom.xmlroot.xmlAttributes["tests"],"Should 10 tests in this suite") />
+  <cfset assertEquals(11,rsDom.xmlroot.xmlAttributes["tests"],"Should be 10 tests in this suite") />
   <cfset found = refind("<title>Test Results \[[0-9]{2}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}[ ]*.*</title>", actual, 0, true)>
   <cfset debug(found) />
   <cfset assertTrue(arrayLen(found.len) gt 0) />
