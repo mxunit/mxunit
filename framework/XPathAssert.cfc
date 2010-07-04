@@ -13,9 +13,9 @@ assertion returns true if any elements of the xpath epxression are found." />
    <cfargument name="message" type="string" required="false" hint="The
 mssage to display when this assertion fails" default="The XPath expression,
 #arguments.xpath#, did not match the data." />
-   <cfset var dom = javacast("null","java.lang.Object") />
+   <cfset var dom = "" />
    <cfset var isUrl= "" />
-   <cfset var results = javacast("null","java.lang.Object") />
+   <cfset var results = "" />
 
       <cftry>
        <!---
@@ -55,10 +55,10 @@ mssage to display when this assertion fails" default="The XPath expression,
      var root =  util.getComponentRoot();
      var dom = xmlNew();
      var paths = arrayNew(1);
-     var loader = javacast("null","java.lang.Object");
-     var bais = javacast("null","java.lang.Object");
-     var doc = javacast("null","java.lang.Object");
-     var builder = javacast("null","java.lang.Object");
+     var loader = "";
+     var bais = "";
+     var doc = "" ;
+     var builder = "";
      var readBuffer = "";
      var soup = "";
      paths[1] = expandPath("/#root#/framework/lib/tagsoup-1.2.jar");

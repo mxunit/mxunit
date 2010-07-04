@@ -4,7 +4,7 @@ A test framework for CFML (ColdFusion).
 
 Main website "http://mxunit.org":http://mxunit.org
 Docs, etc: "http://wiki.mxunit.org/":http://wiki.mxunit.org/
-MXUnit Google Group (to get help): http://groups.google.com/group/mxunit
+MXUnit Google Group (to get help): "http://groups.google.com/group/mxunit":http://groups.google.com/group/mxunit
  
 
 h2. About this repository
