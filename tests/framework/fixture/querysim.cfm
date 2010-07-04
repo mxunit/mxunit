@@ -16,7 +16,7 @@ reading querysim info from a profile file; ie, .ini. This was omitted
 because 'i' don't use that.
 --------------------------------------------------------------------->
 
-<cfsetting enablecfoutputonly="yes">
+<cfsetting enablecfoutputonly="false">
 <cfscript>
  _local.queryName = '';
  _local.raw = '';

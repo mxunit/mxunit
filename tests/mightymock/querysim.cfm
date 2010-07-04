@@ -16,21 +16,21 @@ reading querysim info from a profile file; ie, .ini. This was omitted
 because 'i' don't use that.
 --------------------------------------------------------------------->
 
-<cfsetting enablecfoutputonly="yes">
+<cfsetting enablecfoutputonly="false">
 <cfscript>
- local.queryName = '';
- local.raw = '';
- local.q = chr(0);
+ _local.queryName = '';
+ _local.raw = '';
+ _local.q = chr(0);
 
  if (thistag.HasEndTag and thistag.ExecutionMode is 'start'){
 	//no worries
  }
 
  else if (thistag.HasEndTag and thistag.ExecutionMode is 'end'){
-   local.raw = trim( Thistag.generatedContent );
-	 thistag.generatedContent = '';
-   local.q = parse(local.raw);
-   setVariable( 'caller.' & local.queryName, local.q );
+   _local.raw = trim( Thistag.generatedContent );
+	thistag.generatedContent = '';
+   _local.q = parse(_local.raw);
+   setVariable( 'caller.' & _local.queryName, _local.q );
  }
 
 
@@ -81,7 +81,7 @@ function parse(input){
 
 
   function setQueryName(qName){
-    local.queryName = qName;
+    _local.queryName = qName;
   }
 
 </cfscript>

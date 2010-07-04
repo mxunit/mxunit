@@ -1,7 +1,7 @@
 
 <!--------------------------------------------------------------------
 Original QuerySim.cfm by hal.helms@TeamAllaire.com
-Update by bill s. - 04.09.2010
+Update by bill s. - 07.04.2010
 
 This will only work in ColdFusion 8 and later due to conditional
 syntax usage - && in lieu of AND, and i++, etc.
@@ -15,8 +15,7 @@ Note, one possibly major omission from the original is the lack of
 reading querysim info from a profile file; ie, .ini. This was omitted
 because 'i' don't use that.
 --------------------------------------------------------------------->
-
-<cfsetting enablecfoutputonly="yes">
+<cfsetting enablecfoutputonly="false">
 <cfscript>
  _local.queryName = '';
  _local.raw = '';
@@ -85,4 +84,3 @@ function parse(input){
   }
 
 </cfscript>
-<cfsetting enablecfoutputonly="No">

@@ -7,7 +7,7 @@
     <cfargument name="packagename" type="string" hint="The package name for JUnitReportTask" required="false" default="mxunit.testresults" />
     <cfargument name="outputformat" type="string" hint="Valid Values: HTML,XML, or JUNITXML" required="false" default="junitxml" />
     <cfargument name="recurse" required="false" default="true" hint="whether to recurse down the directory tree">
-	  <cfargument name="excludes" required="false" default="" hint="List of files to exclude if type is DIR">
+	<cfargument name="excludes" required="false" default="" hint="List of files to exclude if type is DIR">
     <cfargument name="componentPath" required="false" hint="performance improver: pass the cfc-notation. See DirectoryTestSuite for details." default="">
 
     <cfset var suite = createObject("component","mxunit.framework.TestSuite").TestSuite()/>
