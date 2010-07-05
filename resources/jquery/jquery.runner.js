@@ -32,8 +32,6 @@
 		$('.summary a', container)
 			.addClass('active')
 			.click(function() {
-				// Toggle the active class on the link
-				$(this).toggleClass('active');
 				
 				// Find what type of filter we are on
 				type = $(this).parent().attr('className');
@@ -76,13 +74,25 @@
 				}));
 		
 		// Append the toggle option
-		toggleContext.appendTo($('.summary ul', container));
+		toggleContext.appendTo($('.summary ul', container));     
+		
+		toggleTests('passed');
 	});
 	
 	function toggleTests( type ) {
 		debug('Toggling: ' + type);
 		
 		$('tr.' + type, container).toggle();
+		
+		
+		// Toggle the active class on the link
+		$('.summary .' + type + ' a', container).toggleClass('active');
+		
+		// Hide suites with no visible tests
+		$('table.results>tbody:not(:has(>tr:visible))', container).parent().prev().andSelf().hide();
+		
+		// Show suites with visible tests
+		$('table.results>tbody:has(>tr:visible)', container).parent().prev().andSelf().show();
 	}
 	
 	function debug(s) {

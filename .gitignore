@@ -1,4 +1,7 @@
 .project
 MXUnitInstallTest.cfc
+*.settings
+buildprops/unames.properties
+buildprops/antrunner.properties
 *.svn
 **/.svn
