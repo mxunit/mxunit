@@ -307,6 +307,7 @@
 		<mxunittask server="${server}" port="${port}" defaultrunner="/mxunit/runner/HttpAntRunner.cfc" outputdir="${output.dir}" verbose="true" testResultsSummary="my.summary" failureproperty="testsfailed">
 			<!-- componentPath is not required, but it results in a much faster test run -->
 			<directory remoteMethod="run" path="${webroot}/mxunit/tests/framework/" packageName="mxunit.tests.framework" componentPath="mxunit.tests.framework" recurse="false" includes="*.cfc" excludes="" />
+			<directory remoteMethod="run" path="${webroot}/mxunit/tests/mightymock/" packageName="mxunit.tests.mightymock" componentPath="mxunit.tests.mightymock" recurse="false" includes="*.cfc" excludes="" />
 			<directory remoteMethod="run" path="${webroot}/mxunit/tests/runner" packageName="mxunit.tests.runner" componentPath="mxunit.tests.runner" recurse="false" includes="*.cfc" excludes="" />
 		</mxunittask>
 
