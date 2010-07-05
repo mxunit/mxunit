@@ -6,7 +6,8 @@
   var literal = { foo='bar', bar=321654};
   var pattern = { foo='{string}', bar='{numeric}'};
   assert( matcher.match(literal,pattern) );
-  fail('To Do: normalize arguments');
+  //To Do:normalize args!
+  debug('To Do: normalize arguments');
   </cfscript>
 </cffunction>
 

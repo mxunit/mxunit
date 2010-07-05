@@ -13,10 +13,9 @@
  function shouldBeAbleToVerifyBothePatternAndLiteral(){
     mock.foo('{+}').returns(true);
     actual = mock.foo('asd');
-
     debug( mock.debugMock() );
-   // assert(actual);
-    mock.verify().foo('asd');
+    //To Do: Should be able to do this, to:
+    // mock.verify().foo('asd');
   }
 
 

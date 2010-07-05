@@ -9,8 +9,7 @@
 
 <cfinclude template="#pathBase#resources/theme/header.cfm" />
 
-<cfset testIsPresent = cgi.path_info is not "" OR url.test is not "" />
-<cfset testToRun = iif(cgi.path_info is "", de(url.test), de(cgi.path_info)) />
+<cfset testToRun = url.test />
 
 <!--- Add the js for the runner --->
 <cfset arrayAppend(scripts, 'runner.js') />

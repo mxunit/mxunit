@@ -91,7 +91,7 @@
        s &= 'where q_#i#.id = q2_#i#.id ' & chr(10);
       if(i != this.mocks.size()) s &= ' union ' & chr(10);
     }
-    s &= 'order by time asc' & chr(0);
+    s &= 'order by [time] asc' & chr(0);
     invocations = _$query(s);
     return invocations;
   }

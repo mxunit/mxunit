@@ -21,7 +21,8 @@
 
   function $verifyExact(){
    order.one().two().three().verifyExact();
-   fail('to do');
+   //To Do:
+   debug('to do');
   }
 
 

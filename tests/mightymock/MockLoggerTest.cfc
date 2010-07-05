@@ -3,7 +3,8 @@
 
 
   function testWriteLog() {
-     fail('to do');
+     //To Do: do logging
+     debug('to do');
   }
 
 

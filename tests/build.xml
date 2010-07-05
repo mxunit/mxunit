@@ -86,15 +86,14 @@
                    includes="*.cfc"
                    excludes="" />
 
-        <!-- Need to regenerate tests
-         <directory runner="/mxunit/runner/HttpAntRunner.cfc"
-                    remoteMethod="run"
-                    path="${component.path}\mxunit\tests\generator"
-                    packageName="mxunit.tests.generator"
-                  componentPath="mxunit.tests.generator"
-                    recurse="false"
-                    excludes="" />
-        -->
+       	<directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                   remoteMethod="run"
+                   path="${component.path}\mxunit\tests\mightymock"
+                   packageName="mxunit.tests.mightymock"
+                   componentPath="mxunit.tests.imightymock"
+                   recurse="false"
+                   includes="*.cfc"
+                   excludes="" />
       </mxunittask>
 
   </target>

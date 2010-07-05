@@ -124,9 +124,13 @@
       if (isPattern(args)) return 'pattern';
       return 'litteral';
     }
-    catch(coldfusion.runtime.ScopeCastException e){
+    catch(coldfusion.runtime.NonArrayException e1){
      $throw(type='InvalidArgumentTypeException',message='arguments not pattern or litteral : @',detail='argType(#args.toString()#)');
     }
+    catch(coldfusion.runtime.ScopeCastException e2){
+     $throw(type='InvalidArgumentTypeException',message='arguments not pattern or litteral : @',detail='argType(#args.toString()#)');
+    }
+    
   }
 
 
@@ -140,15 +144,15 @@
 	 //iterate over	known patterns and see if value exists
 	 var i = 1;
 	 var isPattern = false;
-   var item = '';
-   for(item in args){
-    if( patterns.contains(args[item]) ){
-     isPattern =  true;
-    }
-    else {
-     return false;
-    }
-   }
+	 var item = '';
+	 for(item in args){
+	 	if( patterns.contains(args[item]) ){
+	     isPattern =  true;
+	    }
+	    else {
+	     return false;
+	    }
+	   }
 	 return isPattern;
 	}
 

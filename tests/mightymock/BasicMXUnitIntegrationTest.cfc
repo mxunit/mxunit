@@ -52,7 +52,7 @@
     try{
     order.four().one().verify();
     }
-    catch(mxunit.exception.AssertionFailedError){}
+    catch(mxunit.exception.AssertionFailedError e){}
 	</cfscript>
 </cffunction>
 
