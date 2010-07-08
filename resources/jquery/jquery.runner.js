@@ -35,7 +35,7 @@
 		$('a[rel="tipsy"]').tipsy({fade:true,gravity:'s'});
 		$('.menu_item').tipsy({fade:true,gravity:'n',delayIn:2400});
 		$('#sparkcontainer').tipsy({fade:true,gravity:'n'});
-		$('.mxunittestsparks').sparkline( 'html', {type: 'tristate', barWidth: 1.25, colorMap: {'1': "#50B516", '-1': "#0781FA", '-2': "#DB1414"} } );
+		$('.mxunittestsparks').sparkline( 'html', {type: 'tristate', height:'22px', barWidth: 1.1, colorMap: {'1': "#50B516", '-1': "#0781FA", '-2': "#DB1414"} } );
 
 		
 		// Make the table into a grid
