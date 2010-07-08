@@ -11,11 +11,11 @@
 		if (readCookie(cookieName) == null) {
 			createCookie(cookieName, 'fep');
 		};  
-		
+		                                                                                            
 		return {   
-			'isVisbile'  : function (type) { return readCookie(cookieName).search(type[0]) != -1; }                                      
-			, 'show'     : function (type) { createCookie(cookieName, readCookie(cookieName) + type[0]); this.updateUI(type);}   
-			, 'hide'     : function (type) { createCookie(cookieName, readCookie(cookieName).replace(type[0], '')); this.updateUI(type);}     
+			'isVisbile'  : function (type) { return readCookie(cookieName).search(type.charAt(0)) != -1; }                                      
+			, 'show'     : function (type) { createCookie(cookieName, readCookie(cookieName) + type.charAt(0)); this.updateUI(type);}   
+			, 'hide'     : function (type) { createCookie(cookieName, readCookie(cookieName).replace(type.charAt(0), '')); this.updateUI(type);}     
 			, 'toggle'   : function (type) { this.isVisbile(type) ? this.hide(type) : this.show(type); } 
 			, 'updateUI' : function (type) {  
 				var v = this.isVisbile(type);
