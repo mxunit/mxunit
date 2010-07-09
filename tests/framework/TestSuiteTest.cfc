@@ -43,6 +43,15 @@
     </cfscript>
       
 	</cffunction>
+	
+	<cffunction name="testAddOneTestMethod">    
+		<cfscript>
+		var testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();   
+		testSuite.add("mxunit.tests.framework.fixture.fixturetests.SomeRandomTest", "testThree");
+		results = testSuite.run();
+		assertEquals(1, arrayLen(results.results));      
+		</cfscript>   
+	</cffunction>
 
 
 	<cffunction name="setUp" access="public" returntype="void">

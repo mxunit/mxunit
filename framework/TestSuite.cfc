@@ -64,6 +64,10 @@
 		<cfargument name="methods" type="string" required="yes" />
 		<cfargument name="componentObject" type="Any" required="no" default="" />
 		
+		<cfif isSimpleValue(arguments.ComponentObject)>
+			<cfset ComponentObject = createObject("component",arguments.ComponentName) />
+		</cfif>
+		
 		<cfscript>
 			try{
 				//If the component already has methods, just update the method array
