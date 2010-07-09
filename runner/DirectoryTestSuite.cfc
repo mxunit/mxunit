@@ -91,12 +91,7 @@
 			<cfthrow message="Directory #directory# does not exist">
 		</cfif>
 
-		<cfif ListFirst(server.ColdFusion.ProductVersion) GT 6>
-			<cfdirectory action="list" directory="#arguments.directory#" name="files" recurse="#arguments.recurse#" filter="*.cfc">
-		<cfelse>
-			<cfset runnerUtils = createObject("component","RunnerUtils")>
-			<cfset files = runnerUtils.directoryList(directory=arguments.directory,filter="*.cfc",recurse=arguments.recurse)>
-		</cfif>
+		<cfdirectory action="list" directory="#arguments.directory#" name="files" recurse="#arguments.recurse#" filter="*.cfc">
 
 		<cfreturn files>
 	</cffunction>

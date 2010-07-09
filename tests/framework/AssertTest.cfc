@@ -137,6 +137,21 @@
 
   </cffunction>
 
+  <cffunction name="failNotEqualsShouldAllowInvalidXMLCharsInActual">
+  		<!--- this was added to test http://jira.mxunit.org/browse/MXUI-12
+			It passes using the html runner, but fails with an org.xml.sax.SAXParseException: Premature end of file.
+			with the Eclipse plugin --->
+   		<cftry>
+			<cfset failNotEquals(1,chr(30),"my message")>
+			<cfcatch type="mxunit.exception.AssertionFailedError">
+				<cfif not find("[1]",cfcatch.message)
+					OR not find(chr(30),cfcatch.message)>
+						<cfset fail("Should've had [1] and #chr(30)# in the throw message but instead the message was #cfcatch.message#")>
+				</cfif>
+			</cfcatch>
+		</cftry>
+  </cffunction>
+
 	<cffunction name="testFailEquals" returntype="void" hint="tests error path">
 		<cftry>
 			<!--- do something here to cause an error --->
@@ -457,7 +472,17 @@
 
 
 	</cffunction>
-
+                 
+	
+  <cffunction name="testDoubleHashError">
+		<!--- see http://jira.mxunit.org/browse/MXUI-13 --->          
+		<cftry>
+			<cfset assertTrue(false, "This -> ## <- should not cause an error")> 
+  	 	<cfcatch type="mxunit.exception.AssertionFailedError">
+      	<cfset assertEquals("This -> ## <- should not cause an error", cfcatch.message) />
+			</cfcatch>
+		</cftry>
+  </cffunction>
 
 
 
