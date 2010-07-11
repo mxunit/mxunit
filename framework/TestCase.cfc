@@ -56,7 +56,7 @@
 		<cfparam name="debugArrayWrapper" type="struct" default="#StructNew()#" />
 		<cfparam name="debugArray" type="array" default="#arrayNew(1)#" />
 		
-		<cfset debugArrayWrapper.debugArray = debugArray />
+		<cfset variables.debugArrayWrapper.debugArray = debugArray />
 		
 		<cfreturn debugArrayWrapper />
 	</cffunction>
@@ -302,10 +302,10 @@
 		<cfargument name="debugData" type="any" required="true" />
 		
 		<cfif isDefined("request.debugArrayWrapper")>
-			<cfset debugArrayWrapper = request.debugArrayWrapper>
+			<cfset variables.debugArrayWrapper = request.debugArrayWrapper>
 		</cfif>
 		
-		<cfset arrayappend(debugArrayWrapper.debugArray, arguments.debugData) />
+		<cfset arrayappend(variables.debugArrayWrapper.debugArray, arguments.debugData) />
 	</cffunction>
 	
 	<cffunction name="clearDebug" access="public" returntype="void" hint="Clears the debug array">
@@ -314,14 +314,14 @@
 	
 	<cffunction name="getDebug" access="public" returntype="array" hint="Returns the debug array">
 		<cfif isDefined("request.debugArrayWrapper")>
-			<cfset debugArrayWrapper = request.debugArrayWrapper>
+			<cfset variables.debugArrayWrapper = request.debugArrayWrapper>
 		</cfif>
 		
-		<cfreturn debugArrayWrapper.debugArray />
+		<cfreturn variables.debugArrayWrapper.debugArray />
 	</cffunction>
 	
 	<cffunction name="getDebugWrapper" access="public" returntype="struct" hint="Returns the debug array">
-		<cfreturn debugArrayWrapper />
+		<cfreturn variables.debugArrayWrapper />
 	</cffunction>
 	
 	<cffunction name="setDebugWrapper" access="public" returntype="void" hint="">
