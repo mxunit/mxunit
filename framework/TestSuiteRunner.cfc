@@ -105,7 +105,7 @@
 			</cfcatch>
 			
 			<cfcatch type="any">
-				<cfset handleCaughtException(rootOfException(cfcatch), testCase.expectedExceptionType, testCase.expectedExceptionMessage, results, outputOfTest, testCase)>
+				<cfset handleCaughtException(rootOfException(cfcatch), testCase.expectedExceptionType, testCase.expectedExceptionMessage, results, outputOfTest, testCase, cfcatch)>
 			</cfcatch>
 		</cftry>
 		
@@ -190,12 +190,14 @@
 		<cfargument name="results" />
 		<cfargument name="outputOfTest" />
 		<cfargument name="testCase" />
+		<cfargument name="catch" />
+		
 		
 		<cfif arguments.expectedExceptionMessage eq ''>
-			<cfset arguments.expectedExceptionMessage = 'Exception: #expectedExceptionType# expected but #cfcatch.type# was thrown' />
+			<cfset arguments.expectedExceptionMessage = 'Exception: #expectedExceptionType# expected but #arguments.catch.type# was thrown' />
 		</cfif>
 		
-		<cfif exceptionMatchesType(cfcatch, expectedExceptionType)>
+		<cfif exceptionMatchesType(arguments.catch, expectedExceptionType)>
 			<cfset results.addSuccess('Passed') />
 			<cfset results.addContent(outputOfTest) />
 			<cfset testCase.debug(caughtException) />
@@ -206,7 +208,7 @@
 				<cfthrow message="#arguments.expectedExceptionMessage#">
 				
 				<cfcatch>
-					<cfset addFailureToResults(results=results, expected=expectedExceptionType, actual=cfcatch.type, exception=cfcatch, content=outputOfTest)>
+					<cfset addFailureToResults(results=results, expected=expectedExceptionType, actual=arguments.catch.type, exception=arguments.catch, content=outputOfTest)>
 				</cfcatch>
 			</cftry>
 		<cfelse>
@@ -214,7 +216,7 @@
 			<cfset results.addError(caughtException) />
 			<cfset results.addContent(outputOfTest) />
 			
-			<cflog file="mxunit" type="error" application="false" text="#cfcatch.message#::#cfcatch.detail#" />
+			<cflog file="mxunit" type="error" application="false" text="#arguments.catch.message#::#arguments.catch.detail#" />
 		</cfif>
 	</cffunction>
 	
