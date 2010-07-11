@@ -6,3 +6,4 @@ buildprops/antrunner.properties
 tests/testresults/**
 *.svn
 **/.svn
+eclipse/copysnippets.properties
