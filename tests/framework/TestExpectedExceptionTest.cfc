@@ -5,7 +5,7 @@
 		<cfset fail('This should be caught and exception added to debug') />
 	</cffunction>
 	
-	<cffunction name="expectedSQLExceptionShouldBeCaught" mxunit:expectedException="Database">
+	<cffunction name="expectedSQLExceptionShouldBeCaught" mxunit:expectedException="Database,java.sql.SQLException">
 		<cfquery name="q" datasource="ad">
 		</cfquery>
 	</cffunction>
