@@ -27,6 +27,7 @@
 		<cfset var testCase = "">
 		<cfset var methodIndex = 1>
 		<cfset var currentTestSuiteName = "" />
+		<cfset var currentSuite = "" />
 		
 		<cfloop collection="#allSuites#" item="currentTestSuiteName">
 			<cfset currentSuite = allSuites[currentTestSuiteName] />
@@ -45,7 +46,7 @@
 				<cfset runTestMethod(testCase, testMethod, results, currentTestSuiteName) />
 			<cfelse>
 				<cfloop from="1" to="#arrayLen(currentSuite.methods)#" index="methodIndex">
-					<cfset runTestMethod(testCase, currentSuite.methods[methodIndex++], results, currentTestSuiteName) />
+					<cfset runTestMethod(testCase, currentSuite.methods[methodIndex], results, currentTestSuiteName) />
 				</cfloop>
 			</cfif>
 			
