@@ -1,6 +1,8 @@
 <cfcomponent output="false" extends="mxunit.framework.TestCase">
 
 
+
+
 <!--- <cfset myStruct = {
         foo='bar',bar='123',bunko='banked'
           }>
@@ -8,11 +10,22 @@
   <cfargument name="theData">
   <cfset debug(theData.foo)	>
 </cffunction> --->
+
+
+<!--- Just run this test 100 times --->
+<cffunction name="dataproviderShouldAcceptSimpleValueForNumericLoops" mxunit:dataprovider="201">
+  <cfargument name="cnt">
+  <cfset debug(cnt)>  
+  <cfset r=randrange(cnt,1000+cnt)>
+</cffunction>
+
 <cfset simple=111>
 <!--- Just run this test 100 times --->
-<cffunction name="dataproviderShouldAcceptSimpleNumericLoops" mxunit:dataprovider="simple">
+<cffunction name="dataproviderShouldAcceptSimpleNumericVariablesForLoops" mxunit:dataprovider="simple">
   <cfargument name="cnt">
-<cfset r=randrange(cnt,1000+cnt)>
+  <cfset debug(cnt)>
+  <cfset r=randrange(cnt,1000+cnt)>
+  <cfset assert(r) >
 </cffunction>
 
 <cfset _2dA = [
