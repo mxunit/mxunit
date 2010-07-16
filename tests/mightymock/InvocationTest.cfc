@@ -1,13 +1,63 @@
 <cfcomponent output="false" extends="BaseTest">
 
-<!--- Argument Normalization is on the todo list --->
- <cffunction name="mismatchedArgumentTypesShouldPass">
+
+<!--- 
+
+IMPORTANT (7.15.10)
+ 
+Matching still does not work; 
+
+ --->
+
+<cffunction name="$namedArgumentsOutOfOrderTest">
  <cfscript>
   mock.reset();
-  mock.foo(bar='{string}').returns('bar');
-  assert(mock.foo('asdasdasdasd') == 'bar') ;
-  </cfscript>
+  mock.foo( a='{string}', b='{boolean}' ).returns('bar');
+  debug( mock.debugMock() );
+  actual = mock.foo( b=false , a='axel' );
+  debug( actual );
+  assertEquals('bar', actual ) ;  
+</cfscript>
 </cffunction>
+
+ <cffunction name="$mismatchedArgumentSwap">
+ <cfscript>
+  mock.reset();
+  mock.foo( a='{string}', b='{boolean}' ).returns('bar');
+  debug( mock.debugMock() );
+  actual = mock.foo( 'axel', false );
+  debug( actual );
+  assertEquals('bar', actual ) ;  
+</cfscript>
+</cffunction>	
+	
+ <cffunction name="$mismatchedArgumentTypesShouldPass3">
+ <cfscript>
+  mock.reset();
+  mock.foo(bar='{string}', foo='{numeric}' ).returns('bar');
+  assertEquals('bar',mock.foo( 'axel', 123 )) ;  
+</cfscript>
+</cffunction>
+
+ <cffunction name="$mismatchedArgumentTypesShouldPass2">
+ <cfscript>
+  mock.reset();
+  mock.foo(bar='{string}', foo='{boolean}' ).returns('bar');
+  assertEquals('bar', mock.foo( 'axel', false )) ;  
+</cfscript>
+</cffunction>
+
+
+<!--- Argument Normalization is on the todo list --->
+ <cffunction name="$mismatchedArgumentTypesShouldPass">
+ <cfscript>
+  mock.reset();
+  mock.foo(bar='{string}', foo='{string}' ).returns('bar');
+  assertEquals('bar',mock.foo( 'axel', 'baz' )) ;  
+</cfscript>
+</cffunction>
+
+
 
 <cfscript>
 

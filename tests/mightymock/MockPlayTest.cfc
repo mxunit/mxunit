@@ -17,8 +17,8 @@ function testWhenSomethingIsCalled(){
   
   
  function guaranteeSortedStruct(){
-   var s = {'z'='z', 'a'='a', 'hubuh'='321', 'oof'='aff' };
-   var newArgs = createObject( 'java', 'java.util.TreeMap' ).init(s);
+   var ss = {'z'='z', 'a'='a', 'hubuh'='321', 'oof'='aff' };
+   var newArgs = createObject( 'java', 'java.util.TreeMap' ).init(ss);
    debug(newArgs);
  
  }
@@ -30,7 +30,7 @@ function testWhenSomethingIsCalled(){
   
   }
   
-  private function dumpArgs(foo){
+   function dumpArgs(foo){
     debug(arguments);
   }
   

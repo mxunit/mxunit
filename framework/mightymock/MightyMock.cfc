@@ -158,7 +158,9 @@
  function onMissingMethod(missingMethodName,missingMethodArguments){
    var tempMock = chr(0);
    var temp = '';
-
+   request.debug(missingMethodArguments);
+   missingMethodArguments = createObject('java','java.util.TreeMap').init(missingMethodArguments);
+   
    if( currentState == 'verifying'){
       verifier.doVerify(tempRule[1], missingMethodName, missingMethodArguments, tempRule[2], registry );
       _$setState('idle');

@@ -40,6 +40,7 @@
     var oStringVal = '';
     var literalKeyString = structKeyArray(literal).toString();
     var patternKeyString = structKeyArray(pattern).toString();
+    var patternArgValues = arguments.pattern.values().toArray();
 
    //maybe a wildcard
    if(pattern.size() == 1){
@@ -55,20 +56,18 @@
             'Different number of parameters.',
             'Make sure the same number of paramters are passed in.');
    }
-//i fear this is downright wrong
-//literal.equals(pattern)
-  if(false){
+ //i fear this is downright wrong
+ //literal.equals(pattern)
+ if(literal.equals(pattern)){
   	 /*the above expression is failing sometimes. argh*/
   	  $throw('NamedArgumentConflictException',
           'Different parameter type definition.',
           'It appears that you defined a mock using named or ordered arguments, but attempted to invoke it otherwise. Please use either named or ordered argument, but not both.');
-
-    }
-
+   }
 
    for(key in literal){
      element = literal[key];
-     oArg = pattern[key];
+     oArg = patternArgValues[++i];
      if(oArg == '{any}') continue; //allow for 'ANY' type
      argType = getArgumentType(element);
      if( argType != oArg ) {
