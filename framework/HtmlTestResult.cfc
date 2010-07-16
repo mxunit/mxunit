@@ -138,18 +138,20 @@
 
                <div id="sparkcontainer" rel="tipsy" title="#this.testRuns# tests in #this.totalExecutionTime#ms. Success ratio #int(this.sucessRatio*100)#%">
                <span class="mxunittestsparks">
-                 <cfscript>
-                  //generate data for sparkline
-                  for(i=1;i<=this.failures;i=i+1){
-                    writeoutput(-1 & ",");
-                  }
-                  for(i=1;i<=this.errors;i=i+1){
-                    writeoutput(-2 & ",");
-                  }
-                  for(i=1;i<=this.successes;i=i+1){
-                    writeoutput(1 & ",");
-                  }
-                  i=1;
+                 Replace this in HTMLTestResult
+
+				<cfscript>
+					//generate data for sparkline
+					for(i=1;i lte this.failures;i=i+1){
+					writeoutput(-1 & ",");
+					}
+					for(i=1;i lte this.errors;i=i+1){
+					writeoutput(-2 & ",");
+					}
+					for(i=1;i lte this.successes;i=i+1){
+					writeoutput(1 & ",");
+					}
+					i=1;
                  </cfscript>
                 </span>
               </div>

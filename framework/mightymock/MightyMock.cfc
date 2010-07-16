@@ -136,6 +136,8 @@
 			proxy.variables.MOCKED = MOCKED;
 			proxy._$DUMP = _$DUMP;
 			proxy.variables._$DUMP = _$DUMP;
+			proxy.when = when;
+			proxy.variables.when = when;
 
      return proxy;
 	 }
@@ -215,6 +217,11 @@
 
 
 --------------------------------------------------------------------*/
+  function when(){
+    _$setState('registering');
+    return this;
+  }
+
 
   function returns(){
    var arg = '';
