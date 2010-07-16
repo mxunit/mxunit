@@ -158,7 +158,6 @@
  function onMissingMethod(missingMethodName,missingMethodArguments){
    var tempMock = chr(0);
    var temp = '';
-   request.debug(missingMethodArguments);
    missingMethodArguments = createObject('java','java.util.TreeMap').init(missingMethodArguments);
    
    if( currentState == 'verifying'){
