@@ -1,6 +1,14 @@
 <cfcomponent output="false" extends="mxunit.framework.TestCase">
 <cfscript>
 
+function $peepArgumentCollection(){
+  var ac = createObjecT('java','coldfusion.runtime.ArgumentCollection');
+  //dump(ac);
+  var ss = {'z'='z', 'a'='a', 'hubuh'='321', 'oof'='aff' };
+  _peep(1,'a','zoo','A');
+  
+}
+
 function whenShouldSetStateToRegistering(){
   cut = mock( 'com.foo.bar' );
   cut.when();
@@ -44,4 +52,22 @@ function testWhenSomethingIsCalled(){
 
 
 </cfscript>
+<!--- 
+If a method is defined with named args, the values are naturally sorted.
+If not, the order is not guaranteed, but the keys are able to be sorted:
+2,1,3,4, etc.
+
+ --->
+<cffunction access="private" name="_peep">
+	
+ <cfscript>
+ var set = arguments.values(); 	
+ var it = set.iterator();
+ while(it.hasNext()){
+  dump( it.next().toString() );
+ }
+  dump(it);
+ </cfscript>
+</cffunction>
+
 </cfcomponent>

@@ -48,7 +48,7 @@
 			
 			<div class="grid_9">
 				<ul class="nav horizontal">
-					<li><a class="menu_item" href="<cfoutput>#pathBase#</cfoutput>doc/api/index.cfm" title="Local API Documentation">Local API</a></li>
+					<li><a class="menu_item" href="<cfoutput>#pathBase#</cfoutput>doc/" title="Local API Documentation">Local API</a></li>
 					<li><a class="menu_item" href="http://wiki.mxunit.org/" title="Documentation, Tutorials, etc.">Docs</a></li>
 					<li><a class="menu_item" href="<cfoutput>#pathBase#</cfoutput>samples/samples.cfm" title="Sample tests">Samples</a></li>
 					<li><a class="menu_item" href="http://mxunit.org/blog" title="MXUnit Blog">Blog</a></li>
