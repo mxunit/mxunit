@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>assertSame</name>
+<help></help>
+<starttext><![CDATA[<cfset assertSame($${object1},$${object2}]]></starttext>
+<endtext><![CDATA[,"$${message}")>]]></endtext>
+</snippet>

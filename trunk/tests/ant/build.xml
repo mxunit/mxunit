@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+ <project xmlns:au="antlib:org.apache.ant.antunit"
+          xmlns="antlib:org.apache.tools.ant" default="main">
+
+
+<!-- This could be a runTests target within the main build file -->
+
+ <target name="main">
+  <echo level="info">Running antunit tests</echo>
+
+  <record name="mxunit-test.log" loglevel="verbose"/>
+
+  <au:antunit>
+    <fileset dir=".">
+      <!-- include all tests the start with anything followed by Test.xml -->
+      <include name="*Test.xml" />
+    </fileset>
+    <au:plainlistener />
+  </au:antunit>
+
+ </target>
+
+
+</project>

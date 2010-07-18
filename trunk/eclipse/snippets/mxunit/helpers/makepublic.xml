@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>makepublic</name>
+<help></help>
+<starttext><![CDATA[<cfset makePublic($${Object},"$${Function To Make Public}"]]></starttext>
+<endtext><![CDATA[)>]]></endtext>
+</snippet>

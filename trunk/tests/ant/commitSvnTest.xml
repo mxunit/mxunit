@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+ <project xmlns:au="antlib:org.apache.ant.antunit"
+          xmlns="antlib:org.apache.tools.ant" >
+
+
+  <target name="testCommit">
+
+  	<au:expectfailure>
+      <au:assertPropertyEquals name="testStatus.lastCommitAuthor" value="joe"  />
+    </au:expectfailure> 
+    
+  </target>
+
+
+ <target name="setUp">
+   <!-- for log assertions -->
+  <au:logcontent level="verbose" />
+
+   </target>
+
+
+  <!-- clean up -->
+  <target name="tearDown">
+     <!-- clean up -->
+  </target>
+
+
+</project>
+

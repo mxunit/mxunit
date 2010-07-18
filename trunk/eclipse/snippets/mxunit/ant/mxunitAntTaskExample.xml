@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>mxunitAntTaskExample</name>
+<help></help>
+<starttext><![CDATA[<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="Sample" basedir="." default="runtests">
+
+
+	<target name="init">
+		<!-- what's the directory name of your application? this value will be used throughout this build file; if you don't want that, just replace the references to ${application.name} with your desired values -->
+		<property name="application.name" value="MyAppName" />
+
+		<!-- where do your tests live, relative to this build file? -->
+		<!-- if running from hudson, simply set this property in the hudson configuration; for example:
+		test.dir=c:/inetpub/wwwroot/myapp/test
+		
+		if running against network paths on windows, you'll need to escape slashes in the hudson configuration, for example:
+		\\\\server\\some\\dir\\webapps\\myapp\\test
+		 -->
+		<property name="test.dir" location="test" />
+		<!-- what is the cfc dot-notation path to that directory, as ColdFusion sees it? -->
+		<property name="test.cfcpath" value="${application.name}.test" />
+		<!-- what "runner" URL should the tests hit. -->
+		<property name="test.runner" value="/${application.name}/test/HttpAntRunner.cfc" />
+		<!-- what server and port should your tests run against? -->
+		<property name="test.server" value="localhost" />
+		<property name="test.serverport" value="80" />
+
+		<!-- where does the mxunit ant jar file live? it's easiest to copy it out of the mxunit install and put it into your app;
+		you can include other jars in that directory as well... svn jars for the svnant task, for example-->
+		<path id="project.classpath">
+			<fileset dir="lib">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+
+		<!-- this is where the xml and html will live for the report generator -->
+		<property name="test.output" location="test/testresults" />
+		<property name="test.output.tmp" location="${test.output}/tmp" />
+		<property name="test.junitoutput" location="${test.output}/html" />
+
+		<!-- where the zip file for deployment will live -->
+		<property name="dist.dir" location="deploy" />
+		<!-- what to call it -->
+		<property name="dist.zip" value="${application.name}.zip" />
+		<!-- what to start the "path" in the zip with -->
+		<property name="dist.prefixInZip" value="${application.name}" />
+
+		<!-- dump the properties -->
+		<echoproperties prefix="test" />
+		<echoproperties prefix="dist" />
+	</target>
+
+	<target name="clean" depends="init">
+		<delete dir="{test.output}" failonerror="false" />
+		<delete dir="{dist.dir}" failonerror="false" />
+		<mkdir dir="${test.output.tmp}" />
+		<mkdir dir="${test.junitoutput}" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<target name="svn.update" depends="init">
+		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="project.classpath" />
+		<echo message="updating ${test.dir}" />
+		<svn svnkit="true">
+			<update dir="${test.dir}" />
+		</svn>
+	</target>
+
+	<target name="runtests" description="Make output directories and run the MXUnit task" depends="init,clean">
+		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${test.mxunit.jar}" />
+		<mxunittask server="${test.server}" port="${test.serverport}" defaultrunner="${test.runner}" outputdir="${test.output.tmp}" verbose="true">
+			<directory path="${test.dir}" recurse="true" packageName="${test.cfcpath}" componentPath="${test.cfcpath}" />
+		</mxunittask>
+
+		<!-- generate pretty reports -->
+		<antcall target="junitreport" />
+	</target>
+
+	<target name="junitreport" depends="init,clean" description="Runs the report without running the tests">
+		<junitreport todir="${test.junitoutput}">
+			<fileset dir="${test.output.tmp}">
+				<include name="*.xml" />
+			</fileset>
+			<report format="frames" todir="${test.junitoutput}" />
+		</junitreport>
+	</target>
+
+	<target name="dist" depends="init,clean" description="Builds the zip file for deployment">
+		<zip destfile="${dist.dir}/${dist.zip}">
+			<zipfileset dir="." excludes="test/, deploy/, lib/, .apptacular/, .project, build.xml, settings.xml, .settings" prefix="${dist.prefixInZip}" casesensitive="false" />
+		</zip>
+	</target>
+
+
+
+</project>]]></starttext>
+<endtext><![CDATA[]]></endtext>
+</snippet>

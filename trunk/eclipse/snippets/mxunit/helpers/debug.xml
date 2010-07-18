@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>debug</name>
+<help></help>
+<starttext><![CDATA[<cfset debug($${Thing to Dump}]]></starttext>
+<endtext><![CDATA[)>]]></endtext>
+</snippet>

@@ -1,0 +1,72 @@
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	background-color: ##EDEDEB;
+	margin:0px;
+	border:0px;
+}
+
+input, select {
+	background-color: #ffffff;
+}
+
+h1 {
+	background-image: url("no-bugs.gif");
+	background-repeat: no-repeat;
+	background-color: #eeeeee;
+	color: ##002F2F;
+	margin:0px;
+	padding: 20px 5px 20px 80px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+h2 {
+	background-color: #046380;
+	color: #ffffff;
+	border:0px;
+	margin:0px;
+	padding:5px 5px 5px 15px;
+}
+
+h3 {
+	padding: 5px 5px 5px 15px;
+}
+
+th {
+	padding: 5px;
+	text-align: left;
+	background-color: #EFECCA;
+}
+
+td {
+	text-align: left;
+	background-color: #eee;
+	padding: 3px;
+}
+
+p, table {
+	padding: 15px;
+	font-size: 9pt;
+}
+
+
+.button { 
+	background-color: #cc0000;
+	color: #ffffff;
+	font-weight: bold;
+	padding: 5px;
+	margin: 2px;
+}
+
+li {
+	color: #000000;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+}
+
+a {
+	color:#046380;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="MXUnitTask" basedir="." default="main">
+
+<!-- ================================= 
+      This is designed to run all tests in mxunit but generate no reports.
+      It should be fast and is intended to check everything quickly.         
+     ================================= -->
+    
+   <property name="mxunit.jar" value="../ant/lib/mxunit-ant.jar" />
+   <property file="build.properties" />
+
+	
+	<target name="main">
+    	<echo message="Running tests ..." />
+        <antcall target="runtests"></antcall>
+    </target>
+
+	
+	
+	 <target name="runtests" description="Run the whole kit and kabudle">
+	     <taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"   />
+	       <mxunittask server="${server.name}" port="${server.port}"
+	                   defaultrunner="/mxunit/runner/HttpAntRunner.cfc"
+	                   verbose="true"
+	                   haltonfailure="false"
+	                   haltonerror="false">
+	   	    
+	       
+	       	<directory   path="${component.path}/mxunit/tests/framework"
+	                     packageName="mxunit.tests.framework"
+	                     componentPath="mxunit.tests.framework"
+	                     recurse="false"
+	                    />
+	     
+	          <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+	                     remoteMethod="run"
+	                     path="${component.path}/mxunit/tests/runner"
+	                     packageName="mxunit.tests.runner"
+	                     componentPath="mxunit.tests.runner"
+	                     recurse="false"
+	                      />
+	    
+	         <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+	                    remoteMethod="run"
+	                    path="${component.path}/mxunit/tests/bugs"
+	                    packageName="mxunit.tests.bugs"
+	                    componentPath="mxunit.tests.bugs"
+	                    recurse="false"
+
+	                   />
+
+	        <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+	                   remoteMethod="run"
+	                   path="${component.path}/mxunit/tests/install"
+	                   packageName="mxunit.tests.install"
+	                   componentPath="mxunit.tests.install"
+	                   recurse="false"
+	                   includes="*.cfc"
+	                   excludes="" />
+	       	       	
+	       	
+	       	<directory runner="/mxunit/runner/HttpAntRunner.cfc"
+	                   remoteMethod="run"
+	                   path="${component.path}/mxunit/tests/mightymock"
+	                   packageName="mxunit.tests.mightymock"
+	                   componentPath="mxunit.tests.mightymock"
+	                   recurse="false"
+	                   includes="*.cfc"
+	                   excludes="" />
+	       	
+	       	
+	      </mxunittask>
+
+	  </target>
+
+</project>

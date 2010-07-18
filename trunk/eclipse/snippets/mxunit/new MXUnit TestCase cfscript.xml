@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="">
+<name>new MXUnit TestCase cfscript</name>
+<help></help>
+<starttext><![CDATA[component extends="mxunit.framework.TestCase"{
+
+	function setUp(){
+
+	}
+
+
+	function tearDown(){
+
+	}
+
+
+	function xxx_should_xxx_when_xxx(){
+		fail("Not yet implemented");
+	}
+
+
+	function xxx_should_throw_error_when_xxx(){
+		expectException("SomeException");
+		//do something here to cause an exception
+	}
+
+}]]></starttext>
+<endtext><![CDATA[]]></endtext>
+</snippet>

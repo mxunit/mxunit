@@ -1,0 +1,181 @@
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+		
+			
+		
+		
+		
+		
+	
+
+<html>
+<head>
+    <title>MXUnit - Unit Test Framework and Eclipse Plugin for Adobe ColdFusion</title>
+    <meta name="keywords" value="coldfusion unit testing test cfmx xunit developer framework quality assurance open source community free" />
+    <!-- Include Ext and app-specific scripts: -->
+    <script type="text/javascript" src="resources/ext2/adapter/ext/ext-base.js"></script>
+    
+   <script type="text/javascript" src="resources/ext2/ext-all.js"></script>
+
+    <!-- Include Ext stylesheets here: -->
+    <link rel="stylesheet" type="text/css" href="resources/ext2/resources/css/ext-all.css">
+    <link rel="stylesheet" type="text/css" href="ExtStart.css">
+    <script>
+   Ext.onReady(main);
+
+   function main(){
+     Ext.BLANK_IMAGE_URL = 'resources/ext2/resources/images/default/s.gif';
+     Ext.get('about').on('click', function(){
+        Ext.MessageBox.show({
+         title: 'Just a few dudes who like clean code that works ... ',
+         msg:  '<div align="center"><img src="images/ranch-boys.jpg"/><br/> <strong style="font-weight:bold">From left to right</strong>:  Jeb, Lumpy, Zoot, Sue, and Buddy</div>',
+         width:600,
+         progress:false,
+         closable:true
+
+       })
+    });
+    
+    Ext.get('flexbuilder').on('click',function(){
+    	Ext.MessageBox.show({
+         title: 'Note on FlexBuilder Standalone ',
+         msg:  '<p>The plugin was built for Eclipse. Not Eclipse-based applications. Eclipse. FlexBuilder is an Eclipse-based application. The plugin will almost certainly not work in FlexBuilder 2, since that is Eclipse 3.1 and Java 1.4. It will possibly work in FlexBuilder 3 standalone, although we make no guarantees.</p> <p>In addiiton, the plugin will not be supported on IBM SameTime, AlterPoint DeviceAuthority, EclipseTrader, JTrackAndField, or other eclipse-based products.</p>',
+         width:600,
+         progress:false,
+         closable:true
+
+       })
+    });
+
+   }
+  </script>
+</head>
+<body>
+  <h1 style="height:76;padding-bottom:12">
+  <img style="font-size:11px;position:absolute;left:0;top:0;" src="images/no-bugs.gif" border="0" alt="Download to get rid of those pesky bugs." align="absmiddle">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+  MXUnit <span style="font-size:11px;position:absolute;left:82;top:40;color:gray;font-family:serif"> Unit Testing framework for ColdFusion developers</span>
+
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+  <a href=" download.cfm" style="font-size:12pt" title="Download the latest version"> Download </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href=" doc/index.cfm" style="font-size:12pt;" title="Documentation, Tutorials, etc ..."> Details </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="index.cfm" style="font-size:12pt;"> Home </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="http://groups.google.com/group/mxunit/topics" style="font-size:12pt"> Support </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="blog" style="font-size:12pt"> Blog </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a id="about" href="#" onclick="return false;" style="font-size:12pt"> About </a>
+
+  </h1>
+
+    <div id="content">
+     
+
+     <div align="center">
+     <table border="0">
+	 <tr>
+	 	<td colspan="2">
+		<div class="myDiv" align="center">
+		<a href="doc/index.cfm?doc=whymxunit" style="font-size:14pt;font-weight:bold;text-decoration:underline ">Why MXUnit?</a>
+		</div>
+		
+		</td>
+	 </tr>
+     <tr>
+      <td valign="top">
+
+        <div class="myDiv" align="center">
+           <a href="download.cfm" style="font-weight:bold;font-size:12pt">1. Download</a> the latest MXUnit Framework.
+           <a href="download.cfm" style="font-weight:bold;font-size:12pt"><img src="images/mx-sshot-1.png" border="0"></a>
+
+         <li style="font-size:12px;margin:0,0;text-align:left">Unzip into webroot</li>
+         <li style="font-size:12px;margin:0,0;text-align:left">Test the install: http://myserver/mxunit/index.cfm </li>
+         
+<hr />
+	 <div style="text-indent:0;padding:4">
+	 <strong style="font-weight:bold">Features</strong>
+			<li style="font-size:12px;margin:0,0;text-align:left">Easy to use</li>
+			<li style="font-size:12px;margin:0,0;text-align:left">Eclipse integration</li>
+			<li style="font-size:12px;margin:0,0;text-align:left">Method-level testing</li>
+			<li style="font-size:12px;margin:0,0;text-align:left">Debug Output</li>
+			<li style="font-size:12px;margin:0,0;text-align:left"><a href="doc/mxunit-ant-doc.html" style="font-weight:bold">ANT task</a></li>
+			<li style="font-size:12px;margin:0,0;text-align:left">Test Stub Generator</li>
+			<li style="font-size:12px;margin:0,0;text-align:left">Latest Version:  (Release Candidate #1) 0.9.94-rc2  [05/01/2008]</li>
+			<li style="font-size:12px;margin:0,0;text-align:left"><strong style="background-color:yellow;color:darkred;font-weight:bold;padding:2">New Feature!</strong>
+			<a href="doc/index.cfm?doc=customassertions" class="docitem">Adding your own custom assertions without changing MXUnit
+  Code</a>
+      </li>
+			<hr />
+			<p><a href="testresults/index.html">Latest Build Test Results</a> </p>
+	 </div>
+        </div>
+
+      </td>
+      <td valign="top">
+         <div class="myDiv" align="center">
+          <strong style="font-weight:bold">2. Get the MXUnit Eclipse Plugin</strong><br />
+         <img src="images/mx-sshot-2.png">
+
+
+            <li style="font-size:12px;margin:0,0;text-align:left">Download and install <a href="http://www.eclipse.org">Eclipse</a> and the <a href="download.cfm">MXUnit Framework</a></li>
+            <li style="font-size:12px;margin:0,0;text-align:left">On the Eclipse menu, select Help > Software Updates > Find and Install.
+            Select Search for New Features to Install. Click New Remote Site.
+            Enter MXUnit Plugin for the Name and http://mxunit.org/update for the URL. Click Finish and follow the instructions.
+            </li>
+            <li style="font-size:12px;margin:0,0;text-align:left">Details: 
+            Open Eclipse, then read Help > Help Contents > <em>MXUnit: ColdFusion Unit Testing Framework</em> 
+
+            </li>
+			<li style="font-size:12px;margin:0,0;text-align:left"><b>System requirements:</b> Eclipse 3.2 or later, running under JDK1.5 or later. <a href="#" id="flexbuilder" onclick="return false;">YMMV with FlexBuilder standalone.</a></li>
+            <br />
+			  <br />
+          </div>
+		  
+		  <div class="myDiv" align="center">
+          	<a href="doc/index.cfm" style="font-weight:bold;font-size:12pt">3. Get Started</a><br />
+		  </div>
+        </td>
+       </tr>
+     </table>
+      </div>
+	 
+
+
+
+  </div>
+  <p align="center"><strong style="background-color:yellow;color:darkred;font-weight:bold;padding:2">New Feature!</strong> <a href="doc/index.cfm#cfmeetup">Looking for cfmeetup presentations?</a> </p>
+
+
+
+
+  <div align="center">
+  <hr size="1"  style="width:98%" />
+   <a href="license.txt" title="Copyleft - GNU 3.0 Public License"><img border="0" src="images/copyleft.png" align="absmiddle" title="Copyleft - GNU 3.0 Public License"> 2008 MXUnit.org</a>
+  </div>
+</body>
+</html>

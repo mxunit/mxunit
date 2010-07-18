@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>querysim</name>
+<help></help>
+<starttext><![CDATA[	<cfset var q = "">
+	<cfoutput>
+	<cf_querysim>
+	q
+	$${column names separated by commas}
+	$${row of data separated by pipes}
+
+]]></starttext>
+<endtext><![CDATA[	
+	</cf_querysim>
+	</cfoutput>
+	<cfreturn q>]]></endtext>
+</snippet>

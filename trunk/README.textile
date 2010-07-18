@@ -1,0 +1,25 @@
+h1. MXUnit
+
+A test framework for CFML (ColdFusion).
+
+Main website "http://mxunit.org":http://mxunit.org
+Docs, etc: "http://wiki.mxunit.org/":http://wiki.mxunit.org/
+MXUnit Google Group (to get help): "http://groups.google.com/group/mxunit":http://groups.google.com/group/mxunit
+ 
+
+h2. About this repository
+
+The main distribution branch is currently located at http://mxunit.googlecode.com/svn/mxunit/trunk/ (Subversion)
+
+The presence of the MXUnit source at here Github does not indicate that MXUnit is _moving_ from Google Code to Github. This repository is at Github to help distribute MXUnit to as many people as possible (like those who prefer Git), and to work on MXUnit 2.0 in a collaborative Git environment. Please feel free to fork and hack.
+
+
+h2. Collaborating Guidelines
+
+Patches and improvements are always welcome! Please fork this branch, make your changes (with plenty of passing tests) and make a pull request. 
+
+Test and Be Happy!
+
+
+
+

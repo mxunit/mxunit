@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<snippet filetemplate="false" extension="cfm">
+<name>new MXUnit TestCase</name>
+<help></help>
+<starttext><![CDATA[<cfcomponent extends="mxunit.framework.TestCase">
+
+
+	<cffunction name="setUp" returntype="void" access="public" hint="put things here that you want to run before each test">
+		]]></starttext>
+<endtext><![CDATA[		
+	</cffunction>
+
+	<cffunction name="tearDown" returntype="void" access="public" hint="put things here that you want to run after each test">	
+	
+	</cffunction>
+	
+	<cffunction name="xxx_should_xxxx_When_xxx" returntype="void" access="public">
+		<cfset fail("this test not yet implemented")>
+		
+	</cffunction>
+	
+	<cffunction name="xxx_shouldThrowErrorBecause_xxx" returntype="void" hint="tests error path" mxunit:expectedException="">			
+		<!--- do something here to cause an error --->
+		
+	</cffunction>
+
+</cfcomponent>]]></endtext>
+</snippet>

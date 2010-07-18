@@ -1,0 +1,9 @@
+.project
+MXUnitInstallTest.cfc
+*.settings
+buildprops/unames.properties
+buildprops/antrunner.properties
+tests/testresults/**
+*.svn
+**/.svn
+eclipse/copysnippets.properties

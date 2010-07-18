@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="MXUnitTask" basedir="." default="main">
+
+  <property file="build.properties" />
+  <property name="mxunit.jar" value="../ant/lib/mxunit-ant.jar" />
+  <property name="junit.out.dir.xml" value="testresults" />
+  <property name="junit.out.dir.html" value="testresults/html" />
+  <property name="results.url" value="http://localhost:${runner.port}/mxunit/tests/testresults/html/index.html" />
+  <property name="output.dir" value="tmp" />
+  <property name="style.dir" value="../ant/xsl/" />
+  <property file="../buildprops/unames.properties" />
+
+  <path id="project.classpath">
+    <pathelement location="../lib/svnjavahl.jar" />
+    <pathelement location="../lib/svnant.jar/" />
+    <pathelement location="../lib/svnClientAdapter.jar/" />
+  </path>
+
+   <target name="main" depends="update,runtests,commit" />
+
+  <!-- svn takes care of this and will not allow commits if conflicts exist
+    and these will be highlighted on update and working code will be
+    altered and tests will fail -->
+
+   <target name="update">
+    <echo level="info">Updating MXUnit Framework</echo>
+      <!-- load the svn task -->
+    <taskdef resource="svntask.properties" classpathref="project.classpath"/>
+    <svn username="${gc.username}" password="${gc.password}">
+      <update dir="../" recurse="true" revision="HEAD" />
+    </svn>
+   </target>
+
+  <target name="commit">
+     <echo level="info">Committing Entire MXUnit Framework</echo>
+    <input message="SVN Commit Comment:" addproperty="commit.comment" defaultvalue="Periodic Commit From Ant Task" />
+    <taskdef resource="svntask.properties" classpathref="project.classpath"/>
+      <svn username="${gc.username}" password="${gc.password}">
+        <commit message="${commit.comment}" dir="../" recurse="true" />
+    </svn>
+   </target>
+
+   <target name="runtests" description="Make output directories and run the MXUnit task">
+
+     <mkdir dir="${junit.out.dir.html}" />
+     <mkdir dir="${output.dir}" />
+
+     <taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"   />
+       <mxunittask server="${server.name}" port="${server.port}"
+                   defaultrunner="/mxunit/runner/HttpAntRunner.cfc"
+                   verbose="true"
+                   haltonfailure="true"
+                   haltonerror="true">
+
+          <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                     remoteMethod="run"
+                     path="${component.path}/mxunit/tests/framework"
+                     packageName="mxunit.tests.framework"
+                     componentPath="mxunit.tests.framework"
+                     recurse="false"
+                    />
+
+          <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                     remoteMethod="run"
+                     path="${component.path}/mxunit/tests/runner"
+                     packageName="mxunit.tests.runner"
+                     componentPath="mxunit.tests.runner"
+                     recurse="false"
+                      />
+
+         <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                    remoteMethod="run"
+                    path="${component.path}/mxunit/tests/bugs"
+                    packageName="mxunit.tests.bugs"
+                    componentPath="mxunit.tests.bugs"
+                    recurse="false"
+
+                   />
+
+        <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                   remoteMethod="run"
+                   path="${component.path}/mxunit/tests/install"
+                   packageName="mxunit.tests.install"
+                   componentPath="mxunit.tests.install"
+                   recurse="false"
+                   includes="*.cfc"
+                   excludes="" />
+
+       	<directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                   remoteMethod="run"
+                   path="${component.path}/mxunit/tests/mightymock"
+                   packageName="mxunit.tests.mightymock"
+                   componentPath="mxunit.tests.imightymock"
+                   recurse="false"
+                   includes="*.cfc"
+                   excludes="" />
+      </mxunittask>
+
+  </target>
+
+
+ 
+
+  <target name="junitreport" depends="runtests" description="Create a report for the rest result">
+    <delete dir="${junit.out.dir.html}" />
+    <mkdir dir="${junit.out.dir.html}"/>
+     <junitreport todir="${junit.out.dir.html}">
+        <fileset dir="${output.dir}">
+           <include name="*.xml"/>
+         </fileset>
+         <report format="frames" todir="${junit.out.dir.html}" styledir="${style.dir}"/>
+      </junitreport>
+     <!-- <delete dir="${output.dir}" /> -->
+    </target>
+
+
+  <!-- To fire up a browser with the test results. May not work on your machine -->
+
+  <target name="browse" depends="junitreport">
+    <exec executable="C:\Program Files\Internet Explorer\iexplore.exe">
+      <arg value="${results.url}"/>
+    </exec>
+  </target>
+
+
+
+</project>

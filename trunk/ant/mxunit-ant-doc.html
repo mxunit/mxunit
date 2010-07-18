@@ -1,0 +1,415 @@
+<!--
+
+-->
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+<title>MXUnitAntTask</title>
+</head>
+
+<body>
+
+<h2><a name="zip">MXUnitAntTask</a> - Version: 1.0.5</h2>
+<h3>Description</h3>
+<p>Runs MXUnit tests and saves the output to the directory specified by the <code>outputdir</code> parameter.</p>
+
+<p>This version uses HTTP to connect to the MXUnit test runner running on a CFML server (ColdFusion, Railo, BlueDragon). 
+</p>
+
+<p>
+ This version is also able to handle Http authentication - BASIC, DIGEST, and NTLM.
+</p>
+
+
+<p>
+The default testrunner (/mxunit/runner/HttpAntRunner.cfc) accepts either individual test cases
+or directories of tests to run. This runner returns only JUnitReport formated XML. These XML files
+<em>may</em> optionally be used by the JUnitReport Ant task to generate nice HTML reports. Example usage:
+<xmp>
+   <junitreport todir="${junit.out.dir.html}">
+     <fileset dir="${output.dir}">
+       <include name="*.xml"/>
+     </fileset>
+     <report format="frames" todir="${junit.out.dir.html}" styledir="${style.dir}"/>
+   </junitreport>
+</xmp>
+</p>
+
+<p>
+Note that the mxunit-ant.jar must be in Ant's class path. This can be done by specifying
+the <code>taskdef</code> tag like this:<xmp><taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"   />
+</xmp> and then coding the rest of the MXunit Ant task ...
+<xmp>       <mxunittask server="localhost" port="8500"
+                   defaultrunner="/mxunit/runner/HttpAntRunner.cfc"
+                   outputdir="${output.dir}"
+                   verbose="true"
+                   haltonerror="true"> ... </xmp>
+
+</p>
+
+<p>
+In theory, one should be able to run multiple tests across multiple domains, as long as those tests
+are accessible via Http.
+</p>
+
+<h3>Parameters</h3>
+<table border="1" cellpadding="2" cellspacing="0" width="100%">
+  <tr>
+    <td valign="top"><b>Attribute</b></td>
+    <td valign="top"><b>Description</b></td>
+    <td valign="top" align="center"><b>Required</b></td>
+    <td valign="top" align="center"><b>Default</b></td>
+  </tr>
+  <tr>
+    <td valign="top">server</td>
+    <td valign="top">The Http server name where MXUnit is located.</td>
+    <td align="center" valign="top">Yes</td>
+    <td valign="top" align="center">&nbsp;</td>
+  </tr>
+
+  <tr>
+    <td valign="top">port</td>
+    <td valign="top">The port the Http server is listening on.</td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="center">80</td>
+  </tr>
+  <tr>
+    <td valign="top">outputdir</td>
+    <td valign="top">A directory in which to save JUnit XML test results.</td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="center">&nbsp;</td>
+  </tr>
+  <tr>
+      <td valign="top">haltonerror</td>
+      <td valign="top">Instructs the task to stop executing when an <em>ERROR</em> is detected. <br />
+      This occurs <em>after</em> all the tests in the DIRECTORY or TESTCASE task have been run.
+
+      </td>
+      <td align="center" valign="top">No</td>
+      <td valign="top" align="center">false</td>
+  </tr>
+  <tr>
+      <td valign="top">haltonfailure</td>
+      <td valign="top">Instructs the task to stop executing when a <em>FAILURE</em> is detected. <br />
+      This occurs <em>after</em> all the tests in the DIRECTORY or TESTCASE task have been run.
+      </td>
+      <td align="center" valign="top">No</td>
+      <td valign="top" align="center">false</td>
+  </tr>
+  <tr>
+        <td valign="top">errorproperty</td>
+        <td valign="top">The name of a property to set in the event of an error.
+        </td>
+        <td align="center" valign="top">No</td>
+        <td valign="top" align="center">&nbsp;</td>
+  </tr>
+
+   <tr>
+          <td valign="top">failureproperty</td>
+          <td valign="top"> The name of a property to set in the event of a failure (errors are considered failures as well).
+          </td>
+          <td align="center" valign="top">No</td>
+          <td valign="top" align="center">&nbsp;</td>
+  </tr>
+
+  <tr>
+    <td valign="top">defaultrunner</td>
+    <td valign="top">
+      The testrunner responsible for accepting requests.
+    </td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="left">/mxunit/runner/HttpAntRunner.cfc</td>
+  </tr>
+  <tr>
+    <td valign="top">verbose</td>
+    <td valign="top">Flag to indicate to output additional information.</td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="center">false</td>
+  </tr>
+
+<tr>
+    <td valign="top">testResultsSummary</td>
+    <td valign="top">
+     Name of the properties file the task creates. This file is a Java
+     Properties file that records a summary of all the tests the task
+     has executed and is saved to the location specified in
+     the <code>${outputdir}</code> attribute.
+     This can be useful in automated deployments, for example,
+     if you wish inspect the results of all the tests run prior to deployment.
+     This offers a deeper level of granularity than the haltonerror or haltonfailure offers.
+     <br /><br />
+     The task generates the following properties that can be read by Ant using
+     the following syntax:<br />
+<xmp>
+<property file="${outputdir}/testresults.properties" />
+</xmp>
+testresults.properties looks something like:
+<pre>
+#Sat Mar 01 22:20:25 EST 2008
+success.ratio=.99
+total.failures=2
+failure.ratio=.01
+total.errors=0
+error.ratio=.00
+total.time=8016
+total.runs=151
+</pre>
+
+<code>error.ratio</code>  is the number of errors to the total number of tests runs. <br />
+<code>failure.ratio</code> is the number of failures to the total number of tests runs. <br />
+<code>success.ratio</code> is the total number of tests run to the total number of errors and failures combined.<br />
+
+    </td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="center">testresults.properties</td>
+  </tr>
+
+</table>
+<h3>Parameters specified as nested elements </h3>
+
+<h3><code>directory</code></h3>
+<p><code>&lt;directory ... &gt;</code>s are used to specify groups of tests to run.</p>
+<table border="1" cellpadding="2" cellspacing="0">
+  <tr>
+    <td valign="top"><b>Attribute</b></td>
+    <td valign="top"><b>Description</b></td>
+    <td valign="top" align="center"><b>Required</b></td>
+    <td valign="top" align="center"><b>Default</b></td>
+  </tr>
+  <tr>
+      <td valign="top">path</td>
+      <td valign="top">Directory of tests to run.
+      </td>
+      <td align="center" valign="top">Yes</td>
+      <td valign="top" align="center">&nbsp;</td>
+  </tr>
+  <tr>
+      <td valign="top">componentPath</td>
+      <td valign="top">A prefix to the components being tested. This is a performance
+        attribute. If specified, directory tests will run faster. Otherwise, the framework
+        will discover the componentPath using built in Adobe ColdFusion functions.<br />
+        Example:
+         <code>componentPath="mxunit.tests.framework"</code>. <br />
+         MXUnit will correctly prepend this to all the
+        tests in the specified directory.
+      </td>
+      <td align="center" valign="top">No<br />
+      <strong>
+      Optionallity is deprecated. Future release will require this attribute to be
+      specified.
+      </strong>
+
+      </td>
+      <td valign="top" align="center">&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign="top">runner</td>
+    <td valign="top">The ColdFusion component runner responsible for running the tests,</td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="center">/mxunit/runner/HttpAntRunner.cfc</td>
+  </tr>
+
+  <tr>
+    <td valign="top">remoteMethod</td>
+    <td valign="top">The remote method in the ColdFusion component that will be called.</td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="center"><code>run</code></td>
+  </tr>
+
+  <tr>
+    <td valign="top">packageName</td>
+    <td valign="top">
+      The name used by the JUnitReport task to print the main and child packages in the
+      test result report.
+    </td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="left">mxunit.testresult</td>
+  </tr>
+  <tr>
+    <td valign="top">recurse</td>
+    <td valign="top">Flag to indicate to run all tests in sub directories.</td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="center">false</td>
+  </tr>
+
+  <tr>
+      <td valign="top">excludes</td>
+      <td valign="top">Comma-delimitted list of files not to include in the test suite.</td>
+      <td align="center" valign="top">No</td>
+      <td valign="top" align="center">none</td>
+  </tr>
+
+  </table>
+
+<hr />
+
+<h3><code>testcase</code></h3>
+<p>A <code>&lt;testcase&gt;</code> allows you to specify one or more individual test cases to run.
+
+</p>
+<table border="1" cellpadding="2" cellspacing="0">
+  <tr>
+    <td valign="top"><b>Attribute</b></td>
+    <td valign="top"><b>Description</b></td>
+    <td valign="top" align="center"><b>Required</b></td>
+    <td valign="top" align="center"><b>Default</b></td>
+  </tr>
+  <tr>
+      <td valign="top">name</td>
+      <td valign="top">The fully qualified ColdFusion component name (com.foo.bar.MyCFC)
+      </td>
+      <td align="center" valign="top">Yes</td>
+      <td valign="top" align="center">&nbsp;</td>
+  </tr>
+  <tr>
+    <td valign="top">runner</td>
+    <td valign="top">The ColdFusion component runner responsible for running the tests,</td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="center">/mxunit/runner/HttpAntRunner.cfc"</td>
+  </tr>
+
+  <tr>
+      <td valign="top">remoteMethod</td>
+      <td valign="top">The remote method in the ColdFusion component that will be called.</td>
+      <td align="center" valign="top">No</td>
+      <td valign="top" align="center"><code>run</code></td>
+  </tr>
+
+  <tr>
+    <td valign="top">packageName</td>
+    <td valign="top">
+      The name used by the JUnitReport task to print the main and child packages in the
+      test result report.
+    </td>
+    <td align="center" valign="top">No</td>
+    <td valign="top" align="left">mxunit.testresult</td>
+  </tr>
+ </table>
+
+
+
+
+<hr />
+<h3>Examples</h3>
+<p>This example illustrates a minimal amount of code required to run one directory of tests.
+
+Note that this example does not save any results. This may be useful for automated deployments.</p>
+
+
+
+
+
+<pre>
+&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;project name="MXUnitTask" basedir="." default="runtests"&gt;
+
+  &lt;target name="runtests" description="Run a dir of tests recursively"&gt;
+
+   &lt;taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"   /&gt;
+   &lt;mxunittask server="localhost" &gt;
+     &lt;directory path="C:\CFusionMX7\wwwroot\mxunit\tests\framework" recurse="true" /&gt;
+   &lt;/mxunittask&gt;
+
+  &lt;/target&gt;
+&lt;/project&gt;
+ </pre>
+
+<p>This example runs both directories of and individual tests, saves the output to ${output.dir}, generates a JUnit report, and
+ opens a web browser with the JUnit report.
+</p>
+<pre> &lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;project name="MXUnitTask" basedir="." default="main"&gt;
+
+    &lt;property name="mxunit.jar" value="../ant/lib/mxunit-ant.jar" /&gt;
+    &lt;property name="junit.out.dir.xml" value="testresults" /&gt;
+    &lt;property name="junit.out.dir.html" value="testresults/html" /&gt;
+    &lt;property name="output.dir" value="tmp" /&gt;
+    &lt;property name="style.dir" value="../ant/xsl/" /&gt;
+
+
+
+   &lt;target name="main" depends="browse" /&gt;
+
+
+   &lt;target name="runtests" description="Make output directories and run the MXUnit task"&gt;
+     &lt;mkdir dir="${junit.out.dir.html}" /&gt;
+     &lt;mkdir dir="${output.dir}" /&gt;
+     &lt;taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"   /&gt;
+
+       &lt;mxunittask server="localhost" port="8500"
+                   defaultrunner="/mxunit/runner/HttpAntRunner.cfc"
+                   connectionMethod="http"
+                   outputdir="${output.dir}"
+                   authmethod="basic"
+                   username="foo"
+                   password="bar"
+                   verbose="true"&gt;
+
+          &lt;testcase name="mxunit.tests.framework.AssertTest" packageName="mxunit.asserttests" /&gt;
+          &lt;testcase name="mxunit.tests.framework.AssertDecoratorTest" packageName="mxunit.assertdecoratortests" /&gt;
+
+          &lt;directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                     remoteMethod="run"
+                     path="C:\CFusionMX7\wwwroot\mxunit\tests\framework"
+                     packageName="mxunit.framework"
+                     recurse="false"
+                     componentPath="mxunit.tests.framework"
+                     excludes="none" /&gt;
+
+           &lt;!-- This has a bad componentPath and should fail --&gt;
+           &lt;directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                      remoteMethod="run"
+                      path="C:\CFusionMX7\wwwroot\mxunit\tests\framework"
+                      packageName="mxunit.bad.framework"
+                      recurse="false"
+                      componentPath="mxunit.foo.bar"
+                      excludes="none" /&gt;
+
+          &lt;directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                     remoteMethod="run"
+                     path="C:\CFusionMX7\wwwroot\mxunit\samples"
+                     packageName="mxunit.tests.samples"
+                     recurse="false"
+                     excludes="" /&gt;
+
+
+      &lt;/mxunittask&gt;
+  &lt;/target&gt;
+
+
+
+
+  &lt;target name="junitreport" depends="runtests" description="Create a report for the rest result"&gt;
+     &lt;mkdir dir="${junit.out.dir.html}"/&gt;
+     &lt;junitreport todir="${junit.out.dir.html}"&gt;
+        &lt;fileset dir="${output.dir}"&gt;
+           &lt;include name="*.xml"/&gt;
+         &lt;/fileset&gt;
+         &lt;report format="frames" todir="${junit.out.dir.html}" styledir="${style.dir}"/&gt;
+      &lt;/junitreport&gt;
+      &lt;delete dir="${output.dir}" /&gt;
+    &lt;/target&gt;
+
+
+  &lt;!-- To fire up a browser with the test results. May not work on your machine --&gt;
+
+  &lt;target name="browse" depends="junitreport"&gt;
+    &lt;exec executable="C:\Program Files\Internet Explorer\iexplore.exe"&gt;
+      &lt;arg value="C:\CFusionMX7\wwwroot\mxunit\tests\testresults\html\index.html"/&gt;
+    &lt;/exec&gt;
+  &lt;/target&gt;
+
+
+
+&lt;/project&gt;
+
+</pre>
+<p>
+
+
+</body>
+</html>
+
+

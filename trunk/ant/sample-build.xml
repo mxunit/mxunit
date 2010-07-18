@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!--
+
+   MXUnit Ant Task sample build file.
+   
+   Usage: ant -f sample-build.xml
+   
+   Notes: This assumes installation of mxunit directly under web root.
+          The webroot, in this example, is in D:/webapps/ on an MS Windows
+          installation.
+         
+-->
+
+<project name="MXUnitTask" basedir="." default="main">
+   
+    <property name="mxunit.jar" value="lib/mxunit-ant-java5.jar" />
+    <property name="junit.out.dir.xml" value="testresults" />
+    <property name="junit.out.dir.html" value="testresults/html" />
+    <property name="output.dir" value="tmp" />
+    <property name="style.dir" value="xsl/" />
+    <property name="web.root" value="D:/webapps/" />
+    <property name="server.name" value="localhost" />
+
+
+
+   <target name="main" depends="runtests,junitreport,browse" />
+
+
+   <target name="runtests" description="Make output directories and run the MXUnit task">
+     <mkdir dir="${junit.out.dir.html}" />
+     <mkdir dir="${output.dir}" />
+     
+     
+     <taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}"   />
+       <mxunittask server="${server.name}" 
+                   defaultrunner="/mxunit/runner/HttpAntRunner.cfc"
+                   outputdir="${output.dir}"
+                   verbose="true"
+                   testResultsSummary="my.summary">
+
+          <testcase name="mxunit.tests.framework.AssertTest" packageName="mxunit.asserttests" />
+          <testcase name="mxunit.tests.framework.AssertDecoratorTest" packageName="mxunit.assertdecoratortests" />
+          
+          <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                     remoteMethod="run"
+                     path="${web.root}mxunit/tests/framework"
+                     componentPath="mxunit.tests.framework"
+                     packageName="mxunit.framework"
+                     recurse="false" />
+          
+          <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                     remoteMethod="run"
+                     path="${web.root}mxunit/tests/runner" 
+                     componentPath="mxunit.tests.runner"
+                     packageName="mxunit.runner"
+                     recurse="false" />         
+                     
+         <directory runner="/mxunit/runner/HttpAntRunner.cfc"
+                     remoteMethod="run"
+                     path="${web.root}mxunit/PluginDemoTests"
+                     componentPath="mxunit.PluginDemoTests"
+                     packageName="mxunit.plugintests"
+                     recurse="false"  />
+                     
+                    
+      </mxunittask>
+  </target>
+  
+  
+  
+
+  <target name="junitreport" description="Create a report for the rest result">
+     <mkdir dir="${junit.out.dir.html}"/>
+     <junitreport todir="${junit.out.dir.html}">
+        <fileset dir="${output.dir}">
+           <include name="*.xml"/>
+         </fileset>
+         <report format="frames" todir="${junit.out.dir.html}" styledir="${style.dir}"/>
+      </junitreport>
+      <delete dir="${output.dir}" />
+      
+    <!-- Read the properties files we generated -->
+     <property file="${output.dir}/my.summary" />
+     <echoproperties />
+     
+     <echo />
+     <echo message="MXUnit sample Ant build completed." />
+     <echo message="Point a web browser to ${junit.out.dir.html}/index.html to view the report." />
+    
+    </target>
+  
+  
+  <!-- To fire up a browser with the test results. May not work on your machine  -->
+  
+  <target name="browse" depends="junitreport">
+    <exec executable="C:\Programs\Mozilla Firefox\firefox.exe">
+      <arg value="${user.dir}\testresults\html\index.html"/>
+    </exec>
+  </target>
+
+   
+
+</project>
