@@ -345,6 +345,20 @@
 		<fail if="testsfailed" message="Failing the build because tests failed" />
 	</target>
 
+
+	<!--
+		=================================
+			Target: genApiDocs
+			Calls JS in build props which invokes the ColdDoc cfml script
+		=================================
+	-->
+	<target name="genApiDocs" depends="init">
+		<property file="${antrunner.file}" /> 
+		<script language="javascript" src="buildprops/scripts/http_doc_gen.js" />
+	</target>
+	
+
+
 	<!--
 		=================================
 			Target: publishTestResults
