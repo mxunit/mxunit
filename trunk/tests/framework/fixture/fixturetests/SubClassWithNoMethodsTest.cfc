@@ -1,1 +1,0 @@
-<cfcomponent extends="SuperClassWithPrivateMethodsTest"></cfcomponent>
