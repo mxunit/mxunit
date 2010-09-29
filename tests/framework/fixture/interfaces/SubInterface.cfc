@@ -1,0 +1,2 @@
+<cfinterface extends="AnInterface">
+</cfinterface>
