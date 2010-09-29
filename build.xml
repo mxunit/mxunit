@@ -116,6 +116,10 @@
 		=================================
 	-->
 	<target name="init">
+		
+		<!-- user property file for instance specific settings -->
+		<property file="${unames.file}" />	
+		
 		<tstamp>
 			<format pattern="MM_dd_yyyy" property="nightlystamp" />
 		</tstamp>
@@ -128,6 +132,7 @@
 		<property name="statsvn.file" value="buildprops/statsvn.properties" />
 		<property name="testmailmessage.file" value="buildprops/testresultsmail.html" />
 		<property name="svnserver" value="https://mxunit.googlecode.com/svn" />
+		<property name="svnant.dir" value="svnant13" /> <!-- can also use svnant12 -->
 
 		<!-- for the test runner -->
 		<property name="mxunit.jar" value="ant/lib/mxunit-ant.jar" />
@@ -138,12 +143,14 @@
 		<property name="output.dir" value="${junit.out.dir.xml}/tmp" />
 		<property name="style.dir" value="ant/xsl/" />
 
-		<!-- user property file for instance specific settings -->
-		<property file="${unames.file}" />
+
+		
+		
 
 		<path id="project.classpath">
 			<fileset dir="lib">
-				<include name="**/*.jar" />
+				<include name="*.jar" />
+				<include name="${svnant.dir}/*.jar" />
 			</fileset>
 		</path>
 		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}" />

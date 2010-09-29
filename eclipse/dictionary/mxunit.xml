@@ -274,7 +274,7 @@ actual object to compare.
 		<function creator="8" name="debug" returns="void">
 			<help><![CDATA[
 				Use in your tests to add simple or complex debug data to test results. Used by Eclpise plugin heavily.
-			]]></help> <parameter name="debugData" type="any" required="true">
+			]]></help> <parameter name="var" type="any" required="true">
 
 				
 			</parameter></function>

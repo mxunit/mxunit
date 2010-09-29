@@ -1,4 +1,4 @@
-<cfcomponent>
+<cfcomponent output="false">
 <cfscript>
  //change as needed
  exceptionType = 'mxunit.exception.AssertionFailedError';

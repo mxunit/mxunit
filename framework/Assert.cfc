@@ -122,10 +122,10 @@ assert function and thus mxunit won't run on BD unless we do this --->
    <cfargument name="message" required="true" type="string" hint="Custom message to print in the failure."  />
    <cfset var mess = "">
 	 <cfif arguments.message is ''>
-			<cfset mess = "mxunit test failure"> 
+			<cfset mess = "mxunit test failure">
 	 <cfelse>
 		  <cfset mess = arguments.message />
-	 </cfif> 
+	 </cfif>
    <cfthrow type="mxunit.exception.AssertionFailedError" message="#mess#" />
   </cffunction>
 
@@ -305,7 +305,7 @@ assert function and thus mxunit won't run on BD unless we do this --->
 	</cffunction>
 
 
-  <cffunction name="assertSame" access="public" output="true">
+  <cffunction name="assertSame" access="public" output="false">
     <cfargument name="expected" required="yes" type="any" />
     <cfargument name="actual" required="yes" type="any" />
     <cfargument name="message" required="no" default="The two objects do not refer to the same instance." type="string">

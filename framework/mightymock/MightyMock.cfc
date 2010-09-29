@@ -1,4 +1,4 @@
-<cfcomponent output="true">
+<cfcomponent output="false">
 	<cfscript>
 
 /*------------------------------------------------------------------------------

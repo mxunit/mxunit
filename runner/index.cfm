@@ -5,7 +5,7 @@
 <cfparam name="url.componentPath" default="" />
 
 <cfset pathBase = '../' />
-<cfset title = 'Runner' />
+<cfset title = '#url.test# - Runner' />
 
 <cfinclude template="#pathBase#resources/theme/header.cfm" />
 

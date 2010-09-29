@@ -108,15 +108,24 @@
 	--->
 	<cffunction name="setDebug" access="public" returntype="void" output="false">
 		<cfargument name="debugData" type="Any" required="true"/>
-
 		<!--- TODO Should be injectable setComponentUtil() what about a Guice like thing? --->
 		<cfset var cUtil = createObject("component","ComponentUtils") />
+		<cfset var i = 1>
+		<cfset var tmp = arrayNew(1)>
+		<cfset this.resultItem.debug = arrayNew(1)>
 
-		<cfif cUtil.isCfc(arguments.debugData)>
-			<cfset this.resultItem.debug = getMetaData(arguments.debugData) />
-		<cfelse>
-			<cfset this.resultItem.debug = duplicate(arguments.debugData) />
+		<cfif NOT isArray(debugData)>
+			<cfset arrayAppend(tmp, debugData)>
+			<cfset debugData = tmp>
 		</cfif>
+
+		<cfloop from="1" to="#arrayLen(debugData)#" index="i">
+			<cfif cUtil.isCfc(arguments.debugData[i])>
+				<cfset arrayAppend( this.resultItem.debug, arguments.debugData[i] )  />
+			<cfelse>
+				<cfset arrayAppend( this.resultItem.debug, duplicate(arguments.debugData[i]) ) />
+			</cfif>
+		</cfloop>
 	</cffunction>
 
 	<cffunction name="getDebug" access="public" returntype="any" output="false">

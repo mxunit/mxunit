@@ -47,7 +47,7 @@
 	 result = this.testResult.getResultsOutput(mode);
 	 //assertIsXml(result);
 	 debug(result);
-	 
+
 
 	 mode = 'query';
 	 result = this.testResult.getResultsOutput(mode);
@@ -187,16 +187,16 @@
 
   result.setDebug(objs[1]);
   actual = result.getDebug();
-  assertIsStruct(actual,"Should return a metadata struct of a CFC");
+  assertTrue(isObject(actual[1]),"Should return the object itself");
 
 
    result.setDebug(objs[2]);
    actual = result.getDebug();
-   assertIsStruct(actual,"Should return a metadata struct of a CFC");
+   assertTrue(isObject(actual[1]),"Should return the object itself");
 
    result.setDebug(objs[3]);
    actual = result.getDebug();
-   assertEquals("class coldfusion.runtime.java.JavaProxy", getMetadata(actual),"Java Object: May fail in Railo, OBD");
+   assertEquals("class coldfusion.runtime.java.JavaProxy", getMetadata(actual[1]),"Java Object: May fail in Railo, OBD");
 
 
    result.setDebug(arrayNew(1));
@@ -206,15 +206,15 @@
 
    result.setDebug(structNew());
    actual = result.getDebug();
-   assertIsStruct(actual);
+   assertIsArray(actual);
 
    result.setDebug(-3213213213213213211222222222222222222222222222222222222222222222221);
    actual = result.getDebug();
-   assertEquals(-3213213213213213211222222222222222222222222222222222222222222222221, actual);
+   assertEquals(-3213213213213213211222222222222222222222222222222222222222222222221, actual[1]);
 
    result.setDebug(10002234234234234232.1789789789789789789236654);
    actual = result.getDebug();
-   assertEquals(10002234234234234232.1789789789789789789236654, actual);
+   assertEquals(10002234234234234232.1789789789789789789236654, actual[1]);
 
   </cfscript>
 </cffunction>
@@ -306,7 +306,7 @@
 <cffunction name="normalizeQueryStringShouldIgnoreComplexObjects" hint="Bug and patch by Luis Majano - 3.23.10">
 	<cfscript>
 	var u = structnew(); //url rep
-	var o = structnew(); 
+	var o = structnew();
 	o.foo = "bar";
 	u.method = "runtestremote";
 	u.output = "html";

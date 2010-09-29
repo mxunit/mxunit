@@ -262,6 +262,16 @@
 
 </cffunction>
 
+<cffunction name="assertIsTypeOfPassesForInterfaces" returntype="void">
+	<cfset var component = createObject("fixture.interfaces.AComponent")>
+
+	<cfset assertIsTypeOf( component, "mxunit.tests.framework.fixture.interfaces.AnInterface" )>
+	<cfset assertIsTypeOf( component, "mxunit.tests.framework.fixture.interfaces.OtherInterface" )>
+	<cfset assertIsTypeOf( component, "mxunit.tests.framework.fixture.interfaces.SubInterface" )>
+
+</cffunction>
+
+
 
 <!--- Override these methods as needed. Note that the call to setUp() is Required if using a this-scoped instance--->
 

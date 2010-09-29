@@ -98,11 +98,11 @@
 		<cfsavecontent variable="tableHead">
 			<thead>
 				<tr>
-					<th style="width:15%;">Test</th>
-					<th style="width:10%;">Result</th>
-					<th style="width:50%;">Error Info</th>
-					<th style="width:10%;">Speed</th>
-					<th style="width:10%;">Output</th>
+					<th>Test</th>
+					<th>Result</th>
+					<th>Error Info</th>
+					<th>Speed</th>
+					<th>Output</th>
 				</tr>
 			</thead>
 		</cfsavecontent>

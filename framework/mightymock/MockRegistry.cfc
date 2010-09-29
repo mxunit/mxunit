@@ -1,4 +1,4 @@
-<cfcomponent output="true">
+<cfcomponent output="false">
 <!---
   You'll see target and args used throughout. target is the method name
   and args is the struct representing the arguments. These are used
@@ -130,7 +130,7 @@
     catch(coldfusion.runtime.ScopeCastException e2){
      $throw(type='InvalidArgumentTypeException',message='arguments not pattern or litteral : @',detail='argType(#args.toString()#)');
     }
-    
+
   }
 
 
