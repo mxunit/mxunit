@@ -2,9 +2,8 @@
 	<cfset MyStruct = StructNew()>
 	<cfset MyStruct.SomeData = "blahhhhhhh wahahahaha">
 
-
 	<cffunction name="setUp" output="false" access="public" returntype="void" hint="">
-		
+
 	</cffunction>
 
 	<cffunction name="tearDown" output="false" access="public" returntype="void" hint="">
@@ -23,28 +22,27 @@
 		<cfset QuerySetCell(q,"two","two")>
 		<cfdump var="#q#">
 		<cfset addTrace("Hi mom")>
-
 	</cffunction>
-	
+
 	<cffunction name="testDoSomething">
 		<cfset debug("inside testDoSomething")>
 		<cfset obj = createObject("component","SomeObject")>
 		<cfset obj.doSomething()>
 	</cffunction>
-	
-	<cffunction name="testRequestDotDebug">		
+
+	<cffunction name="testRequestDotDebug">
 		<cfset obj = createObject("component","SomeObject")>
 		<cfset debug("before the object calls request.debug")>
 		<cfset obj.thisWillOnlyWorkInThePlugin()>
 		<cfset debug("after a function that called request.debug")>
 	</cffunction>
-	
+
 	<cffunction name="testRequestDotDebug_WillShowUpWithoutDebugBeingCalledFirst">
 		<cfset obj = createObject("component","SomeObject")>
 		<cfset obj.thisWillOnlyWorkInThePlugin()>
 	</cffunction>
-	
-	<cffunction name="testRequestDotDebug_WillPassInBothPluginAndWeb">		
+
+	<cffunction name="testRequestDotDebug_WillPassInBothPluginAndWeb">
 		<cfset createRequestScopeDebug()>
 		<cfset obj = createObject("component","SomeObject")>
 		<cfset debug("before the object calls request.debug")>
@@ -52,13 +50,13 @@
 		<cfset debug("after a function that called request.debug")>
 		<cfset stopRequestScopeDebug()>
 	</cffunction>
-	
+
 	<cffunction name="testDoSomethingThenExitToGetDump">
 		<cfset obj = createObject("component","SomeObject")>
 		<cfset obj.doSomethingThenExitToGetDump()>
 	</cffunction>
-	
-	
+
+
 
 	<cffunction name="testFail" returntype="void" hint="">
 		<cfoutput>wooopity doo!</cfoutput>

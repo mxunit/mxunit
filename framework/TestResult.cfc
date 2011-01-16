@@ -236,7 +236,7 @@
 		TODO Refactor this out of here... should instantiate the correct object from the runner, not in the base test case.
 	--->
 	<cffunction name="getResultsOutput" returntype="any" hint="" access="public" output="false">
-		<cfargument name="mode" required="true" />
+		<cfargument name="mode" required="true" default="" />
 
 		<cfset arguments.mode = listLast(arguments.mode) />
 

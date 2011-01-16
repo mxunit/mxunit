@@ -55,12 +55,21 @@
 		<cfset assertTrue(cu.isFrameworkTemplate(template),"blue-dragon style should be framework template")>
 
 		<cfset template = "#root#PluginDemoTests#sep#SomeFile.cfc">
-		<cfset assertTrue(NOT cu.isFrameworkTemplate(template),"#template# should not be framework template")>
+		<cfset assertFalse(cu.isFrameworkTemplate(template),"#template# should not be framework template")>
 
 		<cfset template = "#root#PluginDemoTests#sep#SomeFile.cfc">
-		<cfset assertTrue(NOT cu.isFrameworkTemplate(template),"#template# should not be framework template")>
+		<cfset assertFalse(cu.isFrameworkTemplate(template),"#template# should not be framework template")>
 
+		<!--- denny valient's bug --->
+		<cfset template="#root#workspace/ormtests/SomeTest.cfc">
+		<cfset assertFalse(cu.isFrameworkTemplate(template),"#template# should not be framework template")>
 
+		<cfset template="#root#workspace/tests/SomeTest.cfc">
+		<cfset assertFalse(cu.isFrameworkTemplate(template),"#template# should not be framework template")>
+
+		<!--- James Buckingham's bug --->
+		<cfset template = "C:\Inetpub\common\MXUnit\v2.0.2 (vendor)\framework\Assert.cfc.">
+		<cfset assertTrue(cu.isFrameworkTemplate(template), "#template# should be a framework template")>
 	</cffunction>
 
 
@@ -218,7 +227,7 @@
 
 <cffunction name="getMockFactoryInfoReturnsMMInfoAsDefault">
 <cfscript>
-	info = cu.getMockFactoryInfo(); 
+	info = cu.getMockFactoryInfo();
 	assertEquals("MightyMock.Mockfactory",info.factoryPath);
 	assertEquals("createMock",info.createMockMethodName);
 	assertEquals("mocked",info.createMockStringArgumentName);
@@ -230,7 +239,7 @@
 
 <cffunction name="getMockFactoryInfoReturnsExplicitFactorInfo">
 <cfscript>
-	info = cu.getMockFactoryInfo("newFramework"); 
+	info = cu.getMockFactoryInfo("newFramework");
 	assertEquals("mxunit.tests.framework.fixture.MockFactory",info.factoryPath);
 	assertEquals("createMeAMock",info.createMockMethodName);
 	assertEquals("componentName",info.createMockStringArgumentName);

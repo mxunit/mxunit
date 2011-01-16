@@ -7,7 +7,7 @@
 	<cffunction name="isFrameworkTemplate" returntype="boolean" hint="whether the passed in template is part of the mxunit framework">
 		<cfargument name="template" type="string" required="true" />
 		<!--- braindead simple.... is anything more than this necessary? --->
-		<cfreturn refindNoCase("mxunit(.*)[/\\](trunk[/\\])?(framework)",template) and not refindNoCase("tests[/\\]",template) />
+		<cfreturn refindNoCase("mxunit(.*?)[/\\](trunk[/\\])?framework",template) />
 	</cffunction>
 
 

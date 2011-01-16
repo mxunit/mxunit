@@ -35,7 +35,7 @@
 			 - tag the version in svn
 		=================================
 	-->
-	<target name="publish" depends="incrementVersion,runTests,statSVN,package,upload,updatewebsite,publishTestResults,publishStats,tagVersion" description="--> packages into a zip and uploads to google code" />
+	<target name="publish" depends="runTests,incrementVersion,package,upload,updatewebsite,publishTestResults,publishStats,tagVersion" description="--> packages into a zip and uploads to google code" />
 
 	<!--
 		=================================
@@ -43,10 +43,10 @@
 			Generates the zip archive
 		=================================
 	-->
-	<target name="package" depends="clean,version" description="--> packages the appropriate files into the deployment-ready zip file. use this for testing; otherwise, use publish">
+	<target name="package" depends="clean,version,genApiDocs" description="--> packages the appropriate files into the deployment-ready zip file. use this for testing; otherwise, use publish">
 		<echo message="building ${zipfile}. basedir is  ${basedir}" />
 		<zip destfile="${zipfile}" casesensitive="false">
-			<zipfileset dir="${basedir}" includes="*.*,ant/,buildprops/,eclipse/,doc/,framework/,generator/,images/,PluginDemoTests/,resources/,runner/,samples/,tests/,lib/ant-contrib**" excludes=".gitignore,MXUnitInstallTest.cfc,**/testresults/,**/stats/,**/junithtml/,.project,.deployment,**/unames.properties,tests/tmp/,ftp.listing,**/*.db,**/copysnippets.properties,**/copydictionary**,**/*.bak,buildprops/nightlyversion.properties,settings.xml" prefix="mxunit" casesensitive="false" />
+			<zipfileset dir="${basedir}" includes="*.*,ant/,buildprops/,eclipse/,doc/,framework/,generator/,images/,PluginDemoTests/,resources/,runner/,samples/,tests/,lib/ant-contrib**" excludes=".gitignore,MXUnitInstallTest.cfc,**/testresults/,**/stats/,**/junithtml/,.project,.deployment,**/unames.properties,tests/tmp/,ftp.listing,**/*.db,**/copysnippets.properties,**/copydictionary**,**/*.bak,buildprops/nightlyversion.properties,settings.xml,README.html,README.textile,README-toc.xml" prefix="mxunit" casesensitive="false" />
 		</zip>
 	</target>
 	
@@ -59,14 +59,18 @@
 	<target name="packageNightly" depends="package">
 		<move file="${zipfile}" tofile="${nightlyfile}" overwrite="true"/>
 		<copy file="${version.file}" tofile="${version.nightlyfile}" overwrite="true"/>
+		<copy file="${readme.file}" tofile="${readme.nightlyfile}" overwrite="true"/>
 		<propertyfile file="${version.nightlyfile}" comment="Build version info">
 			<entry key="build.date" type="date" value="now" pattern="MM/dd/yyyy" />
 			<entry key="build.versiondescription" operation="=" value="Nightly Build" />
 			<entry key="build.buildnum" type="int" operation="+" value="1" />
 		</propertyfile>
+		<replaceregexp file="${readme.nightlyfile}" match="Version Info:(.*)" replace="Version Info: This is nightly build version ${build.version}, built on ${nightlydate}" />
 		<zip file="${nightlyfile}" update="true">
 			<zipfileset dir="." includes="${version.nightlyfile}" fullpath="mxunit/buildprops/version.properties"/> 
+			<zipfileset dir="." includes="${readme.nightlyfile}" fullpath="mxunit/README.txt"/> 
 		</zip>
+		<delete file="${readme.nightlyfile}"/>
 	</target>
 
 	<!--
@@ -116,18 +120,18 @@
 		=================================
 	-->
 	<target name="init">
-		
-		<!-- user property file for instance specific settings -->
-		<property file="${unames.file}" />	
-		
 		<tstamp>
 			<format pattern="MM_dd_yyyy" property="nightlystamp" />
+			<format pattern="MM/dd/yyyy" property="nightlydate" />
 		</tstamp>
+		
 		<property name="dist" location="dist" />
 		<property name="nightlyfile" location="dist/mxunit-nightly-${nightlystamp}.zip" />
 		<property name="unames.file" value="buildprops/unames.properties" />
 		<property name="version.file" value="buildprops/version.properties" />
 		<property name="version.nightlyfile" value="buildprops/nightlyversion.properties" />
+		<property name="readme.file" value="README.txt" />
+		<property name="readme.nightlyfile" value="README.nightly" />
 		<property name="antrunner.file" value="buildprops/antrunner.properties" />
 		<property name="statsvn.file" value="buildprops/statsvn.properties" />
 		<property name="testmailmessage.file" value="buildprops/testresultsmail.html" />
@@ -143,8 +147,8 @@
 		<property name="output.dir" value="${junit.out.dir.xml}/tmp" />
 		<property name="style.dir" value="ant/xsl/" />
 
-
-		
+		<!-- user property file for instance specific settings -->
+		<property file="${unames.file}" />	
 		
 
 		<path id="project.classpath">
@@ -156,6 +160,7 @@
 		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}" />
 		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="project.classpath" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="project.classpath" />
+		
 	</target>
 
 	<!--
@@ -218,7 +223,9 @@
 		<property name="build.version" value="${build.major}.${build.minor}.${build.buildnum}${build.notation}" />
 		<property name="zipfile" location="${dist}${file.separator}mxunit-${build.version}.zip" />
 
-		<echo message="build.version is ${build.version} -- zipfile is ${zipfile}" />
+		<echo message="build.version is ${build.version} -- zipfile is ${zipfile}" />		
+		
+		<replaceregexp file="${readme.file}" match="Version Info:(.*)" replace="Version Info: This is release build ${build.version}, built on ${build.date}" />
 	</target>
 
 	<!--
@@ -361,9 +368,14 @@
 	-->
 	<target name="genApiDocs" depends="init">
 		<property file="${antrunner.file}" /> 
+		
+		<delete dir="doc/api" failonerror="false"/>
+		<mkdir dir="doc/api" />
+		
 		<script language="javascript" src="buildprops/scripts/http_doc_gen.js" />
+		
+		<delete dir="doc/api" includes="**/*.svn/"></delete>
 	</target>
-	
 
 
 	<!--

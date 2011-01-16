@@ -31,7 +31,21 @@
 		<cfset variables[propertyName] = property>
 		<cfset this[propertyName] = property>
 	</cffunction>
-	
+
+	<cffunction name="_copyToNewName" output="false" access="public" returntype="any" hint="">
+		<cfargument name="propertyName" type="string" required="true"/>
+		<cfargument name="newPropertyName" type="string" required="true"/>
+		<cfargument name="ignoreIfExisting" type="boolean" required="false" default="true">
+
+		<cfif ignoreIfExisting AND structKeyExists( variables, newPropertyName )>
+			<cfreturn>
+		</cfif>
+		<cfif structKeyExists( variables, propertyName )>
+			<cfset variables[newPropertyName] = variables[propertyName]>
+		</cfif>
+    </cffunction>
+
+
 	<cffunction name="_MixinProperty" access="public">
 		<cfargument name="propertyName" type="string" required="true">
 		<cfargument name="property" type="any" required="true">
@@ -41,7 +55,7 @@
 		<cfelse>
 			<cfset _mixin(propertyName,property,false)>
 		</cfif>
-		
+
 	</cffunction>
 
 	<cffunction name="_CopyToThisScope" access="public">
@@ -63,7 +77,7 @@
 		<cfargument name="varname" type="string" required="true">
 		<cfreturn variables[varname]>
 	</cffunction>
-	
+
 	<cffunction name="_getComponentVariables" access="public" returntype="struct">
 		<cfreturn variables>
 	</cffunction>

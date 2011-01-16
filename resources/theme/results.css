@@ -114,6 +114,19 @@
     color: gray;
 }
 
+table.results th {
+	text-align: left;
+}
+
+table.results th.result,
+table.results th.speed {
+	width: 10%;
+}
+
+table.results th.error,
+table.results th.output {
+	width: 25%;
+}
 
 /* Mapped to the actual test status returned by MXUnit */
 

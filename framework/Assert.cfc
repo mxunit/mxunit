@@ -1,6 +1,7 @@
 <!---
- @file Assert.cfc
- @description Main component for performing assertions.
+Assert.cfc
+
+Main component for performing assertions.
 
  --->
 <cfcomponent displayname="Assert"

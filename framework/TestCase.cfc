@@ -271,12 +271,23 @@
 
 		<cfset var blender = createObject("component","ComponentBlender")>
 
-		<cfset blender._mixinAll(Receiver,blender,"_mixin")>
+		<cfset blender._mixinAll(Receiver,blender,"_mixin,_copyToNewName")>
 		<cfset blender._mixinAll(Giver,blender,"_getComponentVariable")>
-		<cfset Receiver._mixin( propertyName = functionNameInReceiver,
+
+		<cfset receiver._copyToNewName(functionNameInReceiver,functionNameInReceiver & "__orig__",true)>
+		<cfset receiver._mixin( propertyName = functionNameInReceiver,
 								property = Giver._getComponentVariable(functionName),
 								ignoreIfExisting = false )>
 	</cffunction>
+
+	<cffunction name="restoreMethod" output="false" access="public" returntype="void" hint="restores a previously overwritten method (via injectMethod) to its original state">
+    	<cfargument name="Receiver" type="any" required="true"/>
+		<cfargument name="functionName" type="string" required="true"/>
+		<cfset var blender = createObject("component","ComponentBlender")>
+		<cfset blender._mixinAll(Receiver,blender,"_copyToNewName")>
+		<cfset receiver._copyToNewName (functionName & "__orig__",functionName,false)>
+	</cffunction>
+
 
 	<cffunction name="injectProperty" output="false" access="public" returntype="void" hint="injects properties into the receiving object">
 		<cfargument name="Receiver" type="any" required="true" hint="the object receiving the method"/>

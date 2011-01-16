@@ -4,15 +4,14 @@
 ;(function($){
 	container = '';
 	
-	
 	var visibleTestResults = (function () {
 		var cookieName = 'mxunit';
 		
 		if (readCookie(cookieName) == null) {
 			createCookie(cookieName, 'fep');
-		};  
-		                                                                                            
-		return {   
+		}
+		
+		return {
 			'isVisbile'  : function (type) { return readCookie(cookieName).search(type.charAt(0)) != -1; }                                      
 			, 'show'     : function (type) { createCookie(cookieName, readCookie(cookieName) + type.charAt(0)); this.updateUI(type);}   
 			, 'hide'     : function (type) { createCookie(cookieName, readCookie(cookieName).replace(type.charAt(0), '')); this.updateUI(type);}     
@@ -24,17 +23,16 @@
 				$('table.results>tbody:not(:has(>tr:visible))', container).parent().prev().andSelf().hide();
 				$('table.results>tbody:has(>tr:visible)', container).parent().prev().andSelf().show();
 			}
-		}     
-	})();                  
+		}
+	})();
 	
 	$(function(){
 		container = $('.mxunitResults');
 		 
-		
 		$('#bug').tipsy({fade:false,gravity:'e'});
 		$('a[rel="tipsy"]').tipsy({fade:true,gravity:'s'});
 		$('.menu_item').tipsy({fade:true,gravity:'n',delayIn:2400});
-		$('#sparkcontainer').tipsy({fade:true,gravity:'n'});
+		$('#sparkcontainer').tipsy({fade:true,gravity:'s'});
 		$('.mxunittestsparks').sparkline( 'html', {type: 'tristate', height:'22px', barWidth: 1.1, colorMap: {'1': "#50B516", '-1': "#0781FA", '-2': "#DB1414"} } );
 
 		

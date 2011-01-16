@@ -1,8 +1,8 @@
 
 <cfscript>
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*  
-*  CF9/ColdDoc script for generating static html MXUnit api docs. 
+*
+*  CF9/ColdDoc script for generating static html MXUnit api docs.
 *  ColdDoc is by Mark Mandel and is included in this MXUnit distribtion.
 *
 *~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -19,7 +19,7 @@ context = getDirectoryFromPath(expandPath(pathBase));
 fileSep = createObject('java','java.lang.System').getProperty('file.separator');
 
 //sanity check (guard condition)
-mxunit.assert( ls( context & 'doc/api', '*.html').recordCount > 0, 'Ruh-roh, Raggy. Should be something in ./api! WTF?');
+//mxunit.assert( ls( context & 'doc/api', '*.html').recordCount > 0, 'Ruh-roh, Raggy. Should be something in ./api! WTF?');
 
 
 //Info to print in the docs
@@ -45,7 +45,7 @@ each({
   });
 
 generateDocs( packages, destination, title );
- 
+
 /* just print some shit ... */
 	out.println( '<title>MXUnit API DocGen</h1>' );
 	out.println( '<h1>MXUnit #version# API Docs Generated!</h1>' );
@@ -89,7 +89,7 @@ function getVersion(){
 
 
 function each(struct properties){
-  //set defaults	
+  //set defaults
   var dir = ( structKeyexists(properties,'dir') )? properties.dir : _throw('''each'' needs a directory') ;
   var apply = ( structKeyexists(properties,'apply') )? properties.apply : _throw('Yo, gimme d''func to <em>apply</em> to <em>each</em> file.') ;
   var filter = ( structKeyexists(properties,'filter') )? properties.filter : '*' ;
@@ -97,12 +97,12 @@ function each(struct properties){
   var type = ( structKeyexists(properties,'type') )? properties.type : 'file' ;
   var files = '';
   var file = 0;
-  
+
   files = ls( dir, filter, recurse, type );
-  
+
   for(file=0; file < files.recordCount; file++){
     // apply for each file, which is a row, but we can get an array of objects
-    // that specify the properties in cfdirectory:name,dir,dlm,mode,size, etc. 
+    // that specify the properties in cfdirectory:name,dir,dlm,mode,size, etc.
     apply( files.getRow(file).getRowData() );
   }
 } //end each()
@@ -117,7 +117,7 @@ function each(struct properties){
 	<cfargument name="type"  required="false" default="file" />
   <cfdirectory 	action="list"
 				directory="#arguments.dir#"
-				filter="#arguments.filter#" 
+				filter="#arguments.filter#"
 				recurse="#arguments.recurse#"
 				type="#arguments.type#"
 				name="dir_list" />

@@ -44,7 +44,7 @@
 	<cffunction name="setUpAndTearDownAreNotAcceptableTests">
 		<cfset var s_test = "" />
 		<cfset var result = "" />
-		
+
 		<cfset s_test = structnew()>
 		<cfset s_test.name = "setup">
 		<cfset s_test.access = "public">
@@ -71,7 +71,7 @@
 		<cfset result = this.testIsAcceptable(s_test)>
 		<cfset assertFalse(result,"package test should not be acceptable")>
 	</cffunction>
-	
+
 	<cffunction name="falseTestAttribute_IsNotAcceptableTest">
 		<cfset var s_test = "" />
 		<cfset var result = "" />
@@ -158,7 +158,27 @@
 		<cfset newVal = mycfc.callDoSomethingPrivate()>
 		<cfset assertEquals("hidad",newval)>
 	</cffunction>
-	
+
+	<cffunction name="testRestoreMethod" output="false" access="public" returntype="any" hint="">
+		<cfset var mycfc = createObject("component",this.fixtureTestPath)>
+		<cfset var orig = mycfc.callDoSomethingPrivate()>
+		<cfset debug(orig)>
+
+		<!--- call twice to ensure that the 'original' copy happens only once --->
+		<cfset injectMethod(mycfc,this,"doSomethingPrivate")>
+		<cfset injectMethod(mycfc,this,"doSomethingPrivate")>
+
+		<cfset newVal = mycfc.callDoSomethingPrivate()>
+		<cfset debug(newVal)>
+		<cfset restoreMethod(mycfc,"doSomethingPrivate")>
+		<cfset backToOrigVal = mycfc.callDoSomethingPrivate()>
+		<cfset debug(backToOrigVal)>
+		<cfset assertEquals(orig,backToOrigVal,"")>
+
+
+    </cffunction>
+
+
 	<cffunction name="testInjectPropertyAlreadyExists">
 		<cfset var newVal = "boo">
 		<cfset var mycfc = createObject("component",this.fixtureTestPath)>
@@ -166,24 +186,24 @@
 		<cfset assertNotEquals(newVal,origVal)>
 		<cfset injectProperty(mycfc,"internalVar",newVal)>
 		<cfset assertEquals(newVal,mycfc.getInternalVar())>
-		
+
 		<!--- now do it again --->
 		<cfset newVal = "gee">
 		<cfset injectProperty(mycfc,"internalVar",newVal)>
 		<cfset assertEquals(newVal,mycfc.getInternalVar())>
-		
+
 	</cffunction>
-	
+
 	<cffunction name="testInjectPropertyWithScope">
 		<cfset var mycfc = createObject("component",this.fixtureTestPath)>
 		<cfset injectProperty(mycfc,"heather","wifey","instance")>
 		<cfset assertEquals("wifey",mycfc.getInstance().heather)>
 	</cffunction>
-	
+
 	<cffunction name="testInjectPropertyWorksForNonExistentMethods">
 		<cfset var mycfc = createObject("component",this.fixtureTestPath)>
-		
-		<cftry>			
+
+		<cftry>
 		<!--- do something here to cause an error --->
 			<cfset mycfc.doSomethingPrivate()>
 			<cfset fail("Error path test... should not have gotten here")>
@@ -192,11 +212,11 @@
 		</cfcatch>
 		<cfcatch type="any"></cfcatch>
 		</cftry>
-		
+
 		<cfset injectProperty(mycfc,"doSomethingPrivate",variables.doSomethingPrivate)>
 		<cfset assertEquals( doSomethingPrivate(), mycfc.doSomethingPrivate()   )>
 	</cffunction>
-	
+
 	<cffunction name="testInjectPropertyWorksForMethodsCalledDirectly">
 		<cfset var mycfc = createObject("component",this.fixtureTestPath)>
 		<cfset orig = mycfc.doSomething()>
@@ -204,7 +224,7 @@
 		<cfset assertNotEquals(orig,mycfc.doSomething())>
 		<cfset assertEquals( doSomethingPrivate(), mycfc.doSomething()   )>
 	</cffunction>
-	
+
 	<cffunction name="testInjectPropertyWorksForMethodsCalledIndirectly">
 		<cfset var mycfc = createObject("component",this.fixtureTestPath)>
 		<cfset orig = mycfc.callDoSomethingPrivate()>
@@ -212,7 +232,7 @@
 		<cfset assertNotEquals(orig,mycfc.callDoSomethingPrivate())>
 		<cfset assertEquals( doSomethingPrivateABitDifferently(), mycfc.callDoSomethingPrivate()   )>
 	</cffunction>
-	
+
 	<cffunction name="doSomethingPrivate" access="private">
 		<cfreturn "himom">
 	</cffunction>
@@ -220,10 +240,10 @@
 	<cffunction name="doSomethingPrivateABitDifferently" access="private">
 		<cfreturn "hidad">
 	</cffunction>
-	
+
 	<cfscript>
 	// annotation tests
-	
+
 	function getAnnotationReturnsDefaultValueIfNoAnnotationFound() {
 		assertEquals("default",getAnnotation("testWithNoAnnotation","myAttribute","default"));
 	}
@@ -231,11 +251,11 @@
 	function getAnnotationReturnsValueUsingMxunitNamespace() {
 		assertEquals("mxunitNamespace",getAnnotation("testWithMxunitNamespaceAnnotation","myAttribute","default"));
 	}
-	
+
 	function getAnnotationReturnsValueUsingJustName() {
 		assertEquals("justName",getAnnotation("testWithJustNameAnnotation","myAttribute","default"));
 	}
-	
+
 	</cfscript>
 
 	<!--- Testing getAnnotation with dataprovider --->
@@ -246,13 +266,13 @@
 	  <cfset assert(arrayItem gt 0 ) >
 	  <cfset assertEquals(arrayItem,arguments.index ) >
 	</cffunction>
-		
+
 	<cffunction name="dataproviderShouldAllowMXUnitNamespacedAnnotation" mxunit:dataprovider="a">
 	  <cfargument name="arrayItem" />
 	  <cfset assert(arrayItem gt 0 ) >
 	  <cfset assertEquals(arrayItem,arguments.index ) >
 	</cffunction>
-		
+
 	<cffunction name="expectedExceptionWithJustNameShouldWork" expectedException="testException">
 		<cfthrow type="testException" />
 	</cffunction>
@@ -273,7 +293,7 @@
 
 	<cffunction name="testWithJustNameAnnotation" myAttribute="justName" hint="a fixture test used for testing getAnnotation">
 	</cffunction>
-	
+
 <cfscript>
 	// beforeTest test
 	function $invokeBeforeTestsShouldSetSimpleValue(){
@@ -293,12 +313,12 @@
 
 	<cffunction name="setUp" access="public" returntype="void">
 		<cfset this.fixtureTestPath = "" />
-	
+
 		<cfset this.fixtureTestPath = "mxunit.tests.framework.fixture.NewCFComponent">
-	
+
 		  <!--- Place additional setUp and initialization code here --->
 	    <!--- <cfset debug(getMetadata(this))>   --->
-	    
+
 	    <!--- only want to make this public one time!!! Otherwise, on railo, bad things happen --->
 	    <cfif not StructKeyExists(this,"testIsAcceptable")>
 	    	<cfset makePublic(this,"testIsAcceptable")>

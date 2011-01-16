@@ -1,7 +1,7 @@
 <project name="copysnippets" basedir="." default="hereToLocalSnippets">
 
 	<!--
-	INSTRUCTIONS:
+	INSTRUCTIONS: 
 	
 	This ant file is designed to help you easily copy the mxunit cfeclipse snippets
 	from this distribution into your own snippets directory. In addition, it will
@@ -15,7 +15,7 @@
 	   The paths must be forward slashes!
 	   
 	   On my computer, the path is:
-	   snipdir.options=C:/Users/Marc/EclipseWorkspaces/MyCFWorkspace/.metadata/.plugins/org.cfeclipse.cfml/snippets
+	   snipdir.options=C:/Users/Marc/Documents/My Dropbox/CFEclipseSnippets
 	      
 	   
 	   note: this can be a comma-separated list, too, just in case you have multiple snippets locations 
