@@ -1,15 +1,30 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<project name="Sample Build. Replace Me!" basedir="." default="runtests">
+<project name="Sample Build. Replace Me!" basedir="." default="runUnitTests">
 
 
+	<!--
+	 Jenkins / Hudson Tips:
+	 
+	 If you stick with the defaults configured in "init", use the following as a guide for populating the Jenkins job configuration for this project
+	 
+	 1) "Test  Report XMLs" configuration will be something like 
+	 
+	 	DirectoryNameOfYourProject/test/testresults/xml/**/*.xml
+	 	
+	 2) "Archive the artifacts" configuration will be something like
+	 	
+	 	DirectoryNameOfYourProject/deploy/*.zip
+	 
+	-->
+	
 	<target name="init">
 
 		<!-- ////////   DIRECTORY AND CFC PATH SETUP (used in all targets) -->
 		
 		<!-- what's the directory name of your application? this value will be used throughout this build file; if you don't want that, just replace the references to ${application.name} with your desired values -->
 		<property name="application.name" value="DirectoryNameOfYourProject" />
-
+		
 		<!-- what's the name of the directory where your tests live? Note: this is just the name of the directory, not the full path-->
 		<property name="test.dir.name" value="test" />
 
@@ -29,11 +44,11 @@
 		<property name="test.serverport" value="80" />
 		<!-- what "runner" URL should the tests hit. In this example, you'd be hitting http://localhost:80/DirectoryNameOfYourProject/test/HttpAntRunner.cfc  Simply copy mxunit/samples/HttpAntRunner.cfc into your test directory! -->
 		<property name="test.runner" value="/${application.name}/${test.dir.name}/HttpAntRunner.cfc" />
-		<!-- this is where the xml and html will live for the report generator -->
+		
+		<!-- this is where the xml and html will live for the report generator and Jenkins -->
 		<property name="test.output" location="${test.dir.name}/testresults" />
 		<property name="test.output.xml" location="${test.output}/xml" />
 		<property name="test.junitoutput" location="${test.output}/html" />
-
 
 
 
@@ -41,8 +56,10 @@
 		
 		<!-- where the zip file for deployment will live -->
 		<property name="dist.dir" location="deploy" />
-		<!-- what to call it -->
+		
+		<!-- what to call it -->		
 		<property name="dist.zip" value="${application.name}.zip" />
+		
 		<!-- what to start the "path" in the zip with -->
 		<property name="dist.prefixInZip" value="${application.name}" />
 
@@ -51,13 +68,15 @@
 		<!-- ////////   JAR FILES WE NEED FOR EXTERNAL TASKS -->
 
 		<!-- where does the mxunit ant jar file live? it's easiest to copy it out of the mxunit install and put it into your app
-			 You can also put any other ant-relatd jars in this directory; for example, if you want to use svnant, you'll need to put those jars here
+			 You can also put any other ant-related jars in this directory; for example, if you want to use svnant, you'll need to put those jars here
 		-->
 		<path id="project.classpath">
 			<fileset dir="lib">
 				<include name="**/*.jar" />
 			</fileset>
 		</path>
+		
+		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpathref="project.classpath" />
 
 		<!-- dump the properties -->
 		<echoproperties prefix="test" />
@@ -72,23 +91,37 @@
 
 	<target name="svn.update" depends="init">
 		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="project.classpath" />
-		<echo message="updating ${test.dir.location}" />
+		<echo message="updating ${basedir}" />
 		<svn svnkit="true">
-			<update dir="${test.dir.location}" />
+			<update dir="${basedir}" />
 		</svn>
 	</target>
 
-	<target name="runtests" description="Make output directories and run the MXUnit task" depends="init,clean">
-		<delete dir="${test.output}" failonerror="false" />
-		<delete dir="${dist.dir}" failonerror="false" />
-		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpathref="project.classpath" />
-		<mxunittask server="${test.server}" port="${test.serverport}" defaultrunner="${test.runner}" outputdir="${test.output.xml}" verbose="true">
-			<directory path="${test.dir.location}" recurse="true" packageName="${test.cfcpath}" componentPath="${test.cfcpath}" />
-		</mxunittask>
+	<target name="runUnitTests" depends="init">
+		<mkdir dir="${test.output.xml}/unit" />
+		<runTestDirectory directoryName="unit" excludes=""/>
+	</target>
+	
+	<target name="runUITests" depends="init,reinitApp">
+		<mkdir dir="${test.output.xml}/UI" />
+		<runTestDirectory directoryName="UI" excludes=""/>		
+	</target>
+	
+	<target name="reinitApp" depends="init">
+		<!-- replace 'reset_app' with any url params you use to reset your application (e.g., init=true, etc) -->
+		<property name="reinitURL" value="http://${test.server}:${test.serverport}/${application.name}/index.cfm?reset_app=true"/>
+		<echo message="reiniting app at ${reinitURL}"/>
+		<loadresource property="test.reinitAppOutput">
+			<url url="${reinitURL}"/>
+		</loadresource>
+	</target>
 
+	<target name="runAllTests" description="Make output directories and run the MXUnit task" depends="init,clean,runUnitTests,runUITests">
 		<!-- generate pretty reports -->
 		<antcall target="junitreport" />
+		<fail if="tests.bombed" message="Failing the build due to test failures"/>
 	</target>
+
 
 	<target name="junitreport" depends="init" description="Runs the report without running the tests">
 		<junitreport todir="${test.junitoutput}">
@@ -105,6 +138,15 @@
 		</zip>
 	</target>
 
+	<macrodef name="runTestDirectory">
+		<attribute name="directoryName"/>
+		<attribute name="excludes" default=""/>
+		<sequential>
+			<mxunittask server="${test.server}" port="${test.serverport}" defaultrunner="${test.runner}" outputdir="${test.output.xml}/@{directoryName}" verbose="true" failureproperty="tests.bombed" errorproperty="tests.bombed">
+				<directory path="${test.dir.location}/@{directoryName}" recurse="true" packageName="${test.cfcpath}.@{directoryName}" componentPath="${test.cfcpath}.@{directoryName}" excludes="@{excludes}" />
+			</mxunittask>
+		</sequential>
+	</macrodef>
 
 
 </project>

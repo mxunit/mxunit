@@ -27,7 +27,7 @@
 		<cfset assertTrue(isStruct(results),"results should be struct")>
 		<cfset assertEquals(ArrayLen(methods),ArrayLen(StructKeyArray(results[name])),"")>
 	</cffunction>
-	
+
 	<cffunction name="testExecuteTestCaseWithFailure" returntype="void" hint="">
 		<cfset var name = "mxunit.PluginDemoTests.SingleFailureTest">
 		<cfset var methods = "">
@@ -40,10 +40,10 @@
 		<cfset assertEquals(ArrayLen(methods),ArrayLen(StructKeyArray(results[name])),"")>
 		<cfset assertTrue(StructKeyExists(results[name]["testFail"],"EXCEPTION"))>
 		<cfset assertTrue(StructKeyExists(results[name]["testFail"],"TAGCONTEXT"))>
-		
+
 		<cfset isArray(results["mxunit.PluginDemoTests.SingleFailureTest"]["testFail"]["TAGCONTEXT"])>
 	</cffunction>
-	
+
 	<cffunction name="testExecuteTestCaseWithComplexErrorTypeError">
 		<cfset var name = "mxunit.PluginDemoTests.ComplexExceptionTypeErrorTest">
 		<cfset var method = "willThrowFunkyNonArrayException">
@@ -52,7 +52,7 @@
 		<cfset results = rf.executeTestCase(name,"","")>
 		<cfset assertTrue(isSimpleValue(results[name][method]["EXCEPTION"]))>
 		<cfset assertTrue( findNoCase("complex",  results[name][method]["EXCEPTION"]),"mxunit should convert the complex exception value into a string and prefix it with 'complexvalue' but didn't: #results[name][method]['EXCEPTION']#" )>
-		<cfset assertTrue(StructKeyExists(results[name][method],"TAGCONTEXT"))>		
+		<cfset assertTrue(StructKeyExists(results[name][method],"TAGCONTEXT"))>
 		<cfset isArray(results[name][method]["TAGCONTEXT"])>
 	</cffunction>
 
@@ -65,7 +65,7 @@
 		<cfset var type = rf.getServerType()>
 		<cfset assertTrue(  len(type) GT 0  )>
 	</cffunction>
-	
+
 	<cffunction name="getFrameworkVersionShouldReturnVersion">
 		<cfset var version = rf.getFrameworkVersion()>
 		<cfset assertEquals(3, listLen(version,".")  )>
@@ -75,11 +75,11 @@
 		<cfset var dt = rf.getFrameworkDate()>
 		<cfset assertTrue(isDate(dt))>
 	</cffunction>
-	
+
 	<cffunction name="assertExpectedKeysArePresent" access="private">
 		<cfargument name="TestResult" type="struct" required="true"/>
 		<cfset var basicKeys = "actual,expected,message,output,result,time">
-		
+
 		<cfloop collection="#TestResult#" item="componentName">
 			<cfloop collection="#TestResult[componentName]#" item="methodName">
 				<cfset methodStruct = TestResult[componentName][methodName]>
@@ -88,8 +88,13 @@
 				</cfloop>
 			</cfloop>
 		</cfloop>
-		
-		
+
+
 	</cffunction>
+
+<!---	<cffunction name="hey">
+		<cfset var beans = rf.getComponentMethodsRich2()>
+		<cfdump var="#beans#">
+	</cffunction>--->
 
 </cfcomponent>

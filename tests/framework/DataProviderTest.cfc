@@ -15,7 +15,7 @@
 <!--- Just run this test 100 times --->
 <cffunction name="dataproviderShouldAcceptSimpleValueForNumericLoops" mxunit:dataprovider="201">
   <cfargument name="cnt">
-  <cfset debug(cnt)>  
+  <cfset debug(cnt)>
   <cfset r=randrange(cnt,1000+cnt)>
 </cffunction>
 
@@ -37,7 +37,7 @@
   <cfargument name="myArray" />
   <cfscript>
 
-
+		debug(myArray);
 	  if(arguments.index == 1){
 	   	assertEquals( myarray[1] , _2dA[1][1] );
 	  	assertEquals( myarray[2] , _2dA[1][2] );

@@ -90,8 +90,10 @@
 	</cffunction>
 
 
-	<cffunction name="dump"><cfargument name="o" />
-		<cfdump var="#arguments.o#" /></cffunction>
+	<cffunction name="dump">
+		<cfargument name="o" />
+		<cfdump var="#arguments.o#" />
+	</cffunction>
 
 	<cffunction name="hasJ2EEContext">
 		<cfreturn getContextRootPath() is not "">

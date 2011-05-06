@@ -97,6 +97,12 @@
 		<cfreturn methods>
 	</cffunction>
 
+
+<!---	<cffunction name="getComponentMethodsRich2" access="remote" returntype="array">
+		<cfset var bean = {dataprovidertype="excel", rows=50}>
+		<cfreturn [bean]>
+	</cffunction>--->
+
 	<cffunction name="actOnTestCase" access="public" hint="an 'Interceptor' for custom remote facades. This will enable you to act on each test case object, possibly injecting additional data, etc" output="false">
 		<cfargument name="testCase" required="true" hint="">
 

@@ -69,7 +69,7 @@
  	<cffile action="read" file="#expandPath("/mxunit/tests/framework/fixture/xpath/nodes.html")#" variable="nodes">
     <cfset xml = xmlParse(nodes)>
 	<cfset assertXPath('/ul/li',xml)>
-  </cffunction>	
+  </cffunction>
 
 
 
@@ -149,7 +149,7 @@
       dom = buildXMLDom("http://google.com",true);
       //debug(dom);
 
-      dom = buildXMLDom("http://washingtonpost.com",true);
+      dom = buildXMLDom("http://hotchickswithdouchebags.com/",true);
       //debug(dom);
     </cfscript>
   </cffunction>
