@@ -10,4 +10,4 @@
  
  MXUnit Google Group (to get help): http://groups.google.com/group/mxunit
  
- Version Info: This is release build 2.0.2, built on 11/19/2010
+ Version Info: This is release build 2.0.3, built on 05/05/2011
