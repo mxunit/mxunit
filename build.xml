@@ -30,9 +30,7 @@
 			 - publish the zip
 			 - upload to google code
 			 - upload version.properties to the website
-			 - generate stats from svn
 			 - reload the website
-			 - tag the version in svn
 		=================================
 	-->
 	<target name="publish" depends="runTests,incrementVersion,package,upload,updatewebsite,publishTestResults,publishStats,tagVersion" description="--> packages into a zip and uploads to google code" />
@@ -74,39 +72,6 @@
 	</target>
 
 	<!--
-		=================================
-			Target: statSVN
-			Generates the svn statistics for viewing pleasure
-		=================================
-	-->
-	<target name="statSVN" depends="init,svnLog" description="Generates statistics from the repository">
-		<property file="${statsvn.file}" />
-
-		<!-- Create a directory for the stats -->
-		<mkdir dir="${statsvn.out.dir.html}" />
-
-		<java jar="lib/statsvn-0.5.0.jar" fork="true" failonerror="true">
-			<arg value="-title" />
-			<arg value="MXUnit" />
-			<arg value="-include" />
-			<arg value="**/*.cfc;**/*.cfm;**/*.js;**/*.css;**/*.xml;**/*.properties" />
-			<arg value="-output-dir" />
-			<arg value="${statsvn.out.dir.html}" />
-			<arg value="-username" />
-			<arg value="${gc.username}" />
-			<arg value="-password" />
-			<arg value="${gc.password}" />
-			<arg value="-disable-twitter-button" />
-			<arg value="-config-file" />
-			<arg value="buildprops/statsvn.properties" />
-			<arg value="${svn.out.xml}" />
-			<arg value="${basedir}" />
-		</java>
-
-		<echo message="SVN Statistics at ${statsvn.out.dir.html}" />
-	</target>
-
-	<!--
 		================================================
 			Internal Targets
 			Run these individually for testing only
@@ -133,17 +98,12 @@
 		<property name="readme.file" value="README.txt" />
 		<property name="readme.nightlyfile" value="README.nightly" />
 		<property name="antrunner.file" value="buildprops/antrunner.properties" />
-		<property name="statsvn.file" value="buildprops/statsvn.properties" />
 		<property name="testmailmessage.file" value="buildprops/testresultsmail.html" />
-		<property name="svnserver" value="https://mxunit.googlecode.com/svn" />
-		<property name="svnant.dir" value="svnant13" /> <!-- can also use svnant12 -->
 
 		<!-- for the test runner -->
 		<property name="mxunit.jar" value="ant/lib/mxunit-ant.jar" />
 		<property name="junit.out.dir.xml" value="tests/testresults" />
 		<property name="junit.out.dir.html" value="${junit.out.dir.xml}/html" />
-		<property name="statsvn.out.dir.html" value="stats" />
-		<property name="svn.out.xml" value="buildprops/svnLog.xml" />
 		<property name="output.dir" value="${junit.out.dir.xml}/tmp" />
 		<property name="style.dir" value="ant/xsl/" />
 
@@ -154,11 +114,9 @@
 		<path id="project.classpath">
 			<fileset dir="lib">
 				<include name="*.jar" />
-				<include name="${svnant.dir}/*.jar" />
 			</fileset>
 		</path>
 		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}" />
-		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="project.classpath" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="project.classpath" />
 		
 	</target>
@@ -188,10 +146,11 @@
 		=================================
 	-->
 	<target name="incrementVersion" depends="init">
+		<!-- 
 		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
 			<update dir="buildprops" />
 		</svn>
-
+		 -->
 		<propertyfile file="${version.file}" comment="Build version info">
 			<entry key="build.date" type="date" value="now" pattern="MM/dd/yyyy" />
 			<entry key="build.major" type="int" operation="=" value="2" />
@@ -201,11 +160,11 @@
 			<!-- this is autoincremented -->
 			<entry key="build.buildnum" type="int" operation="+" value="1" />
 		</propertyfile>
-
+		<!-- 
 		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
 			<commit dir="buildprops" message="" />
 		</svn>
-
+		 -->
 		<property file="${version.file}" />
 
 		<echoproperties prefix="build" />
@@ -269,25 +228,25 @@
 			! intended for use by publish only !
 			Creates an svn tag from the trunk
 		=================================
-	-->
+	
 	<target name="tagVersion" depends="init,version">
 		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
 			<copy srcURL="${svnserver}/mxunit/trunk" destURL="${svnserver}/mxunit/tags/${build.version}" message="autotagging version ${build.version}" />
 		</svn>
 	</target>
-
+-->
 	<!--
 		=================================
 			Target: update
 			Updates the svn to the latest version
 		=================================
-	-->
+	
 	<target name="update" depends="init" unless="nosvnupdate">
 		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
 			<update dir="." />
 		</svn>
 	</target>
-
+-->
 	<!--
 		=================================
 			Target: runTests
@@ -374,7 +333,6 @@
 		
 		<script language="javascript" src="buildprops/scripts/http_doc_gen.js" />
 		
-		<delete dir="doc/api" includes="**/*.svn/"></delete>
 	</target>
 
 
@@ -413,20 +371,6 @@
 
 	<!--
 		=================================
-			Target: publishStats
-			FTPs the stats to the web server
-		=================================
-	-->
-	<target name="publishStats" depends="init">
-		<ftp server="${ftp.site}" userid="${ftp.username}" password="${ftp.password}" remotedir="stats">
-			<fileset dir="${statsvn.out.dir.html}">
-				<include name="**/*" />
-			</fileset>
-		</ftp>
-	</target>
-
-	<!--
-		=================================
 			Target: testFTP
 			Tests the FTP connection by uploading a file
 		=================================
@@ -457,54 +401,6 @@
 				<mail from="${mail.from}" tolist="${mail.to}" mailhost="${mail.host}" subject="MXUnit Build Results" charset="UTF-8" messagemimetype="text/html" message="&lt;h1&gt;Test Successful&lt;/h1&gt;" />
 			</else>
 		</if>
-	</target>
-
-	<!--
-		=================================
-			Target: svnLog
-			Generates an xml log from the SVN server
-			Used by the statSVN target in generating stats
-		=================================
-	-->
-	<target name="svnLog" depends="init">
-		<!-- Create the time stamp -->
-		<tstamp>
-			<format property="svn.log.startDate" pattern="yyyy-MM-dd" offset="-5" unit="year" />
-			<format property="svn.log.endDate" pattern="yyyy-MM-dd" offset="1" unit="day" />
-		</tstamp>
-
-		<exec executable="svn" output="${svn.out.xml}">
-			<arg value="log" />
-			<arg value="-v" />
-			<arg value="--xml" />
-			<arg value="--username" />
-			<arg value="${gc.username}" />
-			<arg value="--password" />
-			<arg value="${gc.password}" />
-			<arg value="-r" />
-			<arg value="{${svn.log.startDate}}:{${svn.log.endDate}}" />
-			<arg value="${basedir}" />
-		</exec>
-
-		<!-- TODO Use this version when they get the verbose option working
-		<svn username="${gc.username}" password="${gc.password}">
-			<log path="${basedir}" destfile="${build.logs.svn}" asxml="true" recurse="true" verbose="true"/>
-		</svn>
-		-->
-
-		<echo message="SVN Log available at ${svn.out.xml}" />
-	</target>
-
-	<!--
-		=================================
-			Target: testSVN
-			Tests the svn by updating
-		=================================
-	-->
-	<target name="testSVN" depends="init">
-		<svn username="${gc.username}" password="${gc.password}" svnkit="true" javahl="false">
-			<update dir="buildprops" />
-		</svn>
 	</target>
 
 	<!--
