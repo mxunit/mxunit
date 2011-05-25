@@ -111,8 +111,10 @@
 			<!--- do something here to cause an error --->
 			<cfset failNotEquals(1,2,"my message",false) />
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfif not find("[1]",cfcatch.message)
-					OR not find("[2]",cfcatch.message)>
+				<cfif not (
+						(find("[1]",cfcatch.message) OR find("[2]",cfcatch.message))
+						or (find("[1.0]",cfcatch.message) OR find("[2.0]",cfcatch.message))
+					)>
 					<cfset fail("Should've had [1] and [2] in the throw message but instead the message was #cfcatch.message#") />
 				</cfif>
 			</cfcatch>
@@ -125,8 +127,10 @@
 			<!--- do something here to cause an error --->
 			<cfset failNotEquals(1,2,"my message") />
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfif not find("[1]",cfcatch.message)
-					OR not find("[2]",cfcatch.message)>
+				<cfif not (
+						(find("[1]",cfcatch.message) OR find("[2]",cfcatch.message))
+						or (find("[1.0]",cfcatch.message) OR find("[2.0]",cfcatch.message))
+					)>
 					<cfset fail("Should've had [1] and [2] in the throw message but instead the message was #cfcatch.message#") />
 				</cfif>
 			</cfcatch>
@@ -141,8 +145,10 @@
 		<cftry>
 			<cfset failNotEquals(1,chr(30),"my message") />
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfif not find("[1]",cfcatch.message)
-					OR not find(chr(30),cfcatch.message)>
+				<cfif not (
+						find("[1]",cfcatch.message)
+						OR not find("[1.0]",cfcatch.message)
+					) OR not find(chr(30),cfcatch.message)>
 					<cfset fail("Should've had [1] and #chr(30)# in the throw message but instead the message was #cfcatch.message#") />
 				</cfif>
 			</cfcatch>
@@ -155,8 +161,10 @@
 			<!--- do something here to cause an error --->
 			<cfset failEquals(1,2,"my message") />
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfif not find("[1]",cfcatch.message)
-					OR not find("[2]",cfcatch.message)>
+				<cfif not (
+						(find("[1]",cfcatch.message) OR find("[2]",cfcatch.message))
+						or (find("[1.0]",cfcatch.message) OR find("[2.0]",cfcatch.message))
+					)>
 					<cfset fail("Should've had [1] and [2] in the throw message but instead the message was #cfcatch.message#") />
 				</cfif>
 			</cfcatch>
@@ -170,8 +178,10 @@
 			<!--- do something here to cause an error --->
 			<cfset failEquals(1,2,false) />
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfif not find("[1]",cfcatch.message)
-					OR not find("[2]",cfcatch.message)>
+				<cfif not (
+						(find("[1]",cfcatch.message) OR find("[2]",cfcatch.message))
+						or (find("[1.0]",cfcatch.message) OR find("[2.0]",cfcatch.message))
+					)>
 					<cfset fail("Should've had [1] and [2] in the throw message but instead the message was #cfcatch.message#") />
 				</cfif>
 			</cfcatch>
