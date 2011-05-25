@@ -67,6 +67,7 @@ mssage to display when this assertion fails" default="The XPath expression,
      soup = loader.create("org.ccil.cowan.tagsoup.Parser").init();
      soup.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
      soup.setFeature("http://xml.org/sax/features/namespaces", false);
+     
      doc = loader.create("nu.xom.Document");
      builder = loader.create("nu.xom.Builder").init(soup);
 
