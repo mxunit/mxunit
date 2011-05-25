@@ -77,10 +77,12 @@
 		<cfset var tickCountAtStart = getTickCount() />
 		<cfset var outputOfTest = "" />
 		
-		<cfset testCase.expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
+		<cfset testCase.expectedExceptionType = '' />
 		<cfset testCase.expectedExceptionMessage = '' />
 		
 		<cftry>
+			<cfset testCase.expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
+			
 			<cfset results.startTest(methodName,currentTestSuiteName) />
 			
 			<cfset testCase.clearClassVariables() />
