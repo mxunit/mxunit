@@ -147,7 +147,7 @@
 			<cfcatch type="mxunit.exception.AssertionFailedError">
 				<cfif not (
 						find("[1]",cfcatch.message)
-						OR not find("[1.0]",cfcatch.message)
+						OR find("[1.0]",cfcatch.message)
 					) OR not find(chr(30),cfcatch.message)>
 					<cfset fail("Should've had [1] and #chr(30)# in the throw message but instead the message was #cfcatch.message#") />
 				</cfif>
