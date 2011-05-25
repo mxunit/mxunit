@@ -254,8 +254,6 @@
 <cfset variables.testDir = variables.rootDir &  "/tests/runner/"/>
 <cfset variables.fixtureDir = variables.rootDir & "/tests/bugs/fixture/">
 <cfset debug(variables.rootDir)>
-<cfexit>
-<!--- Add additional set up code here--->
 </cffunction>
 
 <cffunction name="tearDown">
