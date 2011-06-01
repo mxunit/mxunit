@@ -32,6 +32,7 @@ mssage to display when this assertion fails" default="The XPath expression,
        <cfelse>
                <cfset dom = buildXmlDom(arguments.data,isUrl) />
        </cfif>
+	
        <cfset results = xmlSearch(dom,arguments.xpath)>
        <cfif len(arguments.text) gt 0>
          <cfset assertEquals(arguments.text, results[1].xmlText, message) />
@@ -41,6 +42,13 @@ mssage to display when this assertion fails" default="The XPath expression,
        </cfif>
        <cfreturn results />
       <cfcatch type="any">
+		
+		
+		<!--- TODO Remove --->
+		<cfdump var="#dom#" />
+		<cfdump var="#arguments#" />
+		<cfdump var="#results#" />
+		<cfabort />
        <cfthrow object="#cfcatch#">
       </cfcatch>
      </cftry>
@@ -62,7 +70,7 @@ mssage to display when this assertion fails" default="The XPath expression,
      var readBuffer = "";
      var soup = "";
      paths[1] = expandPath("/#root#/framework/lib/tagsoup-1.2.jar");
-     paths[2] = expandPath("/#root#/framework/lib/xom-1.2.6.jar");
+     paths[2] = expandPath("/#root#/framework/lib/xom-1.1.jar");
      loader = createObject("component", "/#root#/framework/javaloader/JavaLoader").init(paths);
      soup = loader.create("org.ccil.cowan.tagsoup.Parser").init();
      soup.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
