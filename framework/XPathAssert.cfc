@@ -42,13 +42,6 @@ mssage to display when this assertion fails" default="The XPath expression,
        </cfif>
        <cfreturn results />
       <cfcatch type="any">
-		
-		
-		<!--- TODO Remove --->
-		<cfdump var="#dom#" />
-		<cfdump var="#arguments#" />
-		<cfdump var="#results#" />
-		<cfabort />
        <cfthrow object="#cfcatch#">
       </cfcatch>
      </cftry>
