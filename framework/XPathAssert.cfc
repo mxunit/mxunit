@@ -40,6 +40,7 @@ mssage to display when this assertion fails" default="The XPath expression,
        <cfif arrayLen(results) lt 1>
          <cfset fail(message) />
        </cfif>
+	
        <cfreturn results />
       <cfcatch type="any">
        <cfthrow object="#cfcatch#">
@@ -80,6 +81,7 @@ mssage to display when this assertion fails" default="The XPath expression,
      else{
        doc = builder.build(data); //load the doc from the url. Nice!
      }
+     
      dom = xmlParse(doc.toXml());
      return dom;
     </cfscript>
