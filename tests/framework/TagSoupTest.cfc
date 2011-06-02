@@ -20,7 +20,7 @@
      var baos = javacast("null","java.lang.Object");
 
 	   paths[1] = expandPath("#root#/framework/lib/tagsoup-1.2.jar");
-	   paths[2] = expandPath("#root#/framework/lib/xom-1.1.jar");
+	   paths[2] = expandPath("#root#/framework/lib/xom-1.2.6.jar");
 	   loader = createObject("component", "/#root#/framework/javaloader/JavaLoader").init(paths);
 	   soup = loader.create("org.ccil.cowan.tagsoup.Parser").init();
 	   soup.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
