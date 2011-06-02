@@ -90,6 +90,16 @@
 			<format pattern="MM/dd/yyyy" property="nightlydate" />
 		</tstamp>
 		
+		<!-- user property file for instance specific settings -->
+		<property file="${unames.file}" />	
+		
+		<!--
+			get the server, port, and webroot properties from the 
+			antrunner file; this way each developer can have their
+			own version of the properties file with different
+			values depending on their setup
+		-->
+		
 		<property name="dist" location="dist" />
 		<property name="nightlyfile" location="dist/mxunit-nightly-${nightlystamp}.zip" />
 		<property name="unames.file" value="buildprops/unames.properties" />
@@ -99,17 +109,14 @@
 		<property name="readme.nightlyfile" value="README.nightly" />
 		<property name="antrunner.file" value="buildprops/antrunner.properties" />
 		<property name="testmailmessage.file" value="buildprops/testresultsmail.html" />
+		<property file="${antrunner.file}" />
 
 		<!-- for the test runner -->
 		<property name="mxunit.jar" value="ant/lib/mxunit-ant.jar" />
-		<property name="junit.out.dir.xml" value="tests/testresults" />
+		<property name="junit.out.dir.xml" value="tests/testresults/${server}_${port}" />
 		<property name="junit.out.dir.html" value="${junit.out.dir.xml}/html" />
 		<property name="output.dir" value="${junit.out.dir.xml}/tmp" />
 		<property name="style.dir" value="ant/xsl/" />
-
-		<!-- user property file for instance specific settings -->
-		<property file="${unames.file}" />	
-		
 
 		<path id="project.classpath">
 			<fileset dir="lib">
@@ -269,13 +276,6 @@
 		<mkdir dir="${junit.out.dir.html}" />
 		<mkdir dir="${output.dir}" />
 
-		<!--
-			get the server, port, and webroot properties from the 
-			antrunner file; this way each developer can have their
-			own version of the properties file with different
-			values depending on their setup
-		-->
-		<property file="${antrunner.file}" />
 		<property name="context" value="" />
 
 		<mxunittask server="${server}" port="${port}" defaultrunner="${context}/mxunit/runner/HttpAntRunner.cfc" outputdir="${output.dir}" verbose="true" testResultsSummary="my.summary" failureproperty="testsfailed">
@@ -327,7 +327,6 @@
 		=================================
 	-->
 	<target name="genApiDocs" depends="init">
-		<property file="${antrunner.file}" /> 
 		
 		<delete dir="doc/api" failonerror="false"/>
 		<mkdir dir="doc/api" />
@@ -391,7 +390,6 @@
 		=================================
 	-->
 	<target name="testMail" depends="init">
-		<property file="${antrunner.file}" />
 
 		<if>
 			<isset property="mail.ssl" />
@@ -457,7 +455,6 @@
 		<!-- load the varScoper task -->
 		<taskdef name="conGet" classname="com.varscoper.ant.task.ConditionalGet" classpathref="project.classpath" />
 
-		<property file="${antrunner.file}" />
 		<property name="filePathToUse" value="${webroot}" />
 		<property name="recursiveDirectory" value="true" />
 
