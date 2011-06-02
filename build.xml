@@ -90,15 +90,7 @@
 			<format pattern="MM/dd/yyyy" property="nightlydate" />
 		</tstamp>
 		
-		<!-- user property file for instance specific settings -->
-		<property file="${unames.file}" />	
 		
-		<!--
-			get the server, port, and webroot properties from the 
-			antrunner file; this way each developer can have their
-			own version of the properties file with different
-			values depending on their setup
-		-->
 		
 		<property name="dist" location="dist" />
 		<property name="nightlyfile" location="dist/mxunit-nightly-${nightlystamp}.zip" />
@@ -109,6 +101,16 @@
 		<property name="readme.nightlyfile" value="README.nightly" />
 		<property name="antrunner.file" value="buildprops/antrunner.properties" />
 		<property name="testmailmessage.file" value="buildprops/testresultsmail.html" />
+		
+		<!-- user property file for instance specific settings -->
+		<property file="${unames.file}" />	
+		
+		<!--
+			get the server, port, and webroot properties from the 
+			antrunner file; this way each developer can have their
+			own version of the properties file with different
+			values depending on their setup
+		-->
 		<property file="${antrunner.file}" />
 
 		<!-- for the test runner -->
