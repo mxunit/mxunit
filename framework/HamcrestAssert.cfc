@@ -2,7 +2,7 @@
 <!--- Extend Assert in order to use fail and toStringValue --->
 
 <cffunction name="HamcrestAssert" extends="Assert" access="public" hint="Constructor">
-  <cfargument name="whatever" type="any"><!--- WEB-INF.cftags.component --->
+  <cfargument name="whatever" type="any"><!--- any --->
  <!---  <cfset var obj = whatever /> --->
   <!--- <cfset this = obj /> --->
   <cfreturn this />

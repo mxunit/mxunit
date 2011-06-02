@@ -109,7 +109,7 @@
 		<cfreturn this />
 	</cffunction>
 	
-	<cffunction name="run" returntype="WEB-INF.cftags.component" access="remote" output="true" hint="Primary method for running TestSuites and individual tests.">
+	<cffunction name="run" returntype="any" access="remote" output="true" hint="Primary method for running TestSuites and individual tests.">
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
 		

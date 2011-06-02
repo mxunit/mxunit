@@ -13,7 +13,7 @@ function methodShouldBeAbleToReturnObject(){
    mock.reset();
    mock.foo('asd').returns(this);
    t = mock.foo('asd');
-   assertIsTypeOf(t,'WEB-INF.cftags.component');
+   assertIsTypeOf(t,'mxunit.tests.mightymock.MightyMockTest');
 }
 
 function clearOrResetMock(){

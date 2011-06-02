@@ -9,7 +9,7 @@
       // grandparent
       assertIsTypeOf(this,"mxunit.framework.Assert"); 
       //last of the mohicans
-      assertIsTypeOf(this,"WEB-INF.cftags.component"); 
+      assertIsTypeOf(this,"any"); 
     </cfscript>
   </cffunction> 
   
@@ -17,7 +17,7 @@
     <cfscript>
       //itself
       assertIsTypeOf(c,"mxunit.tests.bugs.fixture.93sample"); 
-      assertIsTypeOf(c,"WEB-INF.cftags.component"); 
+      assertIsTypeOf(c,"any"); 
       try{
        assertIsTypeOf(c,"mxunit.framework.TestCase"); 
       } catch(mxunit.exception.AssertionFailedError e){}
@@ -26,7 +26,7 @@
   
    <cffunction name="breakIt" returntype="void" access="public">
     <cfscript>
-      assertIsTypeOf(webinf,"Web-INF.cftags.component"); 
+      assertIsTypeOf(webinf,"any"); 
       try{
        assertIsTypeOf(webinf,"mxunit.bogus.cfc.package.I'm not here"); 
       } catch(mxunit.exception.AssertionFailedError e){
@@ -39,7 +39,7 @@
 <cffunction name="setUp">
   <cfscript>
     c = createObject("component","mxunit.tests.bugs.fixture.93sample");
-    webinf = createObject("component","WEB-INF.cftags.component");;
+    webinf = createObject("component","any");;
   </cfscript>
 </cffunction>
 

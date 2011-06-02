@@ -251,8 +251,8 @@
 		<cfreturn isAcceptable />
 	</cffunction>
 
-	<cffunction name="makePublic" access="package" hint="makes a testable version of a private method for a given object. This is a convenience pass-through to PublicProxyMaker.makePublic. See documentation on 'testing private methods' at mxunit.org/doc. Or open mxunit/tests/framework/PublicProxyMakerTest.cfc for examples of how to use" returntype="WEB-INF.cftags.component">
-		<cfargument name="ObjectUnderTest" required="true" type="WEB-INF.cftags.component" hint="an instance of the object with a private method to be proxied">
+	<cffunction name="makePublic" access="package" hint="makes a testable version of a private method for a given object. This is a convenience pass-through to PublicProxyMaker.makePublic. See documentation on 'testing private methods' at mxunit.org/doc. Or open mxunit/tests/framework/PublicProxyMakerTest.cfc for examples of how to use" returntype="any">
+		<cfargument name="ObjectUnderTest" required="true" type="any" hint="an instance of the object with a private method to be proxied">
 		<cfargument name="privateMethodName" required="true" type="string" hint="name of the private method to be proxied">
 		<cfargument name="proxyMethodName" required="false" type="string" default="" hint="name of the proxy method name to be used; if not passed, defaults to the name of the private method prefixed with an underscore">
 

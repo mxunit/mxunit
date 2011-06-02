@@ -7,9 +7,9 @@
 	<cfset dirSep = cu.getSeparator()>
 
 
-	<cffunction name="makePublic" access="public" hint="creates a public method proxy for the indicated private method for the passed-in object" returntype="WEB-INF.cftags.component">
+	<cffunction name="makePublic" access="public" hint="creates a public method proxy for the indicated private method for the passed-in object" returntype="any">
 
-		<cfargument name="ObjectUnderTest" required="true" type="WEB-INF.cftags.component" hint="an instance of the object with a private method to be proxied">
+		<cfargument name="ObjectUnderTest" required="true" type="any" hint="an instance of the object with a private method to be proxied">
 		<cfargument name="privateMethodName" required="true" type="string" hint="name of the private method to be proxied">
 		<cfargument name="proxyMethodName" required="false" type="string" default="" hint="name of the proxy method name to be used; if not passed, defaults to the name of the private method prefixed with an underscore">
 
