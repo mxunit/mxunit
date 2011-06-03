@@ -1,12 +1,11 @@
+
 <cfparam name="url.print_js_resources" type="boolean" default="true" />
 <cfparam name="url.toggledebug" type="boolean" default="true" />
 
 <cfinclude template="resources/theme/header.cfm" />
 <cftry>
-	<!--- TODO This will probably break once past CF 9 --->
-	<cfset cfMajorVersion = left(server.coldfusion.productversion, 1) />
+	<cfset cfMajorVersion = listFirst(server.coldfusion.productversion, ",.") />
 	<cfset cfEngine =  server.coldfusion.productname />
-
 	<!--- Check what engine --->
 	<cfif find("BlueDragon", cfEngine)>
 		<cfset cfEngine = 'Blue Dragon' />
@@ -28,7 +27,7 @@
 
 	<p><hr color="#eaeaea" noshade="true" size="1" /></p>
 
-	<cfset testCase = '<cfcomponent displayname="MxunitInstallVerificationTest" extends="framework.TestCase">
+	<cfset testCase = '<cfcomponent displayname="MxunitInstallVerificationTest" extends="mxunit.framework.TestCase">
 			<cffunction name="testThis" >
 				<cfset assertEquals("this","this") />
 			</cffunction>
@@ -56,9 +55,9 @@
 
 	<cffile action="write" file="#context#MXUnitInstallTest.cfc" output="#testCase#" />
 
-	<cfset testSuitePath = 'framework.TestSuite' />
+	<cfset testSuitePath = 'mxunit.framework.TestSuite' />
 	<cfset testSuite = createObject("component", testSuitePath).TestSuite() />
-	<cfset installTest = createObject("component", "MXUnitInstallTest") />
+	<cfset installTest = createObject("component", "mxunit.MXUnitInstallTest") />
 	<cfset installTestMetaData = getMetadata(installTest) />
 	<cfset testSuite.addAll("MXUnitInstallTest", installTest) />
 	<cfset results = testSuite.run() />
