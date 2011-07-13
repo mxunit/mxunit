@@ -28,7 +28,7 @@
 
 	<cffunction name="assertIsTypeOfFailsForBogusType" returntype="void" access="public">
 		<cfscript>
-			var webinf = createObject("component","web-inf.cftags.component");
+			var webinf = createObject("component","WEB-INF.cftags.component");
 			//guard - thanks Marc!
 			assertIsTypeOf(webinf,"web-inf.cftags.component");
 			try{
