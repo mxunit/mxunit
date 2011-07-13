@@ -1,3 +1,5 @@
+settings.xml
+.settings/
 .project
 MXUnitInstallTest.cfc
 buildprops/antrunner.properties
