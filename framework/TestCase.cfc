@@ -64,7 +64,7 @@
 	<cffunction name="createRequestScopeDebug" access="public" output="false">
 		<cfset request.debug = debug><!--- mixin the function --->
 		<cfset request.debugArrayWrapper = StructNew()>
-		<cfset request.debugArrayWrapper.debugArray = ArrayNew(1)>
+		<cfset request.debugArrayWrapper.debugArray = arrayNew(1)>
 	</cffunction>
 
 	<cffunction name="stopRequestScopeDebug" access="public" output="false">
@@ -200,50 +200,50 @@
 	</cffunction>
 
 	<cffunction name="getRunnableMethods" hint="Gets an array of all runnable test methods for this test case. This includes anything in its inheritance hierarchy" access="public" returntype="array" output="false">
-		<cfset var a_methods = ArrayNew(1) />
-		<cfset var a_parentMethods = ArrayNew(1) />
+		<cfset var a_methods = arrayNew(1) />
+		<cfset var a_parentMethods = arrayNew(1) />
 		<cfset var thisComponentMetadata = getMetadata(this) />
 		<cfset var i = "" />
 		<cfset var tmpParentObj = "" />
-		<cfset var cu = createObject("component","ComponentUtils") />
+		<cfset var cu = createObject("component", "ComponentUtils") />
 
 		<!--- now get the public methods from the actual component --->
-		<cfif StructKeyExists(ThisComponentMetadata,"Functions")>
-			<cfloop from="1" to="#ArrayLen(ThisComponentMetadata.Functions)#" index="i">
-				<cfparam name="ThisComponentMetadata.Functions[#i#].access" default="public">
-				<cfif testIsAcceptable(ThisComponentMetadata.Functions[i])>
-					<cfset ArrayAppend(a_methods,ThisComponentMetadata.Functions[i].name)>
+		<cfif StructKeyExists(thisComponentMetadata, "Functions")>
+			<cfloop from="1" to="#arrayLen(thisComponentMetadata.Functions)#" index="i">
+				<cfparam name="thisComponentMetadata.Functions[#i#].access" default="public">
+				<cfif accept(thisComponentMetadata.Functions[i])>
+					<cfset arrayAppend(a_methods, thisComponentMetadata.Functions[i].name)>
 				</cfif>
 			</cfloop>
 		</cfif>
 
 		<!--- climb the parent tree until we hit a framework template (i.e. TestCase) --->
-		<cfif NOT cu.isFrameworkTemplate(ThisComponentMetadata.Extends.Path)>
-			<cfset tmpParentObj = createObject("component",ThisComponentMetadata.Extends.Name) />
+		<cfif NOT cu.isFrameworkTemplate(thisComponentMetadata.Extends.Path)>
+			<cfset tmpParentObj = createObject("component", thisComponentMetadata.Extends.Name) />
 			<cfset a_parentMethods = tmpParentObj.getRunnableMethods() />
 
-			<cfloop from="1" to="#ArrayLen(a_parentMethods)#" index="i">
+			<cfloop from="1" to="#arrayLen(a_parentMethods)#" index="i">
 				<!--- append this method from the parent only if the child didn't already add it --->
-				<cfif NOT listFindNoCase( ArrayToList(a_methods), a_parentMethods[i])>
-					<cfset ArrayAppend(a_methods,a_parentMethods[i]) />
+				<cfif NOT listFindNoCase(arrayToList(a_methods), a_parentMethods[i])>
+					<cfset arrayAppend(a_methods, a_parentMethods[i]) />
 				</cfif>
 			</cfloop>
 
 			<cfset tmpParentObj = "" />
-			<cfset a_parentMethods = ArrayNew(1) />
+			<cfset a_parentMethods = arrayNew(1) />
 		</cfif>
 
 		<cfreturn a_methods />
 	</cffunction>
 
-	<cffunction name="testIsAcceptable" access="package" hint="contains the logic for whether a test is a valid runnable method" returntype="boolean">
-		<cfargument name="TestStruct" type="struct" required="true" hint="Structure for a function coming from getmetadata"/>
+	<cffunction name="accept" access="package" hint="contains the logic for whether a test is a valid runnable method" returntype="boolean">
+		<cfargument name="testStruct" type="struct" required="true" hint="Structure for a function coming from getmetadata"/>
 		<cfset var isAcceptable = true>
 
-		<cfif ListFindNoCase("package,private",TestStruct.access)
-			 OR ListFindNoCase("setUp,tearDown,beforeTests,afterTests",TestStruct.name)
-			 OR reFindNoCase("_cffunccfthread",TestStruct.Name)
-			 OR ( (structKeyExists(TestStruct, "test") AND isBoolean(TestStruct.test) AND NOT TestStruct.test))>
+		<cfif listFindNoCase("package,private", testStruct.access)
+			 OR listFindNoCase("setUp,tearDown,beforeTests,afterTests", testStruct.name)
+			 OR reFindNoCase("_cffunccfthread", testStruct.Name)
+			 OR ( (structKeyExists(testStruct, "test") AND isBoolean(testStruct.test) AND NOT testStruct.test))>
 
 			<cfset isAcceptable = false>
 		</cfif>
@@ -264,41 +264,41 @@
 	</cffunction>
 
 	<cffunction name="injectMethod" output="false" access="public" returntype="void" hint="injects the method from giver into receiver. This is helpful for quick and dirty mocking">
-		<cfargument name="Receiver" type="any" required="true" hint="the object receiving the method"/>
-		<cfargument name="Giver" type="any" required="true" hint="the object giving the method"/>
+		<cfargument name="receiver" type="any" required="true" hint="the object receiving the method"/>
+		<cfargument name="giver" type="any" required="true" hint="the object giving the method"/>
 		<cfargument name="functionName" type="string" required="true" hint="the function to be injected from the giver into the receiver"/>
 		<cfargument name="functionNameInReceiver" type="string" required="false" default="#arguments.functionName#" hint="the function name that you will call. this is useful when you want to inject giver.someFunctionXXX but have it be called as someFunction in your receiver object">
 
 		<cfset var blender = createObject("component","ComponentBlender")>
 
-		<cfset blender._mixinAll(Receiver,blender,"_mixin,_copyToNewName")>
-		<cfset blender._mixinAll(Giver,blender,"_getComponentVariable")>
+		<cfset blender._mixinAll(receiver, blender, "_mixin,_copyToNewName")>
+		<cfset blender._mixinAll(giver, blender, "_getComponentVariable")>
 
-		<cfset receiver._copyToNewName(functionNameInReceiver,functionNameInReceiver & "__orig__",true)>
+		<cfset receiver._copyToNewName(functionNameInReceiver, functionNameInReceiver & "__orig__", true)>
 		<cfset receiver._mixin( propertyName = functionNameInReceiver,
 								property = Giver._getComponentVariable(functionName),
 								ignoreIfExisting = false )>
 	</cffunction>
 
 	<cffunction name="restoreMethod" output="false" access="public" returntype="void" hint="restores a previously overwritten method (via injectMethod) to its original state">
-    	<cfargument name="Receiver" type="any" required="true"/>
+    	<cfargument name="receiver" type="any" required="true"/>
 		<cfargument name="functionName" type="string" required="true"/>
 		<cfset var blender = createObject("component","ComponentBlender")>
-		<cfset blender._mixinAll(Receiver,blender,"_copyToNewName")>
-		<cfset receiver._copyToNewName (functionName & "__orig__",functionName,false)>
+		<cfset blender._mixinAll(receiver, blender, "_copyToNewName")>
+		<cfset receiver._copyToNewName(functionName & "__orig__", functionName,false)>
 	</cffunction>
 
 
 	<cffunction name="injectProperty" output="false" access="public" returntype="void" hint="injects properties into the receiving object">
-		<cfargument name="Receiver" type="any" required="true" hint="the object receiving the method"/>
+		<cfargument name="receiver" type="any" required="true" hint="the object receiving the method"/>
 		<cfargument name="propertyName" type="string" required="true" hint="the property to be overwritten"/>
 		<cfargument name="propertyValue" type="any" required="true" hint="the property value to be used">
 		<cfargument name="scope" type="string" required="false" default="" hint="the scope in which to set the property. Defaults to variables and this.">
 
 		<cfset var blender = createObject("component","ComponentBlender")>
 
-		<cfset blender._mixinAll(Receiver,blender,"_mixin,_mixinProperty")>
-		<cfset Receiver._mixinProperty(propertyName = arguments.propertyName,
+		<cfset blender._mixinAll(receiver, blender, "_mixin,_mixinProperty")>
+		<cfset receiver._mixinProperty(propertyName = arguments.propertyName,
 								property = arguments.propertyValue,
 								scope = arguments.scope)>
 	</cffunction>
@@ -316,7 +316,7 @@
 			<cfset variables.debugArrayWrapper = request.debugArrayWrapper>
 		</cfif>
 
-		<cfset arrayappend(variables.debugArrayWrapper.debugArray, arguments) />
+		<cfset arrayAppend(variables.debugArrayWrapper.debugArray, arguments) />
 	</cffunction>
 
 	<cffunction name="clearDebug" access="public" returntype="void" hint="Clears the debug array">

@@ -295,7 +295,7 @@ actual object to compare.
 			<help><![CDATA[
 				Not really used
 			]]></help> </function>
-		<function creator="8" name="testIsAcceptable" returns="boolean">
+		<function creator="8" name="accept" returns="boolean">
 			<help><![CDATA[
 				contains the logic for whether a test is a valid runnable method
 			]]></help> <parameter name="TestStruct" type="struct" required="true">
