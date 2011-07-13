@@ -40,6 +40,7 @@ mssage to display when this assertion fails" default="The XPath expression,
        <cfif arrayLen(results) lt 1>
          <cfset fail(message) />
        </cfif>
+	
        <cfreturn results />
       <cfcatch type="any">
        <cfthrow object="#cfcatch#">
@@ -63,7 +64,7 @@ mssage to display when this assertion fails" default="The XPath expression,
      var readBuffer = "";
      var soup = "";
      paths[1] = expandPath("/#root#/framework/lib/tagsoup-1.2.jar");
-     paths[2] = expandPath("/#root#/framework/lib/xom-1.1.jar");
+     paths[2] = expandPath("/#root#/framework/lib/xom-1.2.6.jar");
      loader = createObject("component", "/#root#/framework/javaloader/JavaLoader").init(paths);
      soup = loader.create("org.ccil.cowan.tagsoup.Parser").init();
      soup.setFeature("http://xml.org/sax/features/namespace-prefixes", false);
@@ -76,11 +77,13 @@ mssage to display when this assertion fails" default="The XPath expression,
        readBuffer = CreateObject("java","java.lang.String").init(data).getBytes();
        bais = createobject("java","java.io.ByteArrayInputStream").init(readBuffer);
        doc = builder.build(bais);
-     }
-     else{
+     } else {
        doc = builder.build(data); //load the doc from the url. Nice!
      }
-     dom = xmlParse(doc.toXml());
+     
+     // Removing the xmlns since xmlSearch is not liking it being there
+     dom = xmlParse(replace(doc.toXml(), ' xmlns="http://www.w3.org/1999/xhtml"', ''));
+     
      return dom;
     </cfscript>
   </cffunction>

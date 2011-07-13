@@ -69,11 +69,11 @@ then you'll need to copy this file into your application
 <cfinvoke webservice="#remoteURL#"
 		  method="getComponentMethodsRich"
 		  returnvariable="getResults" >
-		    
+
 		<cfdump var="#getResults#">
 		<cfdump var="#getResults[1].getData()#">
-		
-		
+
+
 <cfset rf = createObject("mxunit.framework.RemoteFacade")>
 <cfset beans = rf.getComponentMethodsRich()>
 <cfdump var="#beans[1].getData()#">
