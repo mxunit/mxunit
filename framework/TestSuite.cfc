@@ -119,6 +119,7 @@
 			var meta = getMetadata(object);
 			var decorator = 0;
 			var decoratorPath = 0;
+			var decoratorNames = 0;
 
 			//if already a decorator, kick out.
 			if(isInstanceOf(arguments.object, "mxunit.framework.TestDecorator"))
@@ -126,10 +127,12 @@
 				return arguments.object;
 			}
         </cfscript>
+        
+        <cfset decoratorNames = arguments.object.getAnnotation(annotationName="decorators") />
 
 		<!--- Question: do we look up inheritence? --->
-		<cfif structKeyExists(meta, "mxunit:decorators")>
-			<cfloop list="#meta['mxunit:decorators']#" index="decoratorPath">
+		<cfif len(decoratorNames) gt 0>
+			<cfloop list="#decoratorNames#" index="decoratorPath">
 				<cfscript>
 					decorator = createObject("component", decoratorPath);
 					decorator.setTarget(object);

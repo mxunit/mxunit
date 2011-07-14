@@ -5,7 +5,7 @@
  @history
  --->
 
-<cfcomponent  extends="mxunit.framework.TestCase">
+<cfcomponent  extends="mxunit.framework.TestCase" mxunit:testCaseLevelWithNS="valueWithNS" testCaseLevelWithoutNS="valueWithoutNS">
 
   <cffunction name="getSomeValue" hint="Used by child test for testing inherited tests" returntype="string">
    <cfreturn "Some TestCase Data To Read" />
@@ -254,6 +254,14 @@
 
 	function getAnnotationReturnsValueUsingJustName() {
 		assertEquals("justName",getAnnotation("testWithJustNameAnnotation","myAttribute","default"));
+	}
+
+	function getAnnotationReturnsValueFromTestCaseUsingMxunitNamespace() {
+		assertEquals("valueWithNS",getAnnotation(annotationName="testCaseLevelWithNS"));
+	}
+
+	function getAnnotationReturnsValueFromTestCaseUsingJustName() {
+		assertEquals("valueWithoutNS",getAnnotation(annotationName="testCaseLevelWithoutNS"));
 	}
 
 	</cfscript>
