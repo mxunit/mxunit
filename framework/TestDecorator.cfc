@@ -30,6 +30,10 @@
 	<cfreturn getTarget().tearDown() />
 </cffunction>
 
+<cffunction name="createRequestScopeDebug" access="public" output="false">
+	<cfreturn getTarget().createRequestScopeDebug() />
+</cffunction>
+
 <cffunction name="invokeTestMethod"	access="public" returntype="string" output="false" >
 	<cfargument name="methodName" hint="the name of the method to invoke" type="string" required="Yes">
 	<cfargument name="args" hint="Optional set of arguments" type="struct" required="No" >
