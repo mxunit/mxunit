@@ -107,6 +107,17 @@
 		</cfscript>
 	</cffunction>
 
+	<cffunction name="invokeTestMethod" hint="invoke the test method on this case, returns any output. Generally useful for decorators to intercept"
+		access="public" returntype="string" output="false" >
+		<cfargument name="methodName" hint="the name of the method to invoke" type="string" required="Yes">
+		<cfargument name="args" hint="Optional set of arguments" type="struct" required="No" default="#StructNew()#">
+		<cfset var output = 0>
+		<cfsavecontent variable="output" >
+			<cfinvoke component="#this#" method="#arguments.methodName#" argumentcollection="#arguments.args#">
+		</cfsavecontent>
+		<cfreturn output />
+	</cffunction>
+
 	<!---
 		Note: This will fail if test suite is built using the add() method instead
 		of the addAll() method. If add() is used, override this method.
@@ -449,5 +460,9 @@
 		return createObject("component","mightymock.OrderedExpectation").init(mocks);
 		</cfscript>
 	</cffunction>
+
+		<cffunction name="getBaseTarget" hint="In case of decorators - return myself" access="public" returntype="any" output="false">
+			<cfreturn this/>
+		</cffunction>
 
 </cfcomponent>
