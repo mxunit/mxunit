@@ -107,6 +107,17 @@
 		</cfscript>
 	</cffunction>
 
+	<cffunction name="invokeTestMethod" hint="invoke the test method on this case, returns any output. Generally useful for decorators to intercept"
+		access="public" returntype="string" output="false" >
+		<cfargument name="methodName" hint="the name of the method to invoke" type="string" required="Yes">
+		<cfargument name="args" hint="Optional set of arguments" type="struct" required="No" default="#StructNew()#">
+		<cfset var output = 0>
+		<cfsavecontent variable="output" >
+			<cfinvoke component="#this#" method="#arguments.methodName#" argumentcollection="#arguments.args#">
+		</cfsavecontent>
+		<cfreturn output />
+	</cffunction>
+
 	<!---
 		Note: This will fail if test suite is built using the add() method instead
 		of the addAll() method. If add() is used, override this method.
@@ -411,25 +422,30 @@
 
 	<!--- annotation stuff --->
 	<cffunction name="getAnnotation" access="public" returntype="Any" hint="Returns the value for an annotation, allowing for an mxunit namespace or not">
-		<cfargument name="methodName" type="Any" required="true" hint="The name of the test method" />
+		<cfargument name="methodName" type="Any" required="false" hint="The name of the test method. An empty string means a testCase annotation" default="" />
 		<cfargument name="annotationName" type="Any" required="true" hint="The name of the annotation" />
 		<cfargument name="defaultValue" type="Any" required="false" default="" hint="The value to return if no annotation is found" />
 
 		<cfset var returnVal = arguments.defaultValue />
-		<cfset var methodMetadata = "" />
+		<cfset var metadataTarget = this />
+		<cfset var metadata = "" />
 
-		<cfif structKeyExists(this,arguments.methodName)>
-			<cfset methodMetadata = getMetadata(this[arguments.methodName]) />
-
-			<cfif StructKeyExists(methodMetadata,"mxunit:" & arguments.annotationName)>
-				<cfset returnVal = methodmetadata["mxunit:" & arguments.annotationName] />
-			<cfelseif StructKeyExists(methodMetadata,arguments.annotationName)>
-				<cfset returnVal = methodmetadata[arguments.annotationName] />
+		<cfif len(arguments.methodName) gt 0>
+			<cfif not structKeyExists(this,arguments.methodName)>
+				<cfthrow type="mxunit.exception.methodNotFound"
+					message="An annotation of #arguments.annotationName# was requested for the #arguments.methodName# method, which does not exist."
+					detail="Check the name of the method." />
+			<cfelse>
+				<cfset metadataTarget = this[arguments.methodName] />
 			</cfif>
-		<cfelse>
-			<cfthrow type="mxunit.exception.methodNotFound"
-				message="An annotation of #arguments.annotationName# was requested for the #arguments.methodName# method, which does not exist."
-				detail="Check the name of the method." />
+		</cfif>
+		
+		<cfset metadata = getMetadata(metadataTarget) />
+	
+		<cfif StructKeyExists(metadata,"mxunit:" & arguments.annotationName)>
+			<cfset returnVal = metadata["mxunit:" & arguments.annotationName] />
+		<cfelseif StructKeyExists(metadata,arguments.annotationName)>
+			<cfset returnVal = metadata[arguments.annotationName] />
 		</cfif>
 
 		<cfreturn returnVal />
@@ -449,5 +465,9 @@
 		return createObject("component","mightymock.OrderedExpectation").init(mocks);
 		</cfscript>
 	</cffunction>
+
+		<cffunction name="getBaseTarget" hint="In case of decorators - return myself" access="public" returntype="any" output="false">
+			<cfreturn this/>
+		</cffunction>
 
 </cfcomponent>

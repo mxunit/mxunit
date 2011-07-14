@@ -1,50 +1,50 @@
 <cfcomponent displayname="TestSuite" extends="Test" hint="Responsible for creating and running groups of Tests.">
 	<cfset cu = createObject("component","ComponentUtils") />
 	<cfset requestScopeDebuggingEnabled = false />
-	
+
 	<cfparam name="this.testSuites" default="#structNew()#" />
 	<cfparam name="this.tests" default="#arrayNew(1)#" />
-	
+
 	<!--- Generated content from method --->
 	<cfparam name="this.c" default="Error occurred. See stack trace." />
 	<cfparam name="this.dataProviderHandler" default='#createObject("component","DataproviderHandler")#' />
 	<cfparam name="this.MockingFramework" default="" />
-	
+
 	<cffunction name="TestSuite" access="public" returntype="TestSuite" hint="Constructor">
 		<cfreturn this />
 	</cffunction>
-	
+
 	<!---
 		Should be of Type "Test". Since All TestCases and TestSuites
 		are inherited from Test, we should be able to add them here
-		
+
 		Also, need to
 	--->
 	<cffunction name="addTest" access="remote" returntype="void" hint="Adds a single TestCase to the TestSuite.">
 		<cfargument name="componentName" type="string" required="yes" />
 		<cfargument name="method" type="string" required="yes" />
 		<cfargument name="componentObject" type="Any" required="no" default="" />
-		
+
 		<cfscript>
 			try{
 				this.tempStruct = structNew();
 				this.tempStruct.ComponentObject = arguments.ComponentObject;
-				
+
 				// If the test suite exists get the method array and
 				// append the new method name ...
 				// update an existing test suite
 				if (structKeyExists(this.testSuites, componentName)) {
 					this.tempStruct = structFind(this.testSuites, arguments.componentName);
-					
+
 					tempArray = structFind(this.tempStruct, "methods");
 					arrayAppend(tempArray,arguments.method);
-					
+
 					structUpdate(this.tempStruct, "methods", tempArray);
 					structUpdate(this.testSuites,arguments.componentName, this.tempStruct);
 				} else{
 					//Begin a new test Suite
 					structInsert(this.testSuites, arguments.componentName, this.tempStruct);
-					
+
 					//Grab all the methods that begin with the string 'test' ...
 					tests = listToArray(arguments.method);
 					structInsert(evaluate("this.testSuites." & arguments.componentName), "methods", tests);
@@ -54,7 +54,7 @@
 			}
 		</cfscript>
 	</cffunction>
-	
+
 	<!---
 		Maybe should be named addList
 		Adds a list of methods belonging to a component into a testSuite object
@@ -63,24 +63,26 @@
 		<cfargument name="componentName" type="Any" required="yes" />
 		<cfargument name="methods" type="string" required="yes" />
 		<cfargument name="componentObject" type="Any" required="no" default="" />
-		
+
 		<cfif isSimpleValue(arguments.ComponentObject)>
 			<cfset ComponentObject = createObject("component",arguments.ComponentName) />
 		</cfif>
-		
+
+		<cfset arguments.componentObject = applyDecorators(arguments.componentObject)>
+
 		<cfscript>
 			try{
 				//If the component already has methods, just update the method array
 				if ( structKeyExists(this.testSuites,arguments.componentName) ) {
 					tests = structFind(this.testSuites, arguments.componentName);
-					
+
 					for( i = 1; i lte listLen(arguments.methods); i = i + 1 ) {
 						arrayAppend(tests.methods, listGetAt(arguments.methods,i));
 					}
-					
+
 					return;
 				}
-				
+
 				//else convert the list of methods to an array and add it to the test suite
 				this.tempStruct = structNew();
 				this.tempStruct.ComponentObject = arguments.ComponentObject;
@@ -91,106 +93,141 @@
 			}
 		</cfscript>
 	</cffunction>
-	
+
 	<cffunction name="addAll" access="remote" returntype="any" output="false" hint="Adds all runnable TestCases to the TestSuite">
 		<cfargument name="ComponentName" type="any" required="yes" />
 		<cfargument name="ComponentObject" type="any" required="false" default="" />
-		
+
 		<cfset var a_methods = "" />
-		
+
 		<cfif isSimpleValue(arguments.ComponentObject)>
 			<cfset ComponentObject = createObject("component",arguments.ComponentName) />
 		</cfif>
-		
+
+		<cfset arguments.componentObject = applyDecorators(arguments.componentObject)>
+
 		<cfset a_methods = ComponentObject.getRunnableMethods() />
-		
+
 		<cfset add(arguments.ComponentName,ArrayToList(a_methods),ComponentObject) />
-		
+
 		<cfreturn this />
 	</cffunction>
-	
+
+	<cffunction name="applyDecorators" hint="applies the chain of decorators, if it exists" access="public" returntype="any" output="false">
+		<cfargument name="object" hint="the object to check to see if it needs some decorators applied" type="any" required="Yes">
+		<cfscript>
+			var meta = getMetadata(object);
+			var decorator = 0;
+			var decoratorPath = 0;
+			var decoratorNames = 0;
+
+			//if already a decorator, kick out.
+			if(isInstanceOf(arguments.object, "mxunit.framework.TestDecorator"))
+			{
+				return arguments.object;
+			}
+        </cfscript>
+        
+        <cfset decoratorNames = arguments.object.getAnnotation(annotationName="decorators") />
+
+		<!--- Question: do we look up inheritence? --->
+		<cfif len(decoratorNames) gt 0>
+			<cfloop list="#decoratorNames#" index="decoratorPath">
+				<cfscript>
+					decorator = createObject("component", decoratorPath);
+					decorator.setTarget(object);
+					arguments.object = decorator; //flip it and reverse it.
+	            </cfscript>
+			</cfloop>
+		</cfif>
+
+        <cfscript>
+			return arguments.object;
+        </cfscript>
+	</cffunction>
+
 	<cffunction name="run" returntype="any" access="remote" output="true" hint="Primary method for running TestSuites and individual tests.">
 		<cfargument name="results" hint="The TestResult collecting parameter." required="no" type="TestResult" default="#createObject("component","TestResult").TestResult()#" />
 		<cfargument name="testMethod" hint="A single test method to run." type="string" required="no" default="">
-		
+
 		<cfset var testRunner = createObject("component", "TestSuiteRunner") />
-		
+
 		<cfset testRunner.setMockingFramework(this.mockingFramework) />
-		<cfset testRunner.setDataProviderHandler(this.dataProviderHandler) /> 
-		
+		<cfset testRunner.setDataProviderHandler(this.dataProviderHandler) />
+
 		<cfif variables.requestScopeDebuggingEnabled OR structKeyExists(url,"requestdebugenable")>
 			<cfset testRunner.enableRequestScopeDebugging() />
 		</cfif>
-		
+
 		<cfreturn testRunner.run(this.suites(), results, testMethod)>
 	</cffunction>
-	
+
 	<cffunction name="runTestRemote" access="remote" output="true">
 		<cfargument name="output" type="string" required="false" default="jqgrid" hint="Output format: html,xml,junitxml,jqgrid ">
 		<cfargument name="debug" type="boolean" required="false" default="false" hint="Flag to indicate whether or not to dump the test results to the screen.">
-		
+
 		<cfscript>
 			var result = this.run();
-			
+
 			switch(arguments.output){
 			case 'xml':
 					writeoutput(result.getXmlresults());
 				break;
-				
+
 			case 'junitxml':
 					writeoutput(result.getJUnitXmlresults());
 				break;
-				
+
 			case 'json':
 					writeoutput(result.getJSONResults());
 				break;
-				
+
 			case 'query':
 					dump(result.getQueryresults());
 				break;
-				
+
 			case 'text':
 					writeoutput( trim(result.getTextresults(name)));
 				break;
-				
+
 			case 'rawhtml':
 					writeoutput(result.getRawHtmlresults());
 				break;
-				
+
 			default:
 					writeoutput(result.getHtmlresults());
 				break;
 			}
 		</cfscript>
-		
+
 		<cfif arguments.debug>
 			<p>&nbsp;</p>
-			
+
 			<cfdump var="#result.getResults()#" label="Raw Results Dump">
 		</cfif>
 	</cffunction>
-	
+
 	<cffunction name="suites" access="public" returntype="struct">
 		<cfreturn this.testSuites />
 	</cffunction>
-	
+
 	<cffunction name="stringValue" access="remote" returntype="string">
 		<cfreturn this.suites().toString() />
 	</cffunction>
-	
+
 	<cffunction name="dump">
 		<cfargument name="o">
-		
+
 		<cfdump var="#o#">
 	</cffunction>
-	
+
 	<cffunction name="enableRequestScopeDebugging" access="public" output="false" hint="enables creation of the request.debug function">
 		<cfset requestScopeDebuggingEnabled = true>
 	</cffunction>
-	
+
 	<cffunction name="setMockingFramework" hint="Allows a developer to set the default Mocking Framework for this test suite.">
 		<cfargument name="name" type="Any" required="true" hint="The name of the mocking framework to use" />
-		
+
 		<cfset this.MockingFramework = arguments.name />
 	</cffunction>
 </cfcomponent>
