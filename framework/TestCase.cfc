@@ -43,12 +43,11 @@
 		<!--- How can we enforce creating a name? --->
 		<cfparam name="this.name" type="string" default="" />
 		<cfparam name="this.traceMessage" type="string" default="" />
-		<cfparam name="this.result" type="any" default="#createObject("component","TestResult")#" />
+		<cfparam name="this.result" type="any" default="#createObject("component", "TestResult")#" />
 		<cfparam name="this.metadata" type="struct" default="#getMetaData(this)#" />
 		<cfparam name="this.package" type="string" default="" />
 
 		<cfset setMockingFramework("") />
-
 		<cfset initDebug() />
 	</cffunction>
 
@@ -74,17 +73,18 @@
 
 	<!--- get on with the show --->
 	<cffunction name="TestCase" returntype="any" access="remote">
-		<cfargument name="aTestCase" type="TestCase" required="yes" />
+		<cfargument name="aTestCase" type="TestCase" required="no" default="#this#" />
 
 		<cfscript>
 			var utils = "";
 			this.metadata = getMetaData(aTestCase);
 			utils = createObject("component","ComponentUtils");
 			this.installRoot = utils.getComponentRoot();
+			this = applyDecorators(aTestCase);
 			super.init();
+			return this;
 		</cfscript>
 
-		<cfreturn this />
 	</cffunction>
 
 	<cffunction name="toStringValue" access="public" returntype="string" hint="Returns the name of this TestCase">
@@ -429,7 +429,6 @@
 		<cfset var returnVal = arguments.defaultValue />
 		<cfset var metadataTarget = this />
 		<cfset var metadata = "" />
-
 		<cfif len(arguments.methodName) gt 0>
 			<cfif not structKeyExists(this,arguments.methodName)>
 				<cfthrow type="mxunit.exception.methodNotFound"
@@ -439,9 +438,9 @@
 				<cfset metadataTarget = this[arguments.methodName] />
 			</cfif>
 		</cfif>
-		
+
 		<cfset metadata = getMetadata(metadataTarget) />
-	
+
 		<cfif StructKeyExists(metadata,"mxunit:" & arguments.annotationName)>
 			<cfset returnVal = metadata["mxunit:" & arguments.annotationName] />
 		<cfelseif StructKeyExists(metadata,arguments.annotationName)>
@@ -466,8 +465,40 @@
 		</cfscript>
 	</cffunction>
 
-		<cffunction name="getBaseTarget" hint="In case of decorators - return myself" access="public" returntype="any" output="false">
-			<cfreturn this/>
-		</cffunction>
+	<cffunction name="getBaseTarget" hint="In case of decorators - return myself" access="public" returntype="any" output="false">
+		<cfreturn this/>
+	</cffunction>
+
+	<cffunction name="applyDecorators" hint="applies the chain of decorators, if it exists" access="public" returntype="any" output="false">
+		<cfargument name="object" hint="the object to check to see if it needs some decorators applied" type="any" required="Yes">
+		<cfscript>
+			var meta = getMetadata(object);
+			var decorator = 0;
+			var decoratorPath = 0;
+			var decoratorNames = 0;
+
+			//if already a decorator, kick out.
+			if(isInstanceOf(arguments.object, "mxunit.framework.TestDecorator"))
+			{
+				return arguments.object;
+			}
+        </cfscript>
+
+        <cfset decoratorNames = arguments.object.getAnnotation(annotationName="decorators") />
+		<cfset debug(getmetadata(arguments.object))>
+
+		<!--- Question: do we look up inheritence? --->
+		<cfif len(decoratorNames) gt 0>
+			<cfloop list="#decoratorNames#" index="decoratorPath">
+				<cfscript>
+					decorator = createObject("component", decoratorPath);
+					decorator.setTarget(object);
+					arguments.object = decorator; //flip it and reverse it.
+	            </cfscript>
+			</cfloop>
+		</cfif>
+
+		<cfreturn arguments.object>
+	</cffunction>
 
 </cfcomponent>

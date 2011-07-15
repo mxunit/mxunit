@@ -44,6 +44,11 @@
 	<cfreturn getTarget().getRunnableMethods() />
 </cffunction>
 
+<cffunction name="accept" access="public" returntype="boolean" output="false">
+	<cfargument name="testStruct" type="struct" required="true" hint="Structure for a function coming from getmetadata"/>
+	<cfreturn getTarget().accept(testStruct)>
+</cffunction>
+
 <cffunction name="initDebug" access="public" output="false">
 	<cfreturn getTarget().initDebug() />
 </cffunction>

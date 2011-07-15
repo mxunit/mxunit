@@ -68,8 +68,6 @@
 			<cfset ComponentObject = createObject("component",arguments.ComponentName) />
 		</cfif>
 
-		<cfset arguments.componentObject = applyDecorators(arguments.componentObject)>
-
 		<cfscript>
 			try{
 				//If the component already has methods, just update the method array
@@ -104,46 +102,11 @@
 			<cfset ComponentObject = createObject("component",arguments.ComponentName) />
 		</cfif>
 
-		<cfset arguments.componentObject = applyDecorators(arguments.componentObject)>
-
 		<cfset a_methods = ComponentObject.getRunnableMethods() />
 
 		<cfset add(arguments.ComponentName,ArrayToList(a_methods),ComponentObject) />
 
 		<cfreturn this />
-	</cffunction>
-
-	<cffunction name="applyDecorators" hint="applies the chain of decorators, if it exists" access="public" returntype="any" output="false">
-		<cfargument name="object" hint="the object to check to see if it needs some decorators applied" type="any" required="Yes">
-		<cfscript>
-			var meta = getMetadata(object);
-			var decorator = 0;
-			var decoratorPath = 0;
-			var decoratorNames = 0;
-
-			//if already a decorator, kick out.
-			if(isInstanceOf(arguments.object, "mxunit.framework.TestDecorator"))
-			{
-				return arguments.object;
-			}
-        </cfscript>
-        
-        <cfset decoratorNames = arguments.object.getAnnotation(annotationName="decorators") />
-
-		<!--- Question: do we look up inheritence? --->
-		<cfif len(decoratorNames) gt 0>
-			<cfloop list="#decoratorNames#" index="decoratorPath">
-				<cfscript>
-					decorator = createObject("component", decoratorPath);
-					decorator.setTarget(object);
-					arguments.object = decorator; //flip it and reverse it.
-	            </cfscript>
-			</cfloop>
-		</cfif>
-
-        <cfscript>
-			return arguments.object;
-        </cfscript>
 	</cffunction>
 
 	<cffunction name="run" returntype="any" access="remote" output="true" hint="Primary method for running TestSuites and individual tests.">
