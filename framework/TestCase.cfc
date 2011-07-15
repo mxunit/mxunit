@@ -77,12 +77,11 @@
 
 		<cfscript>
 			var utils = "";
+			super.init();
 			this.metadata = getMetaData(aTestCase);
 			utils = createObject("component","ComponentUtils");
 			this.installRoot = utils.getComponentRoot();
-			this = applyDecorators(aTestCase);
-			super.init();
-			return this;
+			return applyDecorators(aTestCase);
 		</cfscript>
 
 	</cffunction>
