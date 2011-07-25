@@ -168,7 +168,7 @@
 		<cfargument name="output" type="string" required="false" default="jqGrid" hint="Output format: html,xml,junitxml,jqGrid "><!--- html,xml,junitxml,jqGrid --->
 
 		<cfscript>
-			TestCase(this);
+			TestCase(this); //don't remove this. its breaks things (no I don't know why)
 
 			this.result = runTest();
 
@@ -502,9 +502,7 @@
         </cfscript>
 
         <cfset decoratorNames = arguments.object.getAnnotation(annotationName="decorators") />
-		<cfset debug(getmetadata(arguments.object))>
 
-		<!--- Question: do we look up inheritence? --->
 		<cfif len(decoratorNames) gt 0>
 			<cfloop list="#decoratorNames#" index="decoratorPath">
 				<cfscript>
