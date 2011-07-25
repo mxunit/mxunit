@@ -440,6 +440,24 @@
 
 		<cfset metadata = getMetadata(metadataTarget) />
 
+		<!--- go lookup up inheritence tree, and move the metadata if neccessary --->
+		<cfscript>
+			if(!Len(arguments.methodName))
+			{
+				while(StructKeyExists(metadata, "extends"))
+				{
+					if(StructKeyExists(metadata,"mxunit:" & arguments.annotationName) OR
+						StructKeyExists(metadata,arguments.annotationName)
+						)
+					{
+						break;
+					}
+
+					metadata = metadata.extends;
+				}
+			}
+        </cfscript>
+
 		<cfif StructKeyExists(metadata,"mxunit:" & arguments.annotationName)>
 			<cfset returnVal = metadata["mxunit:" & arguments.annotationName] />
 		<cfelseif StructKeyExists(metadata,arguments.annotationName)>

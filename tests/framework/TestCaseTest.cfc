@@ -5,7 +5,8 @@
  @history
  --->
 
-<cfcomponent  extends="mxunit.framework.TestCase" mxunit:testCaseLevelWithNS="valueWithNS" testCaseLevelWithoutNS="valueWithoutNS">
+<cfcomponent  extends="mxunit.framework.TestCase" mxunit:testCaseLevelWithNS="valueWithNS" testCaseLevelWithoutNS="valueWithoutNS"
+													overWriteMe="false">
 
   <cffunction name="getSomeValue" hint="Used by child test for testing inherited tests" returntype="string">
    <cfreturn "Some TestCase Data To Read" />
