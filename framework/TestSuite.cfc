@@ -99,7 +99,7 @@
 		<cfset var a_methods = "" />
 
 		<cfif isSimpleValue(arguments.ComponentObject)>
-			<cfset ComponentObject = createObject("component",arguments.ComponentName) />
+			<cfset ComponentObject = createObject("component",arguments.ComponentName).TestCase() />
 		</cfif>
 
 		<cfset a_methods = ComponentObject.getRunnableMethods() />
