@@ -502,18 +502,19 @@
         </cfscript>
 
         <cfset decoratorNames = arguments.object.getAnnotation(annotationName="decorators") />
-
-		<cfif len(decoratorNames) gt 0>
-			<cfloop list="#decoratorNames#" index="decoratorPath">
-				<cfscript>
-					decorator = createObject("component", decoratorPath);
-					decorator.setTarget(object);
-					arguments.object = decorator; //flip it and reverse it.
-	            </cfscript>
-			</cfloop>
-		</cfif>
+		<cfset decoratorNames = listPrepend( decoratorNames, getRequiredDecoratorPaths() ) />
+<cflog text="#decoratorNames#" >
+		<cfloop list="#decoratorNames#" index="decoratorPath">
+			<cfset decorator = createObject("component", decoratorPath)/>
+			<cfset decorator.setTarget(object)/>
+			<cfset arguments.object = decorator/> <!--- flip it and reverse it. --->
+		</cfloop>
 
 		<cfreturn arguments.object>
 	</cffunction>
+
+	<cffunction name="getRequiredDecoratorPaths" output="false" access="public" returntype="any" hint="Returns a list of fully-qualified paths to framework-required decorators">
+    	<cfreturn "mxunit.framework.decorators.DataProviderDecorator">
+    </cffunction>
 
 </cfcomponent>
