@@ -44,6 +44,11 @@
 	<cfreturn getTarget().getRunnableMethods() />
 </cffunction>
 
+<cffunction name="setMockingFramework" access="public" output="false">
+	<cfargument name="name" type="Any" required="true" />
+	<cfset getTarget().setMockingFramework(argumentCollection=arguments) />
+</cffunction>
+
 <cffunction name="initDebug" access="public" output="false">
 	<cfreturn getTarget().initDebug() />
 </cffunction>
@@ -70,6 +75,14 @@
 
 <cffunction name="clearClassVariables" access="public">
 	<cfset getTarget().clearClassVariables()>
+</cffunction>
+
+<cffunction name="getExpected" access="public">
+	<cfreturn getTarget().getExpected() />
+</cffunction>
+
+<cffunction name="getActual" access="public">
+	<cfreturn getTarget().getActual() />
 </cffunction>
 
 <cffunction name="getTarget" hint="get the current Target. May actually be another decorator." access="public" returntype="any" output="false">

@@ -503,7 +503,7 @@
 
         <cfset decoratorNames = arguments.object.getAnnotation(annotationName="decorators") />
 		<cfset decoratorNames = listPrepend( decoratorNames, getRequiredDecoratorPaths() ) />
-<cflog text="#decoratorNames#" >
+
 		<cfloop list="#decoratorNames#" index="decoratorPath">
 			<cfset decorator = createObject("component", decoratorPath)/>
 			<cfset decorator.setTarget(object)/>

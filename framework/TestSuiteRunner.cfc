@@ -104,7 +104,7 @@
 			<cfset results.addContent(outputOfTest) />
 
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfset addFailureToResults(results=results,expected=testCase.expected,actual=testCase.actual,exception=cfcatch,content=outputOfTest)>
+				<cfset addFailureToResults(results=results, expected=testCase.getExpected(), actual=testCase.getActual(), exception=cfcatch, content=outputOfTest)>
 			</cfcatch>
 
 			<cfcatch type="any">
