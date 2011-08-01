@@ -7,13 +7,26 @@ Main component for performing assertions.
 <cfcomponent displayname="Assert"
              hint="Main component for asserting state. You will not generally need to instantiate this component directly - the framework makes it available for your TestCases. Use this to see what assertions are available and note that it can easily be extended using the Assert.addDecortor() method or by editing the mxunit-config.xml file, following the examples therein.">
 
-  <cfparam name="this.TestStyle" default="default">
+	<cfset variables.testStyle = "default">
 
-	<cfset clearClassVariables()>
+	<!--- A Note on these two class variables: We need a way to bus expected and actual values from equality assertions into the TestResult
+	for a given test function; This is 'the simplest way that works' and is safe because tests in a testcase are synchronous;
+	 if in the future we were to support asynchronous test function runs *within a test case*, this would break down--->
+	<cfset variables.expected = "">
+	<cfset variables.actual = "">
+
+	<cffunction name="getExpected">
+		<cfreturn expected>
+	</cffunction>
+
+	<cffunction name="getActual">
+		<cfreturn actual>
+	</cffunction>
+
 
 	<cffunction name="clearClassVariables" access="public">
-		<cfset this.expected = "">
-		<cfset this.actual = "">
+		<cfset variables.expected = "">
+		<cfset variables.actual = "">
 	</cffunction>
 
   <!--- Constructor;  named init instead of Assert because BlueDragon has a built-in
@@ -112,11 +125,11 @@ assert function and thus mxunit won't run on BD unless we do this --->
   <!--- convenience (sort of...maybe) for enabling users of cfunit to convert their stuff without terrible pain. a test case would need to use setTestStyle('cfunit') in the constructor or setUp method of a test --->
   <cffunction name="setTestStyle" access="public" hint="Sets the current test style.">
     <cfargument name="TestStyle" type="string" required="true" hint="Use 'default' to have the framework behave like cfcunit with respect to arguments; otherwise, pass 'cfunit' to behave like cfunit (i.e. for certain assertions, the message is the first arg). This only affects assertEquals and assertTrue">
-    <cfset this.TestStyle = arguments.TestStyle>
+    <cfset variables.TestStyle = arguments.TestStyle>
   </cffunction>
 
   <cffunction name="getTestStyle" access="public" output="false" hint="returns the current test style">
-    <cfreturn this.TestStyle>
+    <cfreturn variables.TestStyle>
   </cffunction>
 
   <cffunction name="fail" access="public" returntype="void" static="true" hint="Fails a test with the given MESSAGE.">
@@ -145,8 +158,8 @@ assert function and thus mxunit won't run on BD unless we do this --->
     <cfargument name="caseSensitive" required="false" default="false" hint="Whether or not to print values in original case." />
     <!---<cfset arguments = normalizeArguments("equals",arguments)>  --->
 		<cfif isSimpleValue(expected) AND isSimpleValue(actual)>
-			<cfset this.expected = arguments.expected>
-			<cfset this.actual = arguments.actual>
+			<cfset variables.expected = arguments.expected>
+			<cfset variables.actual = arguments.actual>
 		</cfif>
 	    <cfthrow type="mxunit.exception.AssertionFailedError" message="#arguments.message#:: Expected [#getStringValue(arguments.expected,arguments.caseSensitive)#] BUT RECEIVED [#getStringValue(arguments.actual,arguments.caseSensitive)#]. These values should be the same. " />
 	  </cffunction>
@@ -371,7 +384,7 @@ assert function and thus mxunit won't run on BD unless we do this --->
     <cfargument name="Args" required="true" type="struct">
     <cfset var s_args = StructNew()>
 
-    <cfif this.TestStyle eq "default">
+    <cfif variables.TestStyle eq "default">
       <cfreturn args>
     </cfif>
 
