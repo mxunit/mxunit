@@ -25,7 +25,7 @@
     <cftry>
       <cfset provider = context[arguments.dataprovider] />
       <cfcatch type="coldfusion.runtime.UndefinedElementException">
-	  <!--- Make sure simple numeric data passes, which would not be in variables scope --->	
+	  <!--- Make sure simple numeric data passes, which would not be in variables scope --->
 	  <cfif not isNumeric(dataProvider)>
       	<cfset _$throw() />
 	  </cfif>
@@ -50,7 +50,7 @@
     <cfelse>
 	       <cfthrow type="mxunit.exception.InvalidDataProviderException"
                 message="The dataprovider specified is not of a supported type"
-                detail="The supported types are query, array, and list" />
+                detail="The supported types are query, array, numeric, file, and list" />
     </cfif>
   </cffunction>
 
