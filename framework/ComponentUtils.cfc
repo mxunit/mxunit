@@ -25,11 +25,21 @@
 		<cfscript>
 			var root = expandPath("/");
 			var mxunit = 0;
+
+			//shortcut of the usual case of a virtualhost / alias on the web root
+			if(fileExists(expandPath("/mxunit/framework/mxunit-config.xml")))
+			{
+				return getContextRoot() &  "/mxunit";
+			}
 		</cfscript>
+
+		<!--- check for the a physical directory --->
 		<cfdirectory action="list" directory="#root#" recurse="true" name="mxunit" filter="mxunit-config.xml">
 
 		<cfif mxunit.RecordCount eq 0>
-			<cfthrow message="Could not find mxunit in the web root" />
+			<cfif mxunit.RecordCount eq 0>
+				<cfthrow message="Could not find mxunit in the web root" />
+			</cfif>
 		</cfif>
 
 		<cfscript>
