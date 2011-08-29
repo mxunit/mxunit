@@ -13,7 +13,7 @@
 			var expected = 'a QuicK BrOWN foX';
 			var actual = 'a QuicK BrOWN foX';
 			assertEqualsCase( expected , actual );
-		</cfscript> 
+		</cfscript>
 	</cffunction>
 
 
@@ -26,10 +26,10 @@
 			 fail('should not get here');
 			}
 			catch(mxunit.exception.AssertionFailedError e){
-			
+
 			}
-			
-		</cfscript> 
+
+		</cfscript>
 	</cffunction>
 
 
@@ -37,7 +37,7 @@
 		<cfscript>
 			var foo = [1,2,{foo='bar'}];
 			assert(true,"should pass");
-			
+
 			try{
 			  assert (false);
 			}
@@ -45,7 +45,7 @@
 			 //ok we're good
 			 // caught expected exception : assert(false)
 			}
-			
+
 			assert(1 eq 1);
 			try{
 			  assert (1 eq 0);
@@ -54,24 +54,24 @@
 			 //ok we're good
 			 // caught expected exception : assert(1 eq 0)
 			}
-			
+
 			try{
 			 assert (foo);
 			}
 			catch(Application e){
 			  // should not allow complex objects. But what's the exception type here, CF?
 			}
-			
+
 			try{
 			 assert ('some string');
 			}
 			catch(Expression e){
 			 // should not allow strings, either;
 			}
-			
+
 			//  assert (_MIN lt _MAX , "@see setUp() for system MIN and MAX values.");
-			
-		</cfscript> 
+
+		</cfscript>
 	</cffunction>
 
 
@@ -90,7 +90,7 @@
 			writeoutput(getStringValue(foo)) ;
 			exp = "test stringValue output from ComparatorTestData.cfc";
 			assertEquals(exp, getStringValue(myComponent3), "getStringValue(myComponent3) problem");
-		</cfscript> 
+		</cfscript>
 	</cffunction>
 
 
@@ -192,7 +192,7 @@
 	<cffunction name="testAssertEquals" access="public" returntype="void">
 		<cfscript>
 			assertEquals(myComponent4, myComponent3,"stringValue() implemented"); //
-		</cfscript> 
+		</cfscript>
 	</cffunction>
 
 
@@ -200,8 +200,8 @@
 		<cftry>
 			<cfset assertEquals("Please Excuse me sir","Please Excuse me madam") />
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfset assertEquals("Please Excuse me sir",this.expected) />
-				<cfset assertEquals("Please Excuse me madam",this.actual) />
+				<cfset assertEquals("Please Excuse me sir", getExpected()) />
+				<cfset assertEquals("Please Excuse me madam", getActual()) />
 			</cfcatch>
 		</cftry>
 	</cffunction>
@@ -211,13 +211,13 @@
 		<!--- trigger the assertion --->
 		<cfset assertEquals("one","one") />
 		<!--- now do the real assertions for this test --->
-		<cfset assertTrue(this.expected eq "","this.expected should have been empty but was #this.expected#") />
-		<cfset assertTrue(this.actual eq "", "this.actual should have been empty but was #this.actual#") />
+		<cfset assertTrue(getExpected() eq "","getExpected() should have been empty but was #getExpected()#") />
+		<cfset assertTrue(getActual() eq "", "getActual() should have been empty but was #getActual()#") />
 	</cffunction>
 
 
 	<cffunction name="testAssertTrue" access="public" returntype="void">
-		<cfscript>assertTrue(true,"This test should pass.");</cfscript> 
+		<cfscript>assertTrue(true,"This test should pass.");</cfscript>
 	</cffunction>
 
 
@@ -237,14 +237,14 @@
 			<cfscript>
 				assertEquals(myComponent1,myComponent2,"This should fail because toString() or stringValue() not implemented.");
 				assertEquals(1,2,"This should fail");
-			</cfscript> 
+			</cfscript>
 			<cfcatch type="mxunit.exception.AssertionFailedError" />
 		</cftry>
 	</cffunction>
 
 
 	<cffunction name="testFailure" access="public" returntype="void">
-		This tests an intentional failure. It should catch the exception correctly and return true. 
+		This tests an intentional failure. It should catch the exception correctly and return true.
 		<cftry>
 			<cfset fail("Did not catch AssertionFailedError") />
 			<cfcatch type="mxunit.exception.AssertionFailedError" />
@@ -492,7 +492,7 @@
 			myComponent4 = createObject("component","mxunit.tests.framework.fixture.ComparatorTestData");
 			_MIN = createObject("java","java.lang.Integer").MIN_VALUE;
 			_MAX = createObject("java","java.lang.Integer").MAX_VALUE;
-		</cfscript> 
+		</cfscript>
 	</cffunction>
 
 

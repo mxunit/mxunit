@@ -146,8 +146,8 @@
 			<cfset t.MESSAGE = "">
 			<cfset t.RESULT = s_test.TestStatus>
 			<cfset t.TIME = s_test.Time>
-			<cfset t.EXPECTED = s_test.Expected>
-			<cfset t.ACTUAL = s_test.Actual>
+			<cfset t.EXPECTED = s_test.expected>
+			<cfset t.ACTUAL = s_test.actual>
 			<!--- <cfset t.httprequestdata = getHTTPRequestData()> --->
 			<cfif not isSimpleValue(s_test.error)>
 				<cfset t.EXCEPTION = formatExceptionKey(s_test.error.type)>
