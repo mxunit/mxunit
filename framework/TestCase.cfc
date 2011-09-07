@@ -470,9 +470,7 @@
 	<cffunction name="expectException">
 		<cfargument name="expectedExceptionType" />
 		<cfargument name="expectedExceptionMessage" default="" />
-
-		<cfset this.expectedExceptionType = arguments.expectedExceptionType />
-		<cfset this.expectedExceptionMessage = arguments.expectedExceptionMessage />
+		<cfset structAppend( variables, arguments ) />
 	</cffunction>
 
 	 <cffunction name="orderedExpectation" access="public" hint="Method for mocking. Creates an OrderedExpectation object used for verify the order in which mocks have been called">
@@ -516,5 +514,23 @@
 	<cffunction name="getRequiredDecoratorPaths" output="false" access="public" returntype="any" hint="Returns a list of fully-qualified paths to framework-required decorators">
     	<cfreturn "mxunit.framework.decorators.DataProviderDecorator">
     </cffunction>
+
+    <cffunction name="setExpectedExceptionType" access="public">
+		<cfargument name="expectedExceptionType" type="string" required="true"/>
+		<cfset variables.expectedExceptionType = arguments.expectedExceptionType />
+	</cffunction>
+
+    <cffunction name="setExpectedExceptionMessage" access="public">
+		<cfargument name="expectedExceptionMessage" type="string" required="true"/>
+		<cfset variables.expectedExceptionMessage = arguments.expectedExceptionMessage />
+	</cffunction>
+
+    <cffunction name="getExpectedExceptionType" access="public">
+		<cfreturn variables.expectedExceptionType />
+	</cffunction>
+
+	<cffunction name="getExpectedExceptionMessage" access="public">
+		<cfreturn variables.expectedExceptionMessage />
+	</cffunction>
 
 </cfcomponent>

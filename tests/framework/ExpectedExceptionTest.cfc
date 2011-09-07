@@ -81,8 +81,6 @@
 
 
 	<cfscript>
-
-
 		function expectedExceptionTestUsingScriptMethodAndSingleName(){
 			expectException("Bar");
 			_throw("Bar");
@@ -95,7 +93,7 @@
 
 		function expectedExceptionShouldSetPropertyInTestCase(){
 			expectException("my.funny.ValantineException");
-			assertEquals( "my.funny.ValantineException", this.expectedExceptionType );
+			assertEquals( "my.funny.ValantineException", this.getExpectedExceptionType() );
 			expectException("");
 		}
 
