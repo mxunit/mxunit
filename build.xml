@@ -358,7 +358,8 @@
 				FTPs the nightly build to the web server
 			=================================
 	-->
-	<target  name="publishNightly" depends="runTests,packageNightly,publishTestResults">
+	<target  name="publishNightly" depends="runTests,packageNightly">
+	<!-- 
 		<ftp server="${ftp.site}" userid="${ftp.username}" password="${ftp.password}" action="del">
 			<fileset>
 				<include name="nightly/mxunit-nightly*.zip" />
@@ -369,6 +370,7 @@
 				<include name="mxunit-nightly*" />
 			</fileset>
 		</ftp>
+		 -->
 	</target>
 
 	<!--
