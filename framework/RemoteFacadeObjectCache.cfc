@@ -2,17 +2,17 @@
 
 	<cfset storageScope = "server">
 	<cfset initializeSuitePool()>
-	
+
 	<cffunction name="initializeSuitePool" access="public" returntype="struct">
 		<cfreturn structGet("#storageScope#.MXUnitRemoteTestSuites")>
 	</cffunction>
 
 	<cffunction name="getSuitePool" access="public" hint="returns the pool struct" returntype="struct">
 		<!--- THIS IS TEMPORARY!!! keeping this here until the structget bug is fixed in railo; then, revert to:
-		
+
 		<cfreturn initializeSuitePool()>
-		
-		 ---> 
+
+		 --->
 		<cfreturn server.MXUnitRemoteTestSuites>
 	</cffunction>
 
@@ -56,13 +56,13 @@
 			</cfif>
 
 			<cfif NOT StructKeyExists(pool[TestRunKey].Components,componentName)>
-				<cfset pool[TestRunKey].Components[componentName] = createObject("component",componentName)>
+				<cfset pool[TestRunKey].Components[componentName] = createObject("component", componentName).TestCase()>
 				<!---  <cflog file="mxunit" text="key is #TestRunKey#; component is #componentName#">  --->
 			</cfif>
 			<cfset obj = pool[TestRunKey].Components[componentName]>
 			<cfset pool[TestRunKey].LastAccessed = now()>
 		<cfelse>
-			<cfset obj = createObject("component",componentName)>
+			<cfset obj = createObject("component", componentName).init()>
 		</cfif>
 		<cfreturn obj>
 	</cffunction>

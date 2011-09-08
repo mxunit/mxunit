@@ -5,7 +5,8 @@
  @history
  --->
 
-<cfcomponent  extends="mxunit.framework.TestCase">
+<cfcomponent  extends="mxunit.framework.TestCase" mxunit:testCaseLevelWithNS="valueWithNS" testCaseLevelWithoutNS="valueWithoutNS"
+													overWriteMe="false">
 
   <cffunction name="getSomeValue" hint="Used by child test for testing inherited tests" returntype="string">
    <cfreturn "Some TestCase Data To Read" />
@@ -48,52 +49,52 @@
 		<cfset s_test = structnew()>
 		<cfset s_test.name = "setup">
 		<cfset s_test.access = "public">
-		<cfset result = this.testIsAcceptable(s_test)>
+		<cfset result = this.accept(s_test)>
 		<cfset assertFalse(result,"setup should not be acceptable")>
 
 		<cfset s_test.name = "teardown">
-		<cfset result = this.testIsAcceptable(s_test)>
+		<cfset result = this.accept(s_test)>
 		<cfset assertFalse(result,"teardown should not be acceptable")>
 	</cffunction>
 
 	<cffunction name="privateAndPackageAreNotAcceptableTests">
 		<cfset var s_test = "" />
 		<cfset var result = "" />
-		<!--- <cfset makePublic(this,"testIsAcceptable")> --->
+		<!--- <cfset makePublic(this,"accept")> --->
 
 		<cfset s_test = structnew()>
 		<cfset s_test.name = "someTestGoesHere">
 		<cfset s_test.access = "private">
-		<cfset result = this.testIsAcceptable(s_test)>
+		<cfset result = this.accept(s_test)>
 		<cfset assertFalse(result,"private test not be acceptable")>
 
 		<cfset s_test.access = "package">
-		<cfset result = this.testIsAcceptable(s_test)>
+		<cfset result = this.accept(s_test)>
 		<cfset assertFalse(result,"package test should not be acceptable")>
 	</cffunction>
 
 	<cffunction name="falseTestAttribute_IsNotAcceptableTest">
 		<cfset var s_test = "" />
 		<cfset var result = "" />
-		<!--- <cfset makePublic(this,"testIsAcceptable")> --->
+		<!--- <cfset makePublic(this,"accept")> --->
 
 		<cfset s_test = structnew()>
 		<cfset s_test.name = "someTestGoesHere">
 		<cfset s_test.access = "public">
 		<cfset s_test.test = false>
-		<cfset result = this.testIsAcceptable(s_test)>
+		<cfset result = this.accept(s_test)>
 		<cfset assertFalse(result,"test=false test should not be acceptable")>
 	</cffunction>
 
 	<cffunction name="cfthreadsInTestAreNotAcceptableTests">
 		<cfset var s_test = "" />
 		<cfset var result = "" />
-		<!--- <cfset makePublic(this,"testIsAcceptable")> --->
+		<!--- <cfset makePublic(this,"accept")> --->
 
 		<cfset s_test = structnew()>
 		<cfset s_test.name = "_cffunccfthread">
 		<cfset s_test.access = "public">
-		<cfset result = this.testIsAcceptable(s_test)>
+		<cfset result = this.accept(s_test)>
 		<cfset assertFalse(result,"methods injected into cfcs as a result of cfthread calls are not acceptable")>
 	</cffunction>
 
@@ -101,12 +102,12 @@
 	<cffunction name="publicFunctionsAreAcceptableTests">
 		<cfset var s_test = "" />
 		<cfset var result = "" />
-		<!--- <cfset makePublic(this,"testIsAcceptable")> --->
+		<!--- <cfset makePublic(this,"accept")> --->
 
 		<cfset s_test = structnew()>
 		<cfset s_test.name = "ILoveToTestCF">
 		<cfset s_test.access = "public">
-		<cfset result = this.testIsAcceptable(s_test)>
+		<cfset result = this.accept(s_test)>
 		<cfset assertTrue(result,"Almost all public functions are testable. This one should be, too")>
 	</cffunction>
 
@@ -256,6 +257,14 @@
 		assertEquals("justName",getAnnotation("testWithJustNameAnnotation","myAttribute","default"));
 	}
 
+	function getAnnotationReturnsValueFromTestCaseUsingMxunitNamespace() {
+		assertEquals("valueWithNS",getAnnotation(annotationName="testCaseLevelWithNS"));
+	}
+
+	function getAnnotationReturnsValueFromTestCaseUsingJustName() {
+		assertEquals("valueWithoutNS",getAnnotation(annotationName="testCaseLevelWithoutNS"));
+	}
+
 	</cfscript>
 
 	<!--- Testing getAnnotation with dataprovider --->
@@ -320,8 +329,8 @@
 	    <!--- <cfset debug(getMetadata(this))>   --->
 
 	    <!--- only want to make this public one time!!! Otherwise, on railo, bad things happen --->
-	    <cfif not StructKeyExists(this,"testIsAcceptable")>
-	    	<cfset makePublic(this,"testIsAcceptable")>
+	    <cfif not StructKeyExists(this,"accept")>
+	    	<cfset makePublic(this,"accept")>
 	    </cfif>
 		<!--- need to make sure we're starting with no mocking framework set --->
 		<cfset setMockingFramework("") />

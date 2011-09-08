@@ -1,4 +1,5 @@
- <cfcomponent  extends="mxunit.tests.framework.TestCaseTest" hint="Should run if this extends other tests. Should not need to extend mxunit.frameowrk.TestCase">
+ <cfcomponent  extends="mxunit.tests.framework.TestCaseTest" hint="Should run if this extends other tests. Should not need to extend mxunit.frameowrk.TestCase"
+			 	overWriteMe="true">
 
 
 
@@ -18,7 +19,19 @@
     we are adding one, so the actual value is changed. --->
   </cffunction>
 
+<cfscript>
+	function getAnnotationReturnsValueFromTestCaseUsingMxunitNamespace() {
+		assertEquals("valueWithNS",getAnnotation(annotationName="testCaseLevelWithNS"));
+	}
 
+	function getAnnotationReturnsValueFromTestCaseUsingJustName() {
+		assertEquals("valueWithoutNS",getAnnotation(annotationName="testCaseLevelWithoutNS"));
+	}
+
+	function getOverwrittenAnnotationReturnsValueFromTestCaseUsingJustName() {
+		assertTrue(getAnnotation(annotationName="overWriteMe"));
+	}
+</cfscript>
 
   <cffunction name="setUp" access="public" returntype="void">
    <!--- Seeing if explicit super.setUp() works, too. Could test

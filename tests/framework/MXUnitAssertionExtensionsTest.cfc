@@ -9,7 +9,7 @@
 			// grandparent
 			assertIsTypeOf(this,"mxunit.framework.Assert");
 			//last of the mohicans
-			assertIsTypeOf(this,"web-inf.cftags.component");
+			assertIsTypeOf(this,"WEB-INF.cftags.component");
 		</cfscript>
 	</cffunction>
 
@@ -30,7 +30,7 @@
 		<cfscript>
 			var webinf = createObject("component","WEB-INF.cftags.component");
 			//guard - thanks Marc!
-			assertIsTypeOf(webinf,"web-inf.cftags.component");
+			assertIsTypeOf(webinf,"WEB-INF.cftags.component");
 			try{
 				assertIsTypeOf(webinf,"mxunit.bogus.cfc.package.I'm not here");
 			} catch(mxunit.exception.AssertionFailedError e){

@@ -77,11 +77,10 @@
 		<cfset var tickCountAtStart = getTickCount() />
 		<cfset var outputOfTest = "" />
 
-		<cfset testCase.expectedExceptionType = '' />
-		<cfset testCase.expectedExceptionMessage = '' />
+		<cfset testCase.setExpectedExceptionType( testCase.getAnnotation(methodName,"expectedException") ) />
+		<cfset testCase.setExpectedExceptionMessage('') />
 
 		<cftry>
-			<cfset testCase.expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
 
 			<cfset results.startTest(methodName,currentTestSuiteName) />
 
@@ -94,9 +93,9 @@
 
 			<cfset testCase.setUp()/>
 
-			<cfset outputOfTest = runTest(testCase, methodName) />
+			<cfset outputOfTest = testCase.invokeTestMethod(methodName)>
 
-			<cfset assertExpectedExceptionTypeWasThrown(testCase.expectedExceptionType, testCase.expectedExceptionMessage) />
+			<cfset assertExpectedExceptionTypeWasThrown( testCase.getExpectedExceptionType(), testCase.getExpectedExceptionMessage() ) />
 
 			<cfset results.addSuccess('Passed') />
 
@@ -104,11 +103,12 @@
 			<cfset results.addContent(outputOfTest) />
 
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfset addFailureToResults(results=results,expected=testCase.getExpected(),actual=testCase.getActual(),exception=cfcatch,content=outputOfTest)>
+				<cfset addFailureToResults(results=results, expected=testCase.getExpected(), actual=testCase.getActual(), exception=cfcatch, content=outputOfTest)>
 			</cfcatch>
 
 			<cfcatch type="any">
-				<cfset handleCaughtException(rootOfException(cfcatch), testCase.expectedExceptionType, testCase.expectedExceptionMessage, results, outputOfTest, testCase, cfcatch)>
+				<cflog text="inside cfcatch. #cfcatch.message# #cfcatch.detail#   #testCase.getExpectedExceptionType()#, #testCase.getexpectedExceptionMessage()# ">
+				<cfset handleCaughtException(rootOfException(cfcatch), testCase.getExpectedExceptionType(), testCase.getExpectedExceptionMessage(), results, outputOfTest, testCase, cfcatch)>
 			</cfcatch>
 		</cftry>
 
@@ -131,25 +131,6 @@
 		<cfset results.addProcessingTime(getTickCount()-tickCountAtStart) />
 
 		<cfset results.endTest(methodName) />
-	</cffunction>
-
-	<cffunction name="runTest" access="private">
-		<cfargument name="testCase" />
-		<cfargument name="methodName"/>
-		<cfset var outputOfTest = "" />
-		<cfset var dpName = "" />
-		<cfsavecontent variable="outputOfTest">
-				<cfset dpName = testCase.getAnnotation(methodName,"dataprovider") />
-
-				<cfif len(dpName) gt 0>
-					<cfset testCase._$snif = _$snif />
-					<cfset dataProviderHandler.init(testCase._$snif()) />
-					<cfset dataProviderHandler.runDataProvider(testCase,methodName,dpName)>
-				<cfelse>
-					<cfinvoke component="#testCase#" method="#methodName#">
-				</cfif>
-		</cfsavecontent>
-		<cfreturn outputOfTest />
 	</cffunction>
 
 	<cffunction name="assertExpectedExceptionTypeWasThrown">

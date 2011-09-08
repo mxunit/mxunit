@@ -140,7 +140,7 @@ function findByPatternTestWithNamedArgs(){
 }
 
 
-function matchLiterlToPatterns(){
+function matchLiteralToPatterns(){
    var actual = false;
    var literal = { 1='bar', 2=321654};
    var pattern = { 1='{string}', 2='{numeric}'};
