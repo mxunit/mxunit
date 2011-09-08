@@ -97,25 +97,8 @@
   --->
   <cffunction name="testGetInstallRoot">
   <cfscript>
-    //@pre metadata will always be dot delimitted list
-    //     web path separator will always be '/'
-    //     method will be used by framework only
-    //@post
-   var root = cu.getInstallRoot("foo.bar.nanoo.mxunit.framework.TestResult");
-   assertEquals("#getContextRootPath()#/foo/bar/nanoo/mxunit/", root);
-
    root = cu.getInstallRoot();
-   assertEquals("#getContextRootPath()#/mxunit/",root);
-
-   root = cu.getInstallRoot("mxunit.mxunit.framework.TestCase");
-   assertEquals("#getContextRootPath()#/mxunit/mxunit/",root);
-
-   root = cu.getInstallRoot("mxunit.framework.TestCase");
-   assertEquals("#getContextRootPath()#/mxunit/",root);
-
-   root = cu.getInstallRoot("mxunit.foo.bar.mxunit.framework.TestCase");
-   assertEquals("#getContextRootPath()#/mxunit/foo/bar/mxunit/",root);
-
+   assertEquals("#getContextRoot()#/mxunit",root);
   </cfscript>
 </cffunction>
 

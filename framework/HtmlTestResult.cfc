@@ -14,7 +14,7 @@
 		<cfset this.successes = arguments.testResults.testSuccesses />
 		<cfset this.totalExecutionTime = arguments.testResults.totalExecutionTime />
 		<cfset this.testResults = arguments.testResults.results />
-		<cfset this.installRoot = createObject("component","ComponentUtils").getComponentRoot() />
+		<cfset this.installRoot = createObject("component","ComponentUtils").getInstallRoot() />
     <cfset totalBad = this.failures+this.errors />
     <cfif totalBad eq 0 >
       <cfset this.sucessRatio = 1 />
@@ -48,17 +48,17 @@
 	<cffunction name="printResources" access="public" output="true" hint="Prints CSS and JavaScript refs for stylizing">
  		<cfargument name="mxunit_root" required="no" default="./mxunit" hint="Location in the webroot where MXUnit is installed." />
 		<cfargument name="test_title" required="false" default="MXUnit Test Results" offhint="An HTML title to display for this test" />
-			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/styles.css">
-			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tablesorter/green/style.css">
-			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/theme/results.css">
-			<link rel="stylesheet" type="text/css" href="/#mxunit_root#/resources/jquery/tipsy/stylesheets/tipsy.css">
+			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/theme/styles.css">
+			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/jquery/tablesorter/green/style.css">
+			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/theme/results.css">
+			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/jquery/tipsy/stylesheets/tipsy.css">
 
-			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.min.js"></script>
-			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery-ui.min.js"></script>
-			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.sparkline.min.js"></script>
-			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
-			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/tipsy/javascripts/jquery.tipsy.js"></script>
-			<script type="text/javascript" src="/#mxunit_root#/resources/jquery/jquery.runner.js"></script>
+			<script type="text/javascript" src="#mxunit_root#/resources/jquery/jquery.min.js"></script>
+			<script type="text/javascript" src="#mxunit_root#/resources/jquery/jquery-ui.min.js"></script>
+			<script type="text/javascript" src="#mxunit_root#/resources/jquery/jquery.sparkline.min.js"></script>
+			<script type="text/javascript" src="#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
+			<script type="text/javascript" src="#mxunit_root#/resources/jquery/tipsy/javascripts/jquery.tipsy.js"></script>
+			<script type="text/javascript" src="#mxunit_root#/resources/jquery/jquery.runner.js"></script>
 
       <title>#test_title#</title>
 	</cffunction>
@@ -80,7 +80,7 @@
 
 	<cffunction name="getRawHtmlResults" access="public" returntype="string" output="false" hint="Returns a _raw_ HTML representation of the TestResult">
 		<cfargument name="mxunit_root" required="no" default="#this.installRoot#" hint="Location in the webroot where MXUnit is installed." />
-		
+
 		<cfset var result = "" />
 		<cfset var classname = "" />
 		<cfset var i = "" />
@@ -122,7 +122,7 @@
 								<a href="##" rel="tipsy" title="Filter by Successes">#this.successes# Successes</a>
 							</li>
 						</ul>
-						
+
 						<!-- brain no working, but this does --->
 						<cfif find('debug=true',cgi.QUERY_STRING)>
 							<cfset toggledUrl = cgi.SCRIPT_NAME & '?' & replace(cgi.QUERY_STRING,'debug=true','debug=false') />
@@ -134,11 +134,11 @@
 							<cfset toggledUrl = cgi.SCRIPT_NAME  & '?' & cgi.QUERY_STRING & '&debug=true'  />
 							<cfset bugMessage = 'Run with verbose debug output.' />
 						</cfif>
-						
+
 						<div id="bugjar">
-							<a id="bug" href="#toggledUrl#" rel="tipsy" title="#bugMessage#"><img border="0" height="24" align="absmiddle" src="/#mxunit_root#/images/bug_green.gif"></a>
+							<a id="bug" href="#toggledUrl#" rel="tipsy" title="#bugMessage#"><img border="0" height="24" align="absmiddle" src="#mxunit_root#/images/bug_green.gif"></a>
 						</div>
-						
+
 						<div id="sparkcontainer" rel="tipsy" title="#this.testRuns# tests in #this.totalExecutionTime#ms. Success ratio #int(this.sucessRatio*100)#%">
 							<span class="mxunittestsparks">
 								Replace this in HTMLTestResult <cfscript>
@@ -152,12 +152,12 @@
 									for(i=1;i lte this.successes;i=i+1){
 										writeoutput(1 & ",");
 									}
-									
+
 									i=1;
-								</cfscript> 
+								</cfscript>
 							</span>
 						</div>
-						
+
 						<div class="clear"><!-- clear --></div>
 					</div>
 
@@ -173,7 +173,7 @@
 							</cfif>
 							<cfset classname = this.testResults[i].component>
 							<!--- printing incorrect results for MXUnitInstallTest.cfc - could be engine bug --->
-							<cfset classtesturl = "/" & Replace(this.testResults[i].component, ".", "/", "all") & ".cfc?method=runtestremote&amp;output=html">
+							<cfset classtesturl = CGI.CONTEXT_PATH & "/" & Replace(this.testResults[i].component, ".", "/", "all") & ".cfc?method=runtestremote&amp;output=html">
 
 							<h3><a href="#classtesturl#" title="Run all tests in #this.testResults[i].component#">#this.testResults[i].component#</a></h3>
 
