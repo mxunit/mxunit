@@ -258,8 +258,8 @@ for each member of the data provider
 		<cfscript>
 			var providerFile = context[dataProvider];
 			var extension = listLast(providerFile, ".");
-			var poi = createObject("component", "POIUtility").init();
-			var csv = createObject("component", "CSVUtility");
+			var poi = createObject("component", "mxunit.framework.POIUtility").init();
+			var csv = createObject("component", "mxunit.framework.CSVUtility");
 			var readResult = "";
 			if(extension eq "xls")
 			{
