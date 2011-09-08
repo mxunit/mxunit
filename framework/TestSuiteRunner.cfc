@@ -107,7 +107,7 @@
 			</cfcatch>
 
 			<cfcatch type="any">
-				<cflog text="inside cfcatch. #cfcatch.message# #cfcatch.detail#   #testCase.getExpectedExceptionType()#, #testCase.getexpectedExceptionMessage()# ">
+				<!---<cflog text="inside cfcatch. #cfcatch.message# #cfcatch.detail#   #testCase.getExpectedExceptionType()#, #testCase.getexpectedExceptionMessage()# ">--->
 				<cfset handleCaughtException(rootOfException(cfcatch), testCase.getExpectedExceptionType(), testCase.getExpectedExceptionMessage(), results, outputOfTest, testCase, cfcatch)>
 			</cfcatch>
 		</cftry>
