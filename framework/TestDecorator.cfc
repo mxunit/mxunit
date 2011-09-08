@@ -119,6 +119,17 @@
 	<cffunction name="getVariablesScope" access="public" hint="Door into another component's variables scope">
 		<cfreturn getTarget().getBaseTarget().getVariablesScope() />
 	</cffunction>
+	
+	<cffunction name="onMissingMethod" hint="Delegates any missing method calls down the decorator chain, ending at the base target. If a function is still not found, a method not found exception will result">
+		<cfargument name="missingMethodName" type="string" required="true"/>
+		<cfargument name="missingMethodArguments" type="any" required="false"/>
+		<cfset var result = "">
+		<cfinvoke component="#getTarget()#" method="#missingMethodName#" argumentcollection="#missingMethodArguments#" returnvariable="result">
+		
+		<cfif isDefined("result")>
+			<cfreturn result>
+		</cfif>
+	</cffunction>
 
 	<!------------------------------------------- PACKAGE ------------------------------------------->
 
