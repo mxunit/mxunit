@@ -18,15 +18,15 @@ for each member of the data provider
 		<cfset var dpName = getAnnotation(methodName, "dataprovider")/>
 		<cfset var outputOfTest = "">
 		<cfif len(dpName)>
-			<cflog text="inside dataproviderdecorator....  running dataprovider named #dpName#">
+			<!---<cflog text="inside dataproviderdecorator....  running dataprovider named #dpName#">--->
 
 			<cfset variables.context = getVariablesScope() />
 
 			<cfsavecontent variable="outputOfTest">
 				<cfset runDataProvider(methodName, dpName)>
 			</cfsavecontent>
+
 			<cfreturn outputOfTest>
-			<!---<cfreturn getTarget().invokeTestMethod(argumentCollection=arguments)/>--->
 		<cfelse>
 			<cfreturn getTarget().invokeTestMethod(argumentCollection=arguments)/>
 		</cfif>
@@ -53,6 +53,8 @@ for each member of the data provider
 			<cfset runQueryDataProvider(methodName, dataProvider)>
 		<cfelseif isArray(provider)>
 			<cfset runArrayDataProvider(methodName, dataProvider)>
+		<cfelseif isStruct(provider)>
+			<cfset runStructDataProvider(methodName, dataProvider)>
 		<cfelseif isNumeric(provider) or isNumeric(dataProvider)>
 			<cfset runNumericDataProvider(methodName, dataProvider)>
 		<cfelseif fileExists(provider)>
@@ -85,8 +87,6 @@ for each member of the data provider
 			var temp = structNew();
 		</cfscript>
 
-		<cfthrow type="NotImplementedException" message="Need a good usecase for this">
-
 		<cfif not arrayLen(getMetaData(method).parameters)>
 			<cfthrow type="mxunit.exception.MissingDataProviderArgumentException"
 			         message="You must specify a  <cfargument...> when using the dataprovider annotation in your test."
@@ -96,20 +96,14 @@ for each member of the data provider
 		<cfscript>
 			structName = getMetaData(method).parameters[1].name;
 			structObject = context[dataProvider];
-			args[structName] = structObject;
+			//args[structName] = structObject;
 		</cfscript>
 
-		<cfdump var="#structObject#">
 		<cfloop collection="#structObject#" item="item">
-			<!---   <cfset temp = structNew() />
-			     <cfset temp[item] = structObject[item] >
-			     <cfdump var="#temp#">
-			     <cfset args = temp>
-			     <cfdump var="#structObject[item]#">
-			      <cfinvoke component="#arguments.objectUnderTest#"
-			                method="#arguments.methodName#"
-			                argumentcollection="#args#" />
-			 --->
+			<cfset temp = structNew() />
+			     <cfset temp[item] = structObject[item]>
+			     <cfset args[structName] = temp>
+			     <cfset _$invoke(methodName, args)>
 		</cfloop>
 	</cffunction>
 
