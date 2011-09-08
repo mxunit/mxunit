@@ -378,6 +378,7 @@
 		=================================
 	-->
 	<target name="testFTP" depends="init">
+		<!-- <echoproperties prefix="ftp" /> -->
 		<ftp server="${ftp.site}" userid="${ftp.username}" password="${ftp.password}" action="list" listing="ftp.listing" verbose="true">
 			<fileset>
 				<include name="index.html" />

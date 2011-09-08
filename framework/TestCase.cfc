@@ -533,4 +533,7 @@
 		<cfreturn variables.expectedExceptionMessage />
 	</cffunction>
 
+	<cffunction name="getVariablesScope" access="public" hint="Front door into the Test's variables scope">
+		<cfreturn variables>
+	</cffunction>
 </cfcomponent>

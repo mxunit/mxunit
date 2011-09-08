@@ -116,6 +116,10 @@
 		<cfreturn getTarget().getBaseTarget()/>
 	</cffunction>
 
+	<cffunction name="getVariablesScope" access="public" hint="Door into another component's variables scope">
+		<cfreturn getTarget().getBaseTarget().getVariablesScope() />
+	</cffunction>
+
 	<!------------------------------------------- PACKAGE ------------------------------------------->
 
 	<!------------------------------------------- PRIVATE ------------------------------------------->
