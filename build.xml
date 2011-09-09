@@ -41,7 +41,7 @@
 			Generates the zip archive
 		=================================
 	-->
-	<target name="package" depends="clean,genApiDocs" description="--> packages the appropriate files into the deployment-ready zip file. use this for testing; otherwise, use publish">
+	<target name="package" depends="clean,getVersion,genApiDocs" description="--> packages the appropriate files into the deployment-ready zip file. use this for testing; otherwise, use publish">
 		<echo message="building ${zipfile}. basedir is  ${basedir}" />
 		<zip destfile="${zipfile}" casesensitive="false">
 			<zipfileset dir="${basedir}" includes="*.*,ant/,buildprops/,eclipse/,doc/,framework/,generator/,images/,PluginDemoTests/,resources/,runner/,samples/,tests/,lib/ant-contrib**" excludes=".settings/,.git/,.gitignore,MXUnitInstallTest.cfc,**/testresults/,**/stats/,**/junithtml/,.project,.deployment,**/unames.properties,tests/tmp/,ftp.listing,**/*.db,**/copysnippets.properties,**/copydictionary**,**/*.bak,buildprops/nightlyversion.properties,settings.xml,README.html,README.textile,README-toc.xml" prefix="mxunit" casesensitive="false" />
@@ -164,7 +164,7 @@
 			Creates the zip file for the current version
 		=================================
 	-->
-	<target name="version" depends="init">
+	<target name="getVersion" depends="init">
 		<property file="${version.file}" />
 
 		<property name="build.version" value="${build.major}.${build.minor}.${build.buildnum}${build.notation}" />
@@ -172,7 +172,7 @@
 
 		<echo message="build.version is ${build.version} -- zipfile is ${zipfile}" />		
 		
-		<replaceregexp file="${readme.file}" match="Version Info:(.*)" replace="Version Info: This is release build ${build.version}, built on ${build.date}" />
+		<!-- <replaceregexp file="${readme.file}" match="Version Info:(.*)" replace="Version Info: This is release build ${build.version}, built on ${build.date}" /> -->
 	</target>
 
 	<!--
@@ -181,7 +181,7 @@
 			Uploads the release zip to the Google Code site
 		=================================
 	-->
-	<target name="upload" depends="version">
+	<target name="upload" depends="getVersion">
 		<input message="Please add a summary for this version" addproperty="build.summary" defaultvalue="MXUnit Unit Test Framework version ${build.version}" />
 
 		<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpathref="project.classpath" name="gcupload" />
@@ -195,7 +195,7 @@
 			Updates the version on the website
 		=================================
 	-->
-	<target name="updatewebsite" depends="version">
+	<target name="updatewebsite" depends="getVersion">
 		<!-- ftp the version file to the website and reinit the application -->
 		<ftp server="${ftp.site}" userid="${ftp.username}" password="${ftp.password}" remotedir="">
 			<fileset dir="buildprops">
@@ -514,7 +514,7 @@
 		</git>
 	</target>
 	
-	<target name="githubUploadTest" depends="init,version">
+	<target name="githubUploadTest" depends="init,getVersion">
 		<property name="github.user" value="mxunit" />
 		<property name="github.username" value="marcesher" />
 		<property name="github.token" value="a793683eb3a9fef536436d23d0f67bf5"/>
