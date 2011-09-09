@@ -127,7 +127,7 @@
 		</path>
 		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="project.classpath" />
-		
+		<taskdef name="upload" classname="no.kinsey.ant.GitHubUploadTask" classpathref="project.classpath"  />
 	</target>
 
 	<!--
@@ -358,8 +358,8 @@
 				FTPs the nightly build to the web server
 			=================================
 	-->
-	<target  name="publishNightly" depends="runTests,packageNightly">
-	<!-- 
+	<!-- <target  name="publishNightly" depends="runTests,packageNightly">
+	
 		<ftp server="${ftp.site}" userid="${ftp.username}" password="${ftp.password}" action="del">
 			<fileset>
 				<include name="nightly/mxunit-nightly*.zip" />
@@ -370,7 +370,27 @@
 				<include name="mxunit-nightly*" />
 			</fileset>
 		</ftp>
-		 -->
+		 
+	</target>-->
+	<target name="publishNightly" depends="init,updateNightlyFiles">
+	
+	</target>
+	
+	<target name="updateNightlyFiles" depends="init">
+		<propertyfile file="${version.file}" comment="Build version info">
+			<entry key="build.date" type="date" value="now" pattern="MM/dd/yyyy" />
+			<entry key="build.versiondescription" operation="=" value="Nightly Build" />
+		</propertyfile>
+		
+		<property file="${version.file}" />
+
+		<property name="build.version" value="${build.major}.${build.minor}.${build.buildnum}${build.notation}" />
+
+		<echo message="build.version is ${build.version}" />		
+		
+		<replaceregexp file="${readme.file}" match="Version Info:(.*)" replace="Version Info: This is a nightly build of the ${build.version} stream, built on ${build.date}" />
+	
+		<gitPushBuildChanges remoteName="origin" branchName="develop"/>
 	</target>
 
 	<!--
@@ -514,6 +534,45 @@
 			</args>
 		</git>
 	</target>
+	
+	<target name="githubUploadTest" depends="init,version">
+		<property name="github.user" value="mxunit" />
+		<property name="github.username" value="marcesher" />
+		<property name="github.token" value="a793683eb3a9fef536436d23d0f67bf5"/>
+		<property name="github.repo" value="mxunit"/>
+		<upload 
+			user="${github.user}" 
+			repo="${github.repo}" 
+			username="${github.username}" 
+			token="${github.token}" 
+			description="just a test" 
+			path="${zipfile}" />
+		
+	</target>
+	
+	<macrodef name="gitPushBuildChanges">
+		<attribute name="remoteName" default="origin"/>
+		<attribute name="branchName" default="develop"/>
+		<sequential>
+			<git command="add" dir=".">
+				<args>
+					<arg value="."/>
+				</args>
+			</git>
+			<git command="commit" dir=".">
+				<args>
+					<arg value="-m"/>
+					<arg value="'build auto-commit'"/>
+				</args>
+			</git>
+			<git command="push" dir=".">
+				<args>
+					<arg value="@{remoteName}"/>
+					<arg value="@{branchName}"/>
+				</args>
+			</git>
+		</sequential>
+	</macrodef>
 	
 	<macrodef name = "git">
         <attribute name = "command" />
