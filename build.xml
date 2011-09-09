@@ -352,7 +352,7 @@
 		 
 	</target>-->
 	<target name="publishNightly" depends="updateNightlyFiles,packageNightly">
-	
+		<gitPushBuildChanges remoteName="origin" branchName="develop"/>
 	</target>
 	
 	<target name="updateNightlyFiles" depends="init">
@@ -369,7 +369,7 @@
 		
 		<replaceregexp file="${readme.file}" match="Version Info:(.*)" replace="Version Info: This is a nightly build of the ${build.version} stream, built on ${build.date}" />
 	
-		<gitPushBuildChanges remoteName="origin" branchName="develop"/>
+		
 	</target>
 
 	<!--
