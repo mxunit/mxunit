@@ -9,13 +9,7 @@
 		
 		1) (one time only): get latest from repository to ensure you have all jar files from the lib directory
 		2) add the commons-net, jakarta-oro, mail, and activation jars to your ant classpath in eclipse (window - preferences - ant - runtime - add external jars)
-		3) in windows explorer, navigate to your eclipse/plugins directory. there should be an org.tigris.subversion.... directory. 
-			mine is at C:\eclipse_33_rcp\plugins\org.tigris.subversion.javahl.win32_1.2.4
-			
-			find that directory and copy the entire directory path. Now, go to your computer's path variable (my computer - properties - advanced - environment variables - path) and paste that path as an extra entry
-			
-		4) You will probably have to restart your computer after that. Every time I've tried just restarting eclipse, it didn't work.
-		5) when you got latest, it put a directory called "buildprops" into your mxunit directory. get the unames.properties file from marc and put it in there. otherwise, this build will not work at all. nothing. nada.
+		3) when you last pulled, it put a directory called "buildprops" into your mxunit directory. get the unames.properties file from marc and put it in there. otherwise, this build will not work at all. nothing. nada.
 	-->
 	
 	
