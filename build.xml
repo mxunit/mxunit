@@ -488,6 +488,7 @@
 			</git>
 			<git command="push" dir=".">
 				<args>
+					<arg value="-f"/>
 					<arg value="@{remoteName}"/>
 					<arg value="'@{tagName}'"/>
 				</args>
