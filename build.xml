@@ -17,47 +17,8 @@
 		4) You will probably have to restart your computer after that. Every time I've tried just restarting eclipse, it didn't work.
 		5) when you got latest, it put a directory called "buildprops" into your mxunit directory. get the unames.properties file from marc and put it in there. otherwise, this build will not work at all. nothing. nada.
 	-->
-
-	<!--
-		================================================
-			Intended Targets
-		================================================
-	-->
-
-	<!--
-		=================================
-			Target: publish
-			 - publish the zip
-			 - upload to google code
-			 - upload version.properties to the website
-			 - reload the website
-		=================================
-	-->
-	<target name="publish" depends="runTests,incrementVersion,package,upload,updatewebsite,publishTestResults" description="--> packages into a zip and uploads to google code" />
-
-	<!--
-		=================================
-			Target: package
-			Generates the zip archive
-		=================================
-	-->
-	<target name="package" depends="clean,getVersion,genApiDocs" description="--> packages the appropriate files into the deployment-ready zip file. use this for testing; otherwise, use publish">
-		<echo message="building ${zipfile}. basedir is  ${basedir}" />
-		<zip destfile="${zipfile}" casesensitive="false">
-			<zipfileset dir="${basedir}" includes="*.*,ant/,buildprops/,eclipse/,doc/,framework/,generator/,images/,PluginDemoTests/,resources/,runner/,samples/,tests/,lib/ant-contrib**" excludes=".settings/,.git/,.gitignore,MXUnitInstallTest.cfc,**/testresults/,**/stats/,**/junithtml/,.project,.deployment,**/unames.properties,tests/tmp/,ftp.listing,**/*.db,**/copysnippets.properties,**/copydictionary**,**/*.bak,buildprops/nightlyversion.properties,settings.xml,README.html,README.textile,README-toc.xml" prefix="mxunit" casesensitive="false" />
-		</zip>
-	</target>
 	
-	<target name="packageNightly" depends="package">
-		<move file="${zipfile}" tofile="${nightlyfile}"/>
-	</target>
-	<!--
-		================================================
-			Internal Targets
-			Run these individually for testing only
-		================================================
-	-->
-
+	
 	<!--
 		=================================
 			Target: init
@@ -126,6 +87,107 @@
 			<fileset dir="framework/generated" includes="*.*" />
 		</delete>
 	</target>
+	
+	
+	
+	
+
+	<!--
+		================================================
+			Intended Targets
+		================================================
+	-->
+
+	<!--
+		=================================
+			Target: publish
+			 - publish the zip
+			 - upload to google code
+			 - upload version.properties to the website
+			 - reload the website
+		=================================
+	-->
+	<target name="publish" depends="runTests,incrementVersion,package,upload,updatewebsite,publishTestResults" description="--> packages into a zip and uploads to google code" />
+
+	<!--
+		=================================
+			Target: publishNightly
+			 - run tests
+			 - update version.properties and readme.txt
+			 - commit and push those changes to github
+			 - tag this version as nightly_latest_stable_build and push to github
+		=================================
+	-->
+	<target name="publishNightly" depends="runTests,updateNightlyFiles,packageNightly" description="--> publishes the nightly build to github">
+		<gitPushBuildChanges remoteName="upstream" branchName="develop"/>
+		<gitTag remoteName="upstream" tagName="nightly_latest_stable_build"/>
+	</target>
+	
+	<!--
+		=================================
+			Target: package
+			Generates the zip archive
+		=================================
+	-->
+	<target name="package" depends="clean,getVersion,genApiDocs" description="--> packages the appropriate files into the deployment-ready zip file. use this for testing; otherwise, use publish">
+		<echo message="building ${zipfile}. basedir is  ${basedir}" />
+		<zip destfile="${zipfile}" casesensitive="false">
+			<zipfileset dir="${basedir}" includes="*.*,ant/,buildprops/,eclipse/,doc/,framework/,generator/,images/,PluginDemoTests/,resources/,runner/,samples/,tests/,lib/ant-contrib**" excludes=".settings/,.git/,.gitignore,MXUnitInstallTest.cfc,**/testresults/,**/stats/,**/junithtml/,.project,.deployment,**/unames.properties,tests/tmp/,ftp.listing,**/*.db,**/copysnippets.properties,**/copydictionary**,**/*.bak,buildprops/nightlyversion.properties,settings.xml,README.html,README.textile,README-toc.xml" prefix="mxunit" casesensitive="false" />
+		</zip>
+	</target>
+	
+	<!--
+		=================================
+			Target: packageNightly
+			Generates the zip archive for the nightly build
+		=================================
+	-->
+	<target name="packageNightly" depends="package" description="--> packages the appropriate files into the deployment-ready nightly build zip file. Use this for testing; otherwise, use publishNightly">
+		<move file="${zipfile}" tofile="${nightlyfile}"/>
+	</target>
+	
+	
+	<!--
+		================================================
+			Internal Targets
+			Run these individually for testing only
+		================================================
+	-->
+
+	<!--
+		=================================
+			Target: runTests
+			Runs the MXUnit tests on MXUnit
+		=================================
+	-->
+	<target name="runTests" depends="init">
+
+		<delete dir="${junit.out.dir.html}" />
+		<delete dir="${output.dir}" />
+
+		<mkdir dir="${junit.out.dir.html}" />
+		<mkdir dir="${output.dir}" />
+
+		<property name="context" value="" />
+
+		<mxunittask server="${server}" port="${port}" defaultrunner="${context}/mxunit/runner/HttpAntRunner.cfc" outputdir="${output.dir}" verbose="true" testResultsSummary="my.summary" failureproperty="testsfailed">
+			<directory remoteMethod="run" path="${webroot}/mxunit/tests/framework/" packageName="mxunit.tests.framework" componentPath="mxunit.tests.framework" recurse="false" includes="*.cfc" excludes="" />
+			<directory remoteMethod="run" path="${webroot}/mxunit/tests/mightymock/" packageName="mxunit.tests.mightymock" componentPath="mxunit.tests.mightymock" recurse="false" includes="*.cfc" excludes="" />
+			<directory remoteMethod="run" path="${webroot}/mxunit/tests/runner" packageName="mxunit.tests.runner" componentPath="mxunit.tests.runner" recurse="false" includes="*.cfc" excludes="" />
+		</mxunittask>
+
+		<!-- create nice pretty report -->
+		<junitreport todir="${junit.out.dir.html}">
+			<fileset dir="${output.dir}">
+				<include name="*.xml" />
+			</fileset>
+
+			<report format="frames" todir="${junit.out.dir.html}" styledir="${style.dir}" />
+		</junitreport>
+
+		<fail if="testsfailed" message="Failing the build because tests failed" />
+	</target>
+
 
 	<!--
 		=================================
@@ -210,97 +272,7 @@
 		</loadresource>
 	</target>
 
-	<!--
-		=================================
-			Target: tagVersion
-			! intended for use by publish only !
-			Creates an svn tag from the trunk
-		=================================
 	
-	<target name="tagVersion" depends="init,version">
-		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
-			<copy srcURL="${svnserver}/mxunit/trunk" destURL="${svnserver}/mxunit/tags/${build.version}" message="autotagging version ${build.version}" />
-		</svn>
-	</target>
--->
-	<!--
-		=================================
-			Target: update
-			Updates the svn to the latest version
-		=================================
-	
-	<target name="update" depends="init" unless="nosvnupdate">
-		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
-			<update dir="." />
-		</svn>
-	</target>
--->
-	<!--
-		=================================
-			Target: runTests
-			Runs the MXUnit tests on MXUnit
-		=================================
-	-->
-	<target name="runTests" depends="init">
-		<!--
-			load the current version of the package-summary file; 
-			this way, we can put it at the end of the email we 
-			send so that comparing test the aggregate test results
-			is easy; makes it simpler to see if any test failures 
-			crept in
-		-->
-		<loadfile property="currentresultshtml" srcFile="${junit.out.dir.html}/mxunit/tests/package-summary.html" failonerror="false" />
-
-		<delete dir="${junit.out.dir.html}" />
-		<delete dir="${output.dir}" />
-
-		<mkdir dir="${junit.out.dir.html}" />
-		<mkdir dir="${output.dir}" />
-
-		<property name="context" value="" />
-
-		<mxunittask server="${server}" port="${port}" defaultrunner="${context}/mxunit/runner/HttpAntRunner.cfc" outputdir="${output.dir}" verbose="true" testResultsSummary="my.summary" failureproperty="testsfailed">
-			<!-- componentPath is not required, but it results in a much faster test run -->
-			<directory remoteMethod="run" path="${webroot}/mxunit/tests/framework/" packageName="mxunit.tests.framework" componentPath="mxunit.tests.framework" recurse="false" includes="*.cfc" excludes="" />
-			<directory remoteMethod="run" path="${webroot}/mxunit/tests/mightymock/" packageName="mxunit.tests.mightymock" componentPath="mxunit.tests.mightymock" recurse="false" includes="*.cfc" excludes="" />
-			<directory remoteMethod="run" path="${webroot}/mxunit/tests/runner" packageName="mxunit.tests.runner" componentPath="mxunit.tests.runner" recurse="false" includes="*.cfc" excludes="" />
-		</mxunittask>
-
-		<!-- create nice pretty report -->
-		<junitreport todir="${junit.out.dir.html}">
-			<fileset dir="${output.dir}">
-				<include name="*.xml" />
-			</fileset>
-
-			<report format="frames" todir="${junit.out.dir.html}" styledir="${style.dir}" />
-		</junitreport>
-
-		<!-- Read the properties files we generated 
-		<property file="${output.dir}/my.summary" />
-		<echoproperties />
-		-->
-
-		<!--
-			load the version we just created; this will be the first
-			set of results in the email we send
-		-->
-		<loadfile property="resultshtml" srcFile="${junit.out.dir.html}/mxunit/tests/package-summary.html" />
-		<loadfile property="resultscss" srcFile="${junit.out.dir.html}/stylesheet.css" />
-		<!--
-		<if>
-			<isset property="mail.ssl" />
-			<then>
-				<mail from="${mail.from}" tolist="${mail.to}" mailhost="${mail.host}" subject="MXUnit Build Results" charset="UTF-8" messagemimetype="text/html" user="${mail.user}" password="${mail.password}" ssl="${mail.ssl}" mailport="${mail.port}" messagefile="${testmailmessage.file}" failonerror="false" />
-			</then>
-			<else>
-				<mail from="${mail.from}" tolist="${mail.to}" mailhost="${mail.host}" subject="MXUnit Build Results" charset="UTF-8" messagemimetype="text/html" messagefile="${testmailmessage.file}" failonerror="false" />
-			</else>
-		</if>
-		-->
-		<fail if="testsfailed" message="Failing the build because tests failed" />
-	</target>
-
-
 	<!--
 		=================================
 			Target: genApiDocs
@@ -332,29 +304,11 @@
 	</target>
 	
 	<!--
-			=================================
-				Target: publishNightlyBuild
-				FTPs the nightly build to the web server
-			=================================
+		=================================
+			Target: updateNightlyFiles
+			Updates version.properties and readme.txt with the appropriate nightly identifiers
+		=================================
 	-->
-	<!-- <target  name="publishNightly" depends="runTests,packageNightly">
-	
-		<ftp server="${ftp.site}" userid="${ftp.username}" password="${ftp.password}" action="del">
-			<fileset>
-				<include name="nightly/mxunit-nightly*.zip" />
-			</fileset>
-		</ftp>
-		<ftp server="${ftp.site}" userid="${ftp.username}" password="${ftp.password}" remotedir="nightly">
-			<fileset dir="dist">
-				<include name="mxunit-nightly*" />
-			</fileset>
-		</ftp>
-		 
-	</target>-->
-	<target name="publishNightly" depends="runTests,updateNightlyFiles,packageNightly">
-		<gitPushBuildChanges remoteName="upstream" branchName="develop"/>
-	</target>
-	
 	<target name="updateNightlyFiles" depends="init">
 		<propertyfile file="${version.file}" comment="Build version info">
 			<entry key="build.date" type="date" value="now" pattern="MM/dd/yyyy" />
@@ -370,41 +324,8 @@
 		<replaceregexp file="${readme.file}" match="Version Info:(.*)" replace="Version Info: This is a nightly build of the ${build.version} stream, built on ${build.date}" />
 	
 	</target>
-
-	<!--
-		=================================
-			Target: testFTP
-			Tests the FTP connection by uploading a file
-		=================================
-	-->
-	<target name="testFTP" depends="init">
-		<!-- <echoproperties prefix="ftp" /> -->
-		<ftp server="${ftp.site}" userid="${ftp.username}" password="${ftp.password}" action="list" listing="ftp.listing" verbose="true">
-			<fileset>
-				<include name="index.html" />
-			</fileset>
-		</ftp>
-	</target>
-
-	<!--
-		=================================
-			Target: testMail
-			Tests the mail sending ability
-		=================================
-	-->
-	<target name="testMail" depends="init">
-
-		<if>
-			<isset property="mail.ssl" />
-			<then>
-				<mail from="${mail.from}" tolist="${mail.to}" mailhost="${mail.host}" subject="MXUnit Build Results" charset="UTF-8" messagemimetype="text/html" user="${mail.user}" password="${mail.password}" ssl="${mail.ssl}" mailport="${mail.port}" message="&lt;h1&gt;Test Successful&lt;/h1&gt;" />
-			</then>
-			<else>
-				<mail from="${mail.from}" tolist="${mail.to}" mailhost="${mail.host}" subject="MXUnit Build Results" charset="UTF-8" messagemimetype="text/html" message="&lt;h1&gt;Test Successful&lt;/h1&gt;" />
-			</else>
-		</if>
-	</target>
-
+	
+	
 	<!--
 		=================================
 			Target: compileCheck
@@ -492,41 +413,50 @@
 
 		<echo>Successful check for unscoped variables</echo>
 	</target>
-	
-	<target name="gitBranchTest">
-		<git command="add" dir=".">
-			<args>
-				<arg value="."/>
-			</args>
-		</git>
-		<git command="commit" dir=".">
-			<args>
-				<arg value="-m"/>
-				<arg value="'build auto-commit'"/>
-			</args>
-		</git>
-		<git command="push" dir=".">
-			<args>
-				<arg value="origin"/>
-				<arg value="branchtest"/>
-			</args>
-		</git>
+
+	<!--
+		=================================
+			Target: testFTP
+			Tests the FTP connection by uploading a file
+		=================================
+	-->
+	<target name="testFTP" depends="init">
+		<!-- <echoproperties prefix="ftp" /> -->
+		<ftp server="${ftp.site}" userid="${ftp.username}" password="${ftp.password}" action="list" listing="ftp.listing" verbose="true">
+			<fileset>
+				<include name="index.html" />
+			</fileset>
+		</ftp>
 	</target>
-	
-	<target name="githubUploadTest" depends="init,getVersion">
-		<property name="github.user" value="mxunit" />
-		<property name="github.username" value="marcesher" />
-		<property name="github.token" value="a793683eb3a9fef536436d23d0f67bf5"/>
-		<property name="github.repo" value="mxunit"/>
-		<upload 
-			user="${github.user}" 
-			repo="${github.repo}" 
-			username="${github.username}" 
-			token="${github.token}" 
-			description="just a test" 
-			path="${zipfile}" />
-		
+
+	<!--
+		=================================
+			Target: testMail
+			Tests the mail sending ability
+		=================================
+	-->
+	<target name="testMail" depends="init">
+
+		<if>
+			<isset property="mail.ssl" />
+			<then>
+				<mail from="${mail.from}" tolist="${mail.to}" mailhost="${mail.host}" subject="MXUnit Build Results" charset="UTF-8" messagemimetype="text/html" user="${mail.user}" password="${mail.password}" ssl="${mail.ssl}" mailport="${mail.port}" message="&lt;h1&gt;Test Successful&lt;/h1&gt;" />
+			</then>
+			<else>
+				<mail from="${mail.from}" tolist="${mail.to}" mailhost="${mail.host}" subject="MXUnit Build Results" charset="UTF-8" messagemimetype="text/html" message="&lt;h1&gt;Test Successful&lt;/h1&gt;" />
+			</else>
+		</if>
 	</target>
+
+
+	
+	
+
+	<!--
+		=================================
+			git-related Macrodefs
+		=================================
+	-->
 	
 	<macrodef name="gitPushBuildChanges">
 		<attribute name="remoteName" default="origin"/>
@@ -547,6 +477,25 @@
 				<args>
 					<arg value="@{remoteName}"/>
 					<arg value="@{branchName}"/>
+				</args>
+			</git>
+		</sequential>
+	</macrodef>
+	
+	<macrodef name="gitTag">
+		<attribute name="remoteName" default="origin"/>
+		<attribute name="tagName"/>
+		<sequential>
+			<git command="tag" dir=".">
+				<args>
+					<arg value="-f"/>
+					<arg value="'@{tagName}'"/>
+				</args>
+			</git>
+			<git command="push" dir=".">
+				<args>
+					<arg value="@{remoteName}"/>
+					<arg value="'@{tagName}'"/>
 				</args>
 			</git>
 		</sequential>
