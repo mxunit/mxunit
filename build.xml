@@ -494,4 +494,37 @@
 
 		<echo>Successful check for unscoped variables</echo>
 	</target>
+	
+	<target name="gitBranchTest">
+		<git command="add" dir=".">
+			<args>
+				<arg value="."/>
+			</args>
+		</git>
+		<git command="commit" dir=".">
+			<args>
+				<arg value="-m"/>
+				<arg value="'build auto-commit'"/>
+			</args>
+		</git>
+		<git command="push" dir=".">
+			<args>
+				<arg value="origin"/>
+				<arg value="branchtest"/>
+			</args>
+		</git>
+	</target>
+	
+	<macrodef name = "git">
+        <attribute name = "command" />
+        <attribute name = "dir" default = "" />
+        <element name = "args" optional = "true" />
+        <sequential>
+            <echo message = "git @{command}" />
+            <exec executable = "git" dir = "@{dir}">
+                <arg value = "@{command}" />
+                <args/>
+            </exec>
+        </sequential>
+    </macrodef>
 </project>
