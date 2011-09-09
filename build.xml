@@ -49,29 +49,6 @@
 	</target>
 	
 	<!--
-			=================================
-				Target: packageNightly
-				Generates the zip archive
-			=================================
-	-->
-	<target name="packageNightly" depends="package">
-		<move file="${zipfile}" tofile="${nightlyfile}" overwrite="true"/>
-		<copy file="${version.file}" tofile="${version.nightlyfile}" overwrite="true"/>
-		<copy file="${readme.file}" tofile="${readme.nightlyfile}" overwrite="true"/>
-		<propertyfile file="${version.nightlyfile}" comment="Build version info">
-			<entry key="build.date" type="date" value="now" pattern="MM/dd/yyyy" />
-			<entry key="build.versiondescription" operation="=" value="Nightly Build" />
-			<entry key="build.buildnum" type="int" operation="+" value="1" />
-		</propertyfile>
-		<replaceregexp file="${readme.nightlyfile}" match="Version Info:(.*)" replace="Version Info: This is nightly build version ${build.version}, built on ${nightlydate}" />
-		<zip file="${nightlyfile}" update="true">
-			<zipfileset dir="." includes="${version.nightlyfile}" fullpath="mxunit/buildprops/version.properties"/> 
-			<zipfileset dir="." includes="${readme.nightlyfile}" fullpath="mxunit/README.txt"/> 
-		</zip>
-		<delete file="${readme.nightlyfile}"/>
-	</target>
-
-	<!--
 		================================================
 			Internal Targets
 			Run these individually for testing only
@@ -372,7 +349,7 @@
 		</ftp>
 		 
 	</target>-->
-	<target name="publishNightly" depends="packageNightly,updateNightlyFiles">
+	<target name="publishNightly" depends="updateNightlyFiles,package">
 	
 	</target>
 	
