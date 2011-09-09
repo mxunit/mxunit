@@ -369,7 +369,6 @@
 		
 		<replaceregexp file="${readme.file}" match="Version Info:(.*)" replace="Version Info: This is a nightly build of the ${build.version} stream, built on ${build.date}" />
 	
-		
 	</target>
 
 	<!--
