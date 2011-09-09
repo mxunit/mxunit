@@ -107,7 +107,6 @@
 		</path>
 		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${mxunit.jar}" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="project.classpath" />
-		<taskdef name="upload" classname="no.kinsey.ant.GitHubUploadTask" classpathref="project.classpath"  />
 	</target>
 
 	<!--
