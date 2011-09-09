@@ -48,6 +48,9 @@
 		</zip>
 	</target>
 	
+	<target name="packageNightly" depends="package">
+		<move file="${zipfile}" tofile="${nightlyfile}"/>
+	</target>
 	<!--
 		================================================
 			Internal Targets
@@ -349,7 +352,7 @@
 		</ftp>
 		 
 	</target>-->
-	<target name="publishNightly" depends="updateNightlyFiles,package">
+	<target name="publishNightly" depends="updateNightlyFiles,packageNightly">
 	
 	</target>
 	
