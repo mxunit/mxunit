@@ -372,7 +372,7 @@
 		</ftp>
 		 
 	</target>-->
-	<target name="publishNightly" depends="init,updateNightlyFiles">
+	<target name="publishNightly" depends="packageNightly,updateNightlyFiles">
 	
 	</target>
 	
