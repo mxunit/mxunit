@@ -352,7 +352,7 @@
 		 
 	</target>-->
 	<target name="publishNightly" depends="runTests,updateNightlyFiles,packageNightly">
-		<gitPushBuildChanges remoteName="origin" branchName="develop"/>
+		<gitPushBuildChanges remoteName="upstream" branchName="develop"/>
 	</target>
 	
 	<target name="updateNightlyFiles" depends="init">
