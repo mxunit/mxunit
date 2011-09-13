@@ -332,7 +332,10 @@ for each member of the data provider
 
 	<cffunction name="getMethod" access="private">
 		<cfargument name="methodName" type="string" required="true"/>
-		<cfreturn getBaseTarget()[arguments.methodName]>
+		<cfscript>
+			var target = getBaseTarget();
+			return target[arguments.methodName];
+        </cfscript>
 	</cffunction>
 
 </cfcomponent>
