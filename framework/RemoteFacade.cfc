@@ -1,4 +1,4 @@
-<cfcomponent name="mxunit.framework.RemoteFacade" hint="Main default interface into MXUnit framework from the MXUnit Ecplise Plugin.">
+<cfcomponent name="mxunit.framework.RemoteFacade" hint="Main default interface into MXUnit framework from the MXUnit Ecplise Plugin." wsversion="1">
 
 	<cfset cu = createObject("component","ComponentUtils")>
 	<cfset cache = createObject("component","RemoteFacadeObjectCache")>

@@ -145,6 +145,32 @@
 
 	</cffunction>
 
+	<cffunction name="assertQueryEquals" access="public" output="false" returntype="void" description="compares 2 queries, cell by cell">
+    	<cfargument name="expected" type="query" required="true"/>
+    	<cfargument name="actual" type="query" required="true"/>
+
+		<cfset var colName = "">
+		<cfset var row = 1>
+		<cfset var col = 1>
+		<cfset var numRows = expected.RecordCount>
+		<cfset var numCols = listLen(expected.ColumnList)>
+
+		<cfset var expectedColumnList = listSort(expected.ColumnList, "text", "asc")>
+		<cfset var actualColumnList = listSort(actual.ColumnList, "text", "asc")>
+
+		<cfset assertEquals( expectedColumnList, actualColumnList, "Expected and actual Column lists did not match" )>
+		<cfset assertEquals( expected.RecordCount, actual.RecordCount, "Expected and actual RecordCount did not match" )>
+
+		<cfset expectedColumnList = listToArray(expectedColumnList)>
+		<cfloop from="1" to="#expected.RecordCount#" index="row">
+			<cfloop from="1" to="#numCols#" index="col">
+				<cfset colName = expectedColumnList[col]>
+				<cfset assertEquals( expected[colName][row], actual[colName][row], "Expected Column named #colName# to be equal"  )>
+			</cfloop>
+		</cfloop>
+
+    </cffunction>
+
 	<cffunction name="buildInheritanceTree" access="public" returntype="string">
 		<cfargument name="metaData" type="struct" />
 		<cfargument name="accumulator" type="string" required="false" default=""/>

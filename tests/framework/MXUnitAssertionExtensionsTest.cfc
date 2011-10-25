@@ -292,7 +292,7 @@
 
 	<cffunction name="assertIsTypeOfPassesForInterfaces" returntype="void">
 
-		<cfset var component = createObject("fixture.interfaces.AComponent")>
+		<cfset var component = createObject("component","fixture.interfaces.AComponent")>
 
 		<cfset assertIsTypeOf( component, "mxunit.tests.framework.fixture.interfaces.AnInterface" )>
 		<cfset assertIsTypeOf( component, "mxunit.tests.framework.fixture.interfaces.OtherInterface" )>
@@ -327,6 +327,30 @@
 			</cfcatch>
 		</cftry>
 	</cffunction>
+
+	<cffunction name="assertQueryEquals_succeeds_for_equal_queries" returntype="void">
+    	<cfset var q1 = "">
+    	<cfset var q2 = "">
+
+<cf_querysim>
+q1
+col1,col2,col3,col4
+1|1.2|1.3|1.4
+2|2.2|2.3|2.4
+3|3.2|3.3|3.4
+</cf_querysim>
+
+<cf_querysim>
+q2
+col4,col2,col3,col1
+1.4|1.2|1.3|1
+2.4|2.2|2.3|2
+3.4|3.2|3.3|3
+</cf_querysim>
+
+	<cfset assertQueryEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
+
+    </cffunction>
 
 	<!--- Override these methods as needed. Note that the call to setUp() is Required if using a this-scoped instance--->
 
