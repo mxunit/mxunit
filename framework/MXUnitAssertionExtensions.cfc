@@ -145,7 +145,7 @@
 
 	</cffunction>
 
-	<cffunction name="assertQueryEquals" access="public" output="false" returntype="void" description="compares 2 queries, cell by cell">
+	<cffunction name="assertQueryEquals" access="public" output="false" returntype="void" description="compares 2 queries, cell by cell, and fails if differences exist">
     	<cfargument name="expected" type="query" required="true"/>
     	<cfargument name="actual" type="query" required="true"/>
 
@@ -155,8 +155,8 @@
 		<cfset var numRows = expected.RecordCount>
 		<cfset var numCols = listLen(expected.ColumnList)>
 
-		<cfset var expectedColumnList = listSort(expected.ColumnList, "text", "asc")>
-		<cfset var actualColumnList = listSort(actual.ColumnList, "text", "asc")>
+		<cfset var expectedColumnList = listSort(expected.ColumnList, "textnocase", "asc")>
+		<cfset var actualColumnList = listSort(actual.ColumnList, "textnocase", "asc")>
 
 		<cfset assertEquals( expectedColumnList, actualColumnList, "Expected and actual Column lists did not match" )>
 		<cfset assertEquals( expected.RecordCount, actual.RecordCount, "Expected and actual RecordCount did not match" )>
@@ -165,8 +165,40 @@
 		<cfloop from="1" to="#expected.RecordCount#" index="row">
 			<cfloop from="1" to="#numCols#" index="col">
 				<cfset colName = expectedColumnList[col]>
-				<cfset assertEquals( expected[colName][row], actual[colName][row], "Expected Column named #colName# to be equal"  )>
+				<cfset assertEquals( expected[colName][row], actual[colName][row], "Expected Row #row#, Column named #colName# to be equal"  )>
 			</cfloop>
+		</cfloop>
+
+    </cffunction>
+
+    <cffunction name="assertStructEquals" output="false" access="public" returntype="any" hint="compares two structures, key by key, and fails if differences exist">
+    	<cfargument name="expected" type="struct" required="true"/>
+    	<cfargument name="actual" type="struct" required="true"/>
+		<cfargument name="path" type="string" required="false" default="" hint="don't touch this, sucker"/>
+		<cfset var key = "">
+		<cfset var currentExpectedValue = "">
+		<cfset var currentActualValue = "">
+		<cfset var expectedKeyArray = arraySort( structKeyArray( expected ), "textnocase", "asc" )>
+		<cfset var actualKeyArray = arraySort( structKeyArray( actual ), "textnocase", "asc" )>
+		<cfset var thisPath = arguments.path>
+
+		<cfset assertEquals( expectedKeyArray, actualKeyArray, "Expected and actual key lists do not match" )>
+
+		<cfloop collection="#expected#" item="key">
+			<cfset thisPath = thisPath & "[ ""#key#"" ]">
+			<cfset currentExpectedValue = expected[key]>
+			<cfset currentActualValue = actual[key]>
+
+			<cfif isSimpleValue( currentExpectedValue ) AND isSimpleValue( currentActualValue )>
+				<cfset assertEquals( currentExpectedValue, currentActualValue, "Structure Key Mismatch at path: #thisPath#" )>
+			<cfelseif isQuery( currentExpectedValue ) AND isQuery( currentActualValue )>
+				<cfset assertQueryEquals( currentExpectedValue, currentActualValue )>
+			<cfelseif isStruct( currentExpectedValue ) AND isStruct( currentActualValue )>
+				<cfset assertStructEquals( currentExpectedValue, currentActualValue, thisPath )>
+			<cfelse>
+				<cfset fail("Not sure how to compare these datatypes at path #thisPath#. File a big with a patch")>
+			</cfif>
+			<cfset thisPath = arguments.path>
 		</cfloop>
 
     </cffunction>

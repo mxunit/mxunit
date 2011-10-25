@@ -352,6 +352,26 @@ col4,col2,col3,col1
 
     </cffunction>
 
+    <cffunction name="assertStructEquals_succeeds_for_matching_nested_structs" returntype="void">
+    	<cfset var struct1 = { one="one", two="two", three="3", nested={"one"=1, "2"="two" } }>
+    	<cfset var struct2 = duplicate( struct1 )>
+    	<cfset assertStructEquals( struct1, struct2 )>
+    </cffunction>
+
+    <cffunction name="assertStructEquals_fails_for_mismatched_nested_structs" returntype="void">
+    	<cfset var struct1 = { one="one", two="two", three="3", nested={"one"=1, "2"="two" } }>
+    	<cfset var struct2 = duplicate( struct1 )>
+    	<cfset struct2.nested.one = "one">
+
+		<cftry>
+	    	<cfset assertStructEquals( struct1, struct2 )>
+		<cfcatch type="mxunit.exception.AssertionFailedError">
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+    </cffunction>
+
 	<!--- Override these methods as needed. Note that the call to setUp() is Required if using a this-scoped instance--->
 
 	<cffunction name="setUp">
