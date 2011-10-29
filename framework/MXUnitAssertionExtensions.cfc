@@ -148,6 +148,8 @@
 	<cffunction name="assertQueryEquals" access="public" output="false" returntype="void" description="compares 2 queries, cell by cell, and fails if differences exist">
     	<cfargument name="expected" type="query" required="true"/>
     	<cfargument name="actual" type="query" required="true"/>
+		<cfargument name="message" type="string" required="false" default=""/>
+		<cfargument name="failFast" type="boolean" required="false" default="false" hint="will cause a failure on first mismatching query row/column. If false, it will accumulate all mismatches and fail at the end"/>
 
 		<cfset var colName = "">
 		<cfset var row = 1>
@@ -157,24 +159,50 @@
 
 		<cfset var expectedColumnList = listSort(expected.ColumnList, "textnocase", "asc")>
 		<cfset var actualColumnList = listSort(actual.ColumnList, "textnocase", "asc")>
+		<cfset var mismatches = structNew()>
+		<cfset var expecteds = "">
+		<cfset var actuals = "">
 
-		<cfset assertEquals( expectedColumnList, actualColumnList, "Expected and actual Column lists did not match" )>
-		<cfset assertEquals( expected.RecordCount, actual.RecordCount, "Expected and actual RecordCount did not match" )>
+		<cfset assertEquals( expectedColumnList, actualColumnList, "Expected and actual Column lists did not match. #message#" )>
+		<cfset assertEquals( expected.RecordCount, actual.RecordCount, "Expected and actual RecordCount did not match. #message#" )>
 
 		<cfset expectedColumnList = listToArray(expectedColumnList)>
 		<cfloop from="1" to="#expected.RecordCount#" index="row">
 			<cfloop from="1" to="#numCols#" index="col">
 				<cfset colName = expectedColumnList[col]>
-				<cfset assertEquals( expected[colName][row], actual[colName][row], "Expected Row #row#, Column named #colName# to be equal"  )>
+
+				<cfif failFast>
+					<cfset assertEquals( expected[colName][row], actual[colName][row], "Expected Row #row#, Column named #colName# to be equal. #message#"  )>
+
+				<cfelseif expected[colName][row] neq actual[colName][row]>
+					<cfif not structKeyExists( mismatches, "row #row#" )>
+						<cfset mismatches["row #row#"] = structNew()>
+					</cfif>
+					<cfset mismatches["row #row#"]["column #colName#"] = structNew()>
+					<cfset mismatches["row #row#"]["column #colName#"].expected = expected[colName][row]>
+					<cfset mismatches["row #row#"]["column #colName#"].actual = actual[colName][row]>
+					<cfset expecteds = listAppend( expecteds, "row #row# column #colName#: #expected[colName][row]#", "#chr(10)#" )>
+					<cfset actuals = listAppend( actuals, "row #row# column #colName#: #actual[colName][row]#", "#chr(10)#" )>
+				</cfif>
+
 			</cfloop>
 		</cfloop>
+
+		<cfif NOT structIsEmpty( mismatches )>
+			<cfset debug(mismatches)>
+			<cfset assertEquals(expecteds, actuals, "Expected queries to match but they did not. See debug output for a visual dump of the differences. #message#")>
+		</cfif>
 
     </cffunction>
 
     <cffunction name="assertStructEquals" output="false" access="public" returntype="any" hint="compares two structures, key by key, and fails if differences exist">
     	<cfargument name="expected" type="struct" required="true"/>
     	<cfargument name="actual" type="struct" required="true"/>
-		<cfargument name="path" type="string" required="false" default="" hint="don't touch this, sucker"/>
+		<cfargument name="message" type="string" required="false" default=""/>
+		<cfargument name="failFast" type="boolean" required="false" default="false" hint="will cause a failure on first mismatching query row/column. If false, it will accumulate all mismatches and fail at the end"/>
+
+		<cfargument name="path" type="string" required="false" intent="private" default="" hint="don't touch this, sucker"/>
+
 		<cfset var key = "">
 		<cfset var currentExpectedValue = "">
 		<cfset var currentActualValue = "">
@@ -192,11 +220,11 @@
 			<cfif isSimpleValue( currentExpectedValue ) AND isSimpleValue( currentActualValue )>
 				<cfset assertEquals( currentExpectedValue, currentActualValue, "Structure Key Mismatch at path: #thisPath#" )>
 			<cfelseif isQuery( currentExpectedValue ) AND isQuery( currentActualValue )>
-				<cfset assertQueryEquals( currentExpectedValue, currentActualValue )>
+				<cfset assertQueryEquals( currentExpectedValue, currentActualValue, message, failFast )>
 			<cfelseif isStruct( currentExpectedValue ) AND isStruct( currentActualValue )>
-				<cfset assertStructEquals( currentExpectedValue, currentActualValue, thisPath )>
+				<cfset assertStructEquals( currentExpectedValue, currentActualValue, message, failFast, thisPath )>
 			<cfelse>
-				<cfset fail("Not sure how to compare these datatypes at path #thisPath#. File a big with a patch")>
+				<cfset fail("Not sure how to compare these datatypes at path #thisPath#. File a bug with a patch")>
 			</cfif>
 			<cfset thisPath = arguments.path>
 		</cfloop>
