@@ -51,12 +51,19 @@
 		<cfset var s = StructNew()>
 		<cfset var s2 = StructNew()>
 		<cfset var combo = StructNew()>
+		<cfset s.nested = StructNew()>
+		<cfset s.nested.someValue = 5>
 		<cfset s.one = "one">
 		<cfset s.two = StructNew()>
 		<cfset s2 = duplicate(s)>
 		<cfset s2.one = "ona">
+		<cfset s2.nested.someValue = 50000>
 		<cfset combo.one = s>
 		<cfset combo.two = s2>
+		<cfset s2.KeyNotInS1 = "hi mom!">
+		<cfset s.KeyNotInS2 = "hi dad!">
+
+
 		<cfreturn combo>
 	</cffunction>
 
