@@ -202,8 +202,8 @@
 	       <cfargument name="delim2" type="string" required="false" default="," />
 	       <cfargument name="delim3" type="string" required="false" default="," />
 
-	       <cfset var list1Array = ListToArray(arguments.List1,Delim1) />
-	       <cfset var list2Array = ListToArray(arguments.List2,Delim2) />
+	       <cfset var list1Array = ListToArray(lCase(arguments.List1),Delim1) />
+	       <cfset var list2Array = ListToArray(lcase(arguments.List2),Delim2) />
 
 	       <!--- Remove the subset List2 from List1 to get the diff --->
 	       <cfset list1Array.removeAll(list2Array) />

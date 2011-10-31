@@ -388,7 +388,7 @@
 		<cfset var nested = {one=1, 2="two" }>
     	<cfset var struct1 = { one="one", two="two", three="3", nested = nested }>
     	<cfset var struct2 = duplicate( struct1 )>
-    	<cfset assertStructEquals( struct1, struct2 )>
+    	<cfset assertEquals( struct1, struct2 )>
     </cffunction>
 
 	<cffunction name="assertStructEquals_fails_for_mismatching_simple_structs" returntype="void">
@@ -399,7 +399,7 @@
     	<cfset struct2.nested["2"] = "two">
 
     	<cftry>
-	    	<cfset assertStructEquals( struct1, struct2 )>
+	    	<cfset assertEquals( struct1, struct2 )>
 		<cfcatch type="mxunit.exception.AssertionFailedError">
 			<!--- we want this failure --->
 			<cfset debug(cfcatch)>
@@ -414,7 +414,7 @@
     	<cfset struct2.nested.one = "one">
 
 		<cftry>
-	    	<cfset assertStructEquals( struct1, struct2 )>
+	    	<cfset assertEquals( struct1, struct2 )>
 		<cfcatch type="mxunit.exception.AssertionFailedError">
 			<!--- we want this failure --->
 			<cfset debug(cfcatch)>
@@ -442,7 +442,7 @@ col4,col2,col3,col1
 3.4|3.2|3.3|3
 </cf_querysim>
 
-	<cfset assertQueryEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
+	<cfset assertEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
 
     </cffunction>
 
@@ -469,7 +469,7 @@ col1,col2,col3,col4
 
 
 		<cftry>
-			<cfset assertQueryEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
+			<cfset assertEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
 
 		<cfcatch type="mxunit.exception.AssertionFailedError" >
 			<!--- we want this failure --->
