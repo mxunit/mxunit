@@ -38,9 +38,6 @@ function testWhenSomethingIsCalled(){
 
   }
 
-   package function dumpArgs(foo){
-    debug(arguments);
-  }
 
   function setUp(){
 
@@ -52,6 +49,11 @@ function testWhenSomethingIsCalled(){
 
 
 </cfscript>
+
+<cffunction name="dumpArgs" access="package" output="false">
+	<cfset debug(arguments)>
+</cffunction>
+
 <!---
 If a method is defined with named args, the values are naturally sorted.
 If not, the order is not guaranteed, but the keys are able to be sorted:
