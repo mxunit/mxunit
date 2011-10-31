@@ -104,12 +104,12 @@
 	</cffunction>
 
 	<cffunction name="getTarget" hint="get the current Target. May actually be another decorator." access="public" returntype="any" output="false">
-		<cfreturn instance.target />
+		<cfreturn variables.instance.target />
 	</cffunction>
 
 	<cffunction name="setTarget" access="public" returntype="void" output="false">
 		<cfargument name="target" type="any" required="true">
-		<cfset instance.target = arguments.target />
+		<cfset variables.instance.target = arguments.target />
 	</cffunction>
 
 	<cffunction name="getBaseTarget" hint="Get the absolute bottom target - the actual test case" access="public" returntype="any" output="false">
@@ -119,13 +119,13 @@
 	<cffunction name="getVariablesScope" access="public" hint="Door into another component's variables scope">
 		<cfreturn getTarget().getBaseTarget().getVariablesScope() />
 	</cffunction>
-	
+
 	<cffunction name="onMissingMethod" hint="Delegates any missing method calls down the decorator chain, ending at the base target. If a function is still not found, a method not found exception will result">
 		<cfargument name="missingMethodName" type="string" required="true"/>
 		<cfargument name="missingMethodArguments" type="any" required="false"/>
 		<cfset var result = "">
 		<cfinvoke component="#getTarget()#" method="#missingMethodName#" argumentcollection="#missingMethodArguments#" returnvariable="result">
-		
+
 		<cfif isDefined("result")>
 			<cfreturn result>
 		</cfif>
