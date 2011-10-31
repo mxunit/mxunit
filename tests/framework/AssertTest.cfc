@@ -391,6 +391,17 @@
     	<cfset assertEquals( struct1, struct2 )>
     </cffunction>
 
+	<cffunction name="assertStructEquals_succeeds_for_matching_nested_structs_with_different_key_case" returntype="void">
+		<cfset var nested = {one=1, 2="two" }>
+    	<cfset var struct1 = { one="one", two="two", three="3", nested = nested }>
+    	<cfset var struct2 = structNew()>
+    	<cfset struct2["one"] = "one">
+    	<cfset struct2["two"] = "two">
+    	<cfset struct2["three"] = "3">
+    	<cfset struct2["nested"] = nested>
+    	<cfset assertEquals( struct1, struct2 )>
+    </cffunction>
+
 	<cffunction name="assertStructEquals_fails_for_mismatching_simple_structs" returntype="void">
 		<cfset var nested = {one=1, 2="too" }>
     	<cfset var struct1 = { one="one", two="two", three="3", nested=nested }>
