@@ -385,14 +385,14 @@
 	</cffunction>
 
 	<cffunction name="assertStructEquals_succeeds_for_matching_nested_structs" returntype="void">
-		<cfset var nested = {"one"=1, "2"="two" }>
+		<cfset var nested = {one=1, 2="two" }>
     	<cfset var struct1 = { one="one", two="two", three="3", nested = nested }>
     	<cfset var struct2 = duplicate( struct1 )>
     	<cfset assertStructEquals( struct1, struct2 )>
     </cffunction>
 
 	<cffunction name="assertStructEquals_fails_for_mismatching_simple_structs" returntype="void">
-		<cfset var nested = {"one"=1, "2"="too" }>
+		<cfset var nested = {one=1, 2="too" }>
     	<cfset var struct1 = { one="one", two="two", three="3", nested=nested }>
     	<cfset var struct2 = duplicate( struct1 )>
     	<cfset struct2.one = 1>
@@ -408,7 +408,7 @@
     </cffunction>
 
     <cffunction name="assertStructEquals_fails_for_mismatching_nested_structs" returntype="void">
-    	<cfset var nested = {"one"=1, "2"="two" }>
+    	<cfset var nested = {one=1, 2="two" }>
     	<cfset var struct1 = { one="one", two="two", three="3", nested=nested }>
     	<cfset var struct2 = duplicate( struct1 )>
     	<cfset struct2.nested.one = "one">
