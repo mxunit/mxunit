@@ -38,7 +38,7 @@ function testWhenSomethingIsCalled(){
 
   }
 
-   function dumpArgs(foo){
+   package function dumpArgs(foo){
     debug(arguments);
   }
 
