@@ -9,7 +9,7 @@
      testSuite.addAll("mxunit.tests.bugs.fixture.test_with_underscore");
      suites = testSuite.suites();
      //debug(suites["mxunit.tests.bugs.fixture.test-with_hyphen"]);
-     methods = suites["mxunit.tests.bugs.fixture.test-with_hyphen"].methods;
+     methods = suites.get("mxunit.tests.bugs.fixture.test-with_hyphen").methods;
      assertEquals(3,arrayLen(methods),"Should be adding to methods element.");
     
     </cfscript>
@@ -53,6 +53,17 @@
 		</cfscript>   
 	</cffunction>
 
+	<cffunction name="testGetMapReturnsMap">
+		<cfscript>
+		var testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite();   
+		var map = "";
+
+		makePublic(testSuite,"getMap");
+		map = testSuite.getMap();
+		
+		assertTrue(isInstanceof(map,"java.util.Map"));
+		</cfscript>
+	</cffunction>
 
 	<cffunction name="setUp" access="public" returntype="void">
 
