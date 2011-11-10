@@ -227,16 +227,27 @@ assert function and thus mxunit won't run on BD unless we do this --->
 	  <cfset expectedStringValue = getStringValue(arguments.expected) />
 	  <cfset actualStringValue = getStringValue(arguments.actual) />
     <cfscript>
-		  if (isNumeric(arguments.expected) AND isnumeric(arguments.actual) AND arguments.expected eq arguments.actual){
-		    return;
-		  }
-		    if (expectedStringValue is "" AND actualStringValue is ""){
-		    return;
-		    }
-		  if (expectedStringValue is not "" AND expectedStringValue.equals(actualStringValue)){
-		    return;
-		  }
-		  failNotEquals(expectedStringValue, actualStringValue, arguments.message);
+
+		if( isStruct( expected ) AND isStruct( actual ) ){
+			assertStructEquals( expected, actual, message );
+			return;
+		}
+
+		if( isQuery( expected ) AND isQuery( actual ) ){
+			assertQueryEquals( expected, actual, message );
+			return;
+		}
+
+		if (isNumeric(arguments.expected) AND isnumeric(arguments.actual) AND arguments.expected eq arguments.actual){
+			return;
+		}
+		if (expectedStringValue is "" AND actualStringValue is ""){
+			return;
+		}
+		if (expectedStringValue is not "" AND expectedStringValue.equals(actualStringValue)){
+			return;
+		}
+		failNotEquals(expectedStringValue, actualStringValue, arguments.message);
     </cfscript>
   </cffunction>
 
@@ -289,6 +300,34 @@ assert function and thus mxunit won't run on BD unless we do this --->
 		  failNotEquals(expectedStringValue, actualStringValue, arguments.message, true); //last arg is caseSensitive flag
     </cfscript>
   </cffunction>
+
+  	<cffunction name="assertQueryEquals" access="public" output="false" returntype="void" description="compares 2 queries, cell by cell, and fails if differences exist">
+    	<cfargument name="expected" type="query" required="true"/>
+    	<cfargument name="actual" type="query" required="true"/>
+		<cfargument name="message" type="string" required="false" default=""/>
+
+		<cfset var compareResult = "">
+		<cfinvoke component="DataCompare" method="compareQueries" query1="#expected#" query2="#actual#" returnvariable="compareResult">
+
+		<cfif not compareResult.success>
+			<cfset debug(compareResult)>
+			<cfset assertEquals( compareResult.Query1MismatchValues, compareResult.Query2MismatchValues, "Expected queries to match but they did not. See debug output for a visual dump of the differences. #compareResult.Message#. #arguments.message#" )>
+		</cfif>
+    </cffunction>
+
+    <cffunction name="assertStructEquals" output="false" access="public" returntype="any" hint="compares two structures, key by key, and fails if differences exist">
+    	<cfargument name="expected" type="struct" required="true"/>
+    	<cfargument name="actual" type="struct" required="true"/>
+		<cfargument name="message" type="string" required="false" default=""/>
+
+		<cfset var compareResult = "">
+		<cfinvoke component="DataCompare" method="compareStructs" struct1="#expected#" struct2="#actual#" returnvariable="compareResult">
+
+		<cfif not compareResult.success>
+			<cfset debug(compareResult)>
+			<cfset assertEquals( compareResult.Struct1MismatchValues, compareResult.Struct2MismatchValues, "Expected Structures to match but did not. #compareResult.message# #arguments.message#")>
+		</cfif>
+    </cffunction>
 
   <cffunction name="assertTrue" access="public" returntype="boolean" hint="Core assertion that tests the CONDITION and throws mxunit.exception.AssertionFailedError on failure">
   	<cfargument name="condition" required="yes" type="string" hint="The condition to test. Note that expressions containing CFCs may likely fail">

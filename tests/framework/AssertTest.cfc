@@ -384,6 +384,112 @@
 		</cftry>
 	</cffunction>
 
+	<cffunction name="assertStructEquals_succeeds_for_matching_nested_structs" returntype="void">
+		<cfset var nested = {one=1, 2="two" }>
+    	<cfset var struct1 = { one="one", two="two", three="3", nested = nested }>
+    	<cfset var struct2 = duplicate( struct1 )>
+    	<cfset assertEquals( struct1, struct2 )>
+    </cffunction>
+
+	<cffunction name="assertStructEquals_succeeds_for_matching_nested_structs_with_different_key_case" returntype="void">
+		<cfset var nested = {one=1, 2="two" }>
+    	<cfset var struct1 = { one="one", two="two", three="3", nested = nested }>
+    	<cfset var struct2 = structNew()>
+    	<cfset struct2["one"] = "one">
+    	<cfset struct2["two"] = "two">
+    	<cfset struct2["three"] = "3">
+    	<cfset struct2["nested"] = nested>
+    	<cfset assertEquals( struct1, struct2 )>
+    </cffunction>
+
+	<cffunction name="assertStructEquals_fails_for_mismatching_simple_structs" returntype="void">
+		<cfset var nested = {one=1, 2="too" }>
+    	<cfset var struct1 = { one="one", two="two", three="3", nested=nested }>
+    	<cfset var struct2 = duplicate( struct1 )>
+    	<cfset struct2.one = 1>
+    	<cfset struct2.nested["2"] = "two">
+
+    	<cftry>
+	    	<cfset assertEquals( struct1, struct2 )>
+		<cfcatch type="mxunit.exception.AssertionFailedError">
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+    </cffunction>
+
+    <cffunction name="assertStructEquals_fails_for_mismatching_nested_structs" returntype="void">
+    	<cfset var nested = {one=1, 2="two" }>
+    	<cfset var struct1 = { one="one", two="two", three="3", nested=nested }>
+    	<cfset var struct2 = duplicate( struct1 )>
+    	<cfset struct2.nested.one = "one">
+
+		<cftry>
+	    	<cfset assertEquals( struct1, struct2 )>
+		<cfcatch type="mxunit.exception.AssertionFailedError">
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+    </cffunction>
+
+	<cffunction name="assertQueryEquals_succeeds_for_equal_queries" returntype="void">
+    	<cfset var q1 = "">
+    	<cfset var q2 = "">
+
+<cf_querysim>
+q1
+col1,col2,col3,col4
+1|1.2|1.3|1.4
+2|2.2|2.3|2.4
+3|3.2|3.3|3.4
+</cf_querysim>
+
+<cf_querysim>
+q2
+col4,col2,col3,col1
+1.4|1.2|1.3|1
+2.4|2.2|2.3|2
+3.4|3.2|3.3|3
+</cf_querysim>
+
+	<cfset assertEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
+
+    </cffunction>
+
+	<cffunction name="assertQueryEquals_fails_for_mismatching_queries" returntype="void">
+    	<cfset var q1 = "">
+    	<cfset var q2 = "">
+
+<cf_querysim>
+q1
+col1,col2,col3,col4
+1|1.2|1.3|1.4
+2|2.2|2.3|2.4
+3|3.2|3.3|3.4
+</cf_querysim>
+
+<cf_querysim>
+q2
+col1,col2,col3,col4
+4|1.2|1.3|1.a
+6|2.2|2.3|2.b
+9|3.2|3.3|3.c
+10|3.6|3.0|3.d
+</cf_querysim>
+
+
+		<cftry>
+			<cfset assertEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
+
+		<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+
+    </cffunction>
+
 
 	<cffunction name="testNormalizeArgumentsDefaultEquals">
 		<cfset var asserttype = "equals" />

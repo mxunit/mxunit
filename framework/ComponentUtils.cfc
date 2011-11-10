@@ -22,28 +22,35 @@
 
 
 	<cffunction name="getInstallRoot" returnType="string" access="public">
-		<cfargument name="fullPath" type="string" required="false" default="" hint="Used for testing, really." />
 		<cfscript>
-			var i = 1;//loop index
-			var sep = "/";
-			var package = arrayNew(1); //list
-			var installRoot = "";
-			//We know THIS will always be in mxunit.framework.ComponentUtils
-			var md = getMetaData(this);
-			var name = md.name ;
-			if(len(arguments.fullPath)) {
-			  name = arguments.fullPath;
+			var root = expandPath("/");
+			var mxunit = 0;
+
+			//shortcut of the usual case of a virtualhost / alias on the web root
+			if(fileExists(expandPath("/mxunit/framework/mxunit-config.xml")))
+			{
+				return getContextRoot() &  "/mxunit";
 			}
-			package = listToArray(name,".");
-			//Use the getContextPath to support J2EE apps
-			installRoot = getPageContext().getRequest().getContextPath() & sep;
-			 for(i; i lte arrayLen(package)-2; i = i + 1){
-			  installRoot = installRoot & package[i] & sep;
-			 }
-			return installRoot;
+		</cfscript>
+
+		<!--- check for the a physical directory --->
+		<cfdirectory action="list" directory="#root#" recurse="true" name="mxunit" filter="mxunit-config.xml">
+
+		<cfif mxunit.RecordCount eq 0>
+			<cfif mxunit.RecordCount eq 0>
+				<cfthrow message="Could not find mxunit in the web root" />
+			</cfif>
+		</cfif>
+
+		<cfscript>
+			root = replaceNoCase("#mxunit.directory#/#mxunit.name#", root,"");
+			root = getDirectoryFromPath(root);
+
+			root = getContextRoot() &  "/" &  left(root, (Len(root) - Len("/framework/")));
+
+			return root;
 		</cfscript>
 	</cffunction>
-
 
 	<cffunction name="getComponentRoot" returnType="string" access="public">
 		<cfargument name="fullPath" type="string" required="false" default="" hint="Test Hook." />

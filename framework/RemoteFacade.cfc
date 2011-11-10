@@ -1,4 +1,4 @@
-<cfcomponent name="mxunit.framework.RemoteFacade" hint="Main default interface into MXUnit framework from the MXUnit Ecplise Plugin.">
+<cfcomponent name="mxunit.framework.RemoteFacade" hint="Main default interface into MXUnit framework from the MXUnit Ecplise Plugin." wsversion="1">
 
 	<cfset cu = createObject("component","ComponentUtils")>
 	<cfset cache = createObject("component","RemoteFacadeObjectCache")>
@@ -60,8 +60,8 @@
 		<cfset var key = "">
 		<cfset var suite = createObject("component","TestSuite")>
 		<cfset var testResult = "">
-
-		<cfset var obj = getObject(componentName, TestRunKey)>
+		<!--- the "baseTarget" is the actual test case, underneath its layers of test decorators. When we start the test case, we want the pure object, not the decorated object --->
+		<cfset var obj = getObject(componentName, TestRunKey).getBaseTarget()>
 		<cfset var componentPath = getMetadata(obj).path>
 
 		<cfset suite.enableRequestScopeDebugging()>
@@ -161,6 +161,7 @@
 					<!---		 --->
 				<cfloop from="1" to="#ArrayLen(s_test.error.tagcontext)#" index="tag">
 					<cfif FileExists(s_test.error.tagcontext[tag].template)>
+						<cflog text=" #s_test.error.tagcontext[tag].template# #isFrameworkTest# OR NOT #cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)#" >
 						<cfif isFrameworkTest OR NOT cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)>
 							<cfset t.TAGCONTEXT[i] = structNew()>
 							<cfset t.TAGCONTEXT[i].FILE = s_test.error.tagcontext[tag].template>
