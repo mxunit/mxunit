@@ -238,6 +238,11 @@ assert function and thus mxunit won't run on BD unless we do this --->
 			return;
 		}
 
+		if( isArray(expected) AND isArray( actual ) ){
+			assertArrayEquals( expected, actual, message );
+			return;
+		}
+
 		if (isNumeric(arguments.expected) AND isnumeric(arguments.actual) AND arguments.expected eq arguments.actual){
 			return;
 		}
@@ -311,7 +316,7 @@ assert function and thus mxunit won't run on BD unless we do this --->
 
 		<cfif not compareResult.success>
 			<cfset debug(compareResult)>
-			<cfset assertEquals( compareResult.Query1MismatchValues, compareResult.Query2MismatchValues, "Expected queries to match but they did not. See debug output for a visual dump of the differences. #compareResult.Message#. #arguments.message#" )>
+			<cfset assertEquals( compareResult.Query1MismatchValues, compareResult.Query2MismatchValues, "Expected queries to match but they did not. See debug output for a visual display of the differences. #compareResult.Message#. #arguments.message#" )>
 		</cfif>
     </cffunction>
 
@@ -325,7 +330,20 @@ assert function and thus mxunit won't run on BD unless we do this --->
 
 		<cfif not compareResult.success>
 			<cfset debug(compareResult)>
-			<cfset assertEquals( compareResult.Struct1MismatchValues, compareResult.Struct2MismatchValues, "Expected Structures to match but did not. #compareResult.message# #arguments.message#")>
+			<cfset assertEquals( compareResult.Struct1MismatchValues, compareResult.Struct2MismatchValues, "Expected Structures to match but did not. See debug output for a visual display of the differences. #compareResult.message# #arguments.message#")>
+		</cfif>
+    </cffunction>
+
+    <cffunction name="assertArrayEquals" output="false" access="public" returntype="any" hint="compares two arrays, element by element, and fails if differences exist">
+    	<cfargument name="expected" type="array" required="true"/>
+    	<cfargument name="actual" type="array" required="true"/>
+		<cfargument name="message" type="string" required="false" default=""/>
+
+		<cfset var compareResult = "">
+		<cfinvoke component="DataCompare" method="compareArrays" array1="#expected#" array2="#actual#" returnvariable="compareResult">
+		<cfif not compareResult.success>
+			<cfset debug(compareResult)>
+			<cfset assertEquals( compareResult.array1MismatchValues, compareResult.array2MismatchValues, "Expected arrays to match but did not. See debug output for a visual display of the differences. #compareResult.message#. #arguments.message#")>
 		</cfif>
     </cffunction>
 

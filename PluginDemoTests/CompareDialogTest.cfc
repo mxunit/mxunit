@@ -23,6 +23,28 @@
 		<cfset assertStructEquals(s.one, s.two)>
 	</cffunction>
 
+	<cffunction name="arrayCompareDifferences">
+		<cfset var a1 = [1,2,3,4,5,"a","b","c"]>
+		<cfset var a2 = [1,2,3,4,6,"a","b","c","d","e","f"]>
+		<cfset debug("Check debug output!")>
+		<cfset assertEquals( a1, a2 )>
+	</cffunction>
+
+	<cffunction name="arrayCompareDifferences2">
+		<cfset var a1 = [1,2,3,4,6,"a","b","c","d","e","f"]>
+		<cfset var a2 = [1,2,3,4,5,"a","b","c"]>
+		<cfset debug("Check debug output!")>
+		<cfset assertEquals( a1, a2 )>
+	</cffunction>
+
+	<cffunction name="arrayCompareDifferencesComplex">
+		<cfset var s = makeStructures()>
+		<cfset var a1 = [1,2,3,4,6,"a","b","c", s.one, "d"]>
+		<cfset var a2 = [1,2,3,4,5,"a","b","c", s.two, "e"]>
+		<cfset debug("Check debug output!")>
+		<cfset assertEquals( a1, a2 )>
+	</cffunction>
+
 
 	<cffunction name="makeQueries" access="private">
 			<cfset var q = "">

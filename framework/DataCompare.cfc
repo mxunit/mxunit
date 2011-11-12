@@ -33,8 +33,8 @@
 				return mistmatches;
 			}
 
-			for( row = 1; row LTE query1RecordCount; row++ ){
-				for( col = 1; col LTE numCols; col++ ){
+			for( row = 1; row LTE query1RecordCount; row=row+1 ){
+				for( col = 1; col LTE numCols; col=col+1 ){
 					columnName = columnNames[col];
 					query1ColumnValue = query1[columnName][row];
 					if( row LTE query2RecordCount ){
@@ -62,7 +62,7 @@
 			if( query2RecordCount GT query1RecordCount ){
 				mismatches.success = false;
 				mismatches.message = mismatches.message & "Query 2 was longer than query 1. ";
-				for( row=1; row LTE query1RecordCount; row++ ){
+				for( row=1; row LTE query1RecordCount; row=row+1 ){
 					rowsToDelete = listAppend( rowsToDelete, row );
 				}
 				mismatches.Query2AdditionalRows = QueryDeleteRows( query2, rowsToDelete );
@@ -85,6 +85,7 @@
 			var struct2Value = "";
 			var queryCompareResult = "";
 			var structCompareResult = "";
+			var arrayCompareResult = "";
 			var thisPath = arguments.path;
 			var mismatches = structNew();
 
@@ -136,6 +137,14 @@
 							mismatches.Struct1MismatchValues = listAppend( mismatches.Struct1MismatchValues, "#structCompareResult.Struct1MismatchValues#", "#chr(10)#" );
 							mismatches.Struct2MismatchValues = listAppend( mismatches.Struct2MismatchValues, "#structCompareResult.Struct2MismatchValues#", "#chr(10)#" );
 						}
+					} else if ( isArray( struct1Value ) AND isArray( struct2Value ) ) {
+						arrayCompareResult = compareArrays( struct1Value, struct2Value );
+						if( NOT arrayCompareResult.success ){
+							mismatches.success = false;
+							mismatches.mismatches[thisPath] = arrayCompareResult;
+							mismatches.Struct1MismatchValues = listAppend( mismatches.Struct1MismatchValues, "#arrayCompareResult.Array1MismatchValues#", "#chr(10)#" );
+							mismatches.Struct2MismatchValues = listAppend( mismatches.Struct2MismatchValues, "#arrayCompareResult.Array2MismatchValues#", "#chr(10)#" );
+						}
 					} else {
 						mismatches.message = "Not sure how to compare these datatypes at path #thisPath#. File a bug with a patch. ";
 						mismatches.success = false;
@@ -147,6 +156,91 @@
 			return mismatches;
         </cfscript>
 	</cffunction>
+
+	<cffunction name="compareArrays" output="false" access="public" returntype="any" hint="">
+    	<cfargument name="array1" type="array" required="true"/>
+    	<cfargument name="array2" type="array" required="true"/>
+
+		<cfscript>
+			var row = 1;
+			var array1Len = arrayLen(array1);
+			var array2Len = arrayLen(array2);
+			var array1Value = ""; var array2Value = "";
+			var mismatches = structNew();
+			var loopTotal = min( array1Len, array2Len );
+
+			var queryCompareResult = ""; var structCompareResult = ""; var arrayCompareResult = "";
+
+			mismatches.message = "";
+			mismatches.success = true;
+			mismatches.LengthsMatch = array1Len eq array2Len;
+			mismatches.Array1MismatchValues = "";
+			mismatches.Array2MismatchValues = "";
+
+			for( row = 1; row LTE loopTotal; row=row+1 ){
+
+				array1Value = array1[row];
+				array2Value = array2[row];
+				if( isSimpleValue( array1Value ) AND isSimpleValue( array2Value ) ){
+					if( array1Value NEQ array2Value ){
+						mismatches["row #row#"] = structNew();
+
+						mismatches.success = false;
+						mismatches.message = "Data mismatch. ";
+						mismatches["row #row#"].array1Value = array1Value;
+						mismatches["row #row#"].array2Value = array2Value;
+						mismatches.Array1MismatchValues = listAppend( mismatches.Array1MismatchValues, "row #row#: #array1Value#", "#chr(10)#" );
+						mismatches.Array2MismatchValues = listAppend( mismatches.Array2MismatchValues, "row #row#: #array2Value#", "#chr(10)#" );
+					}
+				} else if ( isQuery( array1Value ) AND isQuery( array2Value ) ){
+					queryCompareResult = compareQueries( array1Value, array2Value );
+					if( NOT queryCompareResult.success ){
+						mismatches.success = false;
+						mismatches["row #row#"] = queryCompareResult;
+						mismatches.Array1MismatchValues = listAppend( mismatches.Array1MismatchValues, "Row #row#, Query Compare Result: #queryCompareResult.Query1MismatchValues#", "#chr(10)#" );
+						mismatches.Array2MismatchValues = listAppend( mismatches.Array2MismatchValues, "Row #row#, Query Compare Result: #queryCompareResult.Query2MismatchValues#", "#chr(10)#" );
+					}
+				} else if ( isStruct( array1Value ) AND isStruct( array2Value ) ){
+					structCompareResult = compareStructs( array1Value, array2Value );
+					if( NOT structCompareResult.success ){
+						mismatches.success = false;
+						mismatches["row #row#"] = structCompareResult;
+						mismatches.Array1MismatchValues = listAppend( mismatches.Array1MismatchValues, "Row #row#, Struct Compare Result: #structCompareResult.Struct1MismatchValues#", "#chr(10)#" );
+						mismatches.Array2MismatchValues = listAppend( mismatches.Array2MismatchValues, "Row #row#, Struct Compare Result: #structCompareResult.Struct2MismatchValues#", "#chr(10)#" );
+					}
+				} else if ( isArray(array1Value) AND isArray(array2Value) ){
+					arrayCompareResult = compareArrays( array1Value, array2Value );
+					if( NOT arrayCompareResult.success ){
+						mismatches.success = false;
+						mismatches["row #row#"] = arrayCompareResult;
+						mismatches.Array1MismatchValues = listAppend( mismatches.Array1MismatchValues, "Row #row#, Array Compare Result: #arrayCompareResult.Array1MismatchValues#", "#chr(10)#" );
+						mismatches.Array2MismatchValues = listAppend( mismatches.Array2MismatchValues, "Row #row#, Array Compare Result: #arrayCompareResult.Array2MismatchValues#", "#chr(10)#" );
+					}
+				} else {
+					mismatches.message = "Not sure how to compare these datatypes at row #row#. File a bug with a patch. ";
+					mismatches.success = false;
+				}
+
+			}
+
+			if( array1Len GT array2Len ){
+				mismatches.success = false;
+				mismatches.message = mismatches.message & " Array 1 was longer than array 2. ";
+				mismatches.Array1AdditionalRows = array1.sublist( array2Len, array1Len );
+				mismatches.Array1MismatchValues = listAppend( mismatches.Array1MismatchValues, "Array 1 had #Array1Len-Array2Len# additional row(s)", "#chr(10)#" );
+			}
+
+			if( array2Len GT array1Len ){
+				mismatches.success = false;
+				mismatches.message = mismatches.message & " Array 2 was longer than array 1. ";
+				mismatches.Array2AdditionalRows = array2.sublist( array1Len, array2Len );//TODO: TEST THIS!!!
+				mismatches.Array2MismatchValues = listAppend( mismatches.Array2MismatchValues, "Array 2 had #Array2Len-Array1Len# additional row(s)", "#chr(10)#" );
+			}
+
+			return mismatches;
+        </cfscript>
+
+    </cffunction>
 
 
 

@@ -99,6 +99,7 @@
 		<cftry>
 			<!--- do something here to cause an error --->
 			<cfset assertEquals("message",1,2) />
+			<cfthrow message="We should have failed prior to this">
 			<cfcatch type="mxunit.exception.AssertionFailedError"><!--- we want this! ---></cfcatch>
 			<cfcatch type="any"><cfrethrow></cfcatch>
 		</cftry>
@@ -458,29 +459,10 @@ col4,col2,col3,col1
     </cffunction>
 
 	<cffunction name="assertQueryEquals_fails_for_mismatching_queries" returntype="void">
-    	<cfset var q1 = "">
-    	<cfset var q2 = "">
-
-<cf_querysim>
-q1
-col1,col2,col3,col4
-1|1.2|1.3|1.4
-2|2.2|2.3|2.4
-3|3.2|3.3|3.4
-</cf_querysim>
-
-<cf_querysim>
-q2
-col1,col2,col3,col4
-4|1.2|1.3|1.a
-6|2.2|2.3|2.b
-9|3.2|3.3|3.c
-10|3.6|3.0|3.d
-</cf_querysim>
-
+		<cfset var queries = createUnequalQueries()>
 
 		<cftry>
-			<cfset assertEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
+			<cfset assertEquals( queries.query1, queries.query2, "These queries should fail because they are not equal")>
 
 		<cfcatch type="mxunit.exception.AssertionFailedError" >
 			<!--- we want this failure --->
@@ -490,6 +472,104 @@ col1,col2,col3,col4
 
     </cffunction>
 
+    <cffunction name="assertEquals_passes_for_matching_arrays" output="false" access="public" returntype="any" hint="">
+		<cfset var expected = [1,2,3,4,5, "a", "b", "c", "d", "e"]>
+		<cfset var actual = [1,2,3,4,5,"a","b","c","d","e"]>
+		<cfset assertEquals( expected, actual, "These arrays should have been equal" )>
+    </cffunction>
+
+    <cffunction name="assertEquals_fails_for_longer_expected_array" output="false" access="public" returntype="any" hint="">
+		<cfset var expected = [1,2,3,4,5, "a", "b", "c", "d", "e", "f", "g"]>
+		<cfset var actual = [1,2,3,4,5,"a","b","c","d","e"]>
+		<cftry>
+			<cfset assertEquals( expected, actual, "These arrays should have been equal" )>
+
+		<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+    </cffunction>
+
+    <cffunction name="assertEquals_fails_for_longer_actual_array" output="false" access="public" returntype="any" hint="">
+		<cfset var expected = [1,2,3,4,5,"a","b","c","d","e"]>
+		<cfset var actual = [1,2,3,4,5, "a", "b", "c", "d", "e", "f", "g", {}]>
+		<cftry>
+			<cfset assertEquals( expected, actual, "These arrays should have been equal" )>
+
+			<cfthrow message="We should have failed prior to this">
+		<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+
+    </cffunction>
+
+    <cffunction name="assertEquals_fails_for_array_with_mismatching_queries" output="false" access="public" returntype="any" hint="">
+    	<cfset var queries = createUnequalQueries()>
+    	<cfset var expected = [queries.query1, queries.query2]>
+    	<cfset var actual = [queries.query2, queries.query1]>
+
+    	<cftry>
+    		<cfset assertEquals( expected, actual, "These comparisons should fail because the queries at each array position do not match")>
+	    	<cfthrow message="We should have failed prior to this">
+    	<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+    	</cftry>
+
+    </cffunction>
+
+    <cffunction name="assertEquals_passes_for_array_with_matching_queries" output="false" access="public" returntype="any" hint="">
+    	<cfset var queries = createUnequalQueries()>
+    	<cfset var expected = [queries.query1, queries.query2]>
+    	<cfset var actual = [queries.query1, queries.query2]>
+
+    	<cfset assertEquals( expected, actual, "These comparisons should pass because the queries at each array position match")>
+    </cffunction>
+
+    <cffunction name="assertEquals_fails_for_array_with_mismatching_structs" output="false" access="public" returntype="any" hint="">
+    	<cfset var expected = [ 1,2,3, {one="one", two="two", three=["a", "b", "c"]} ]>
+    	<cfset var actual = [ 1,2,3, {one="one", two="two", three=["a", "b", "c", "d"]} ]>
+
+    	<cftry>
+    		<cfset assertEquals( expected, actual, "These comparisons should fail because the nested array inside of the nested struct did not match")>
+	    	<cfthrow message="We should have failed prior to this">
+    	<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+    	</cftry>
+
+    </cffunction>
+
+    <cffunction name="assertEquals_passes_for_array_with_matching_structs" output="false" access="public" returntype="any" hint="">
+    	<cfset var expected = [ 1,2,3, {one="one", two="two", three=["a", "b", "c"]} ]>
+    	<cfset var actual = [ 1,2,3, {two="two", three=["a", "b", "c"], one="one"} ]>
+
+    	<cfset assertEquals( expected, actual, "These comparisons should pass b/c the nested data are equal")>
+    </cffunction>
+
+	<cffunction name="assertEquals_fails_for_array_with_mismatching_arrays" output="false" access="public" returntype="any" hint="">
+    	<cfset var expected = [ [1,2,3], [4,5,6] ]>
+    	<cfset var actual = [ [1,2,4], [4,5,7] ]>
+    	<cftry>
+    		<cfset assertEquals( expected, actual, "These comparisons should fail because the nested arrays do not match")>
+	    	<cfthrow message="We should have failed prior to this">
+    	<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+    	</cftry>
+    </cffunction>
+
+	<cffunction name="assertEquals_passes_for_array_with_matching_arrays" output="false" access="public" returntype="any" hint="">
+    	<cfset var expected = [ [1,2,3], [4,5,6] ]>
+    	<cfset var actual = duplicate( expected )>
+    	<cfset assertEquals( expected, actual, "These comparisons should pass because the nested arrays match")>
+    </cffunction>
 
 	<cffunction name="testNormalizeArgumentsDefaultEquals">
 		<cfset var asserttype = "equals" />
@@ -582,6 +662,31 @@ col1,col2,col3,col4
 			</cfcatch>
 		</cftry>
 	</cffunction>
+
+	<cffunction name="createUnequalQueries" output="false" access="private" returntype="struct" hint="">
+		<cfset var q1 = "">
+		<cfset var q2 = "">
+		<cfset var result = "">
+<cf_querysim>
+q1
+col1,col2,col3,col4
+1|1.2|1.3|1.4
+2|2.2|2.3|2.4
+3|3.2|3.3|3.4
+</cf_querysim>
+
+<cf_querysim>
+q2
+col1,col2,col3,col4
+4|1.2|1.3|1.a
+6|2.2|2.3|2.b
+9|3.2|3.3|3.c
+10|3.6|3.0|3.d
+</cf_querysim>
+
+		<cfset result = {query1 = q1, query2 = q2}>
+		<cfreturn result>
+    </cffunction>
 
 	<!---End Specific Test Cases --->
 
