@@ -9,7 +9,7 @@
 			<cftransaction action="rollback" />
 		</cftransaction>
 
-		<cfreturn  result/>
+		<cfreturn result/>
 	</cffunction>
 
 </cfcomponent>

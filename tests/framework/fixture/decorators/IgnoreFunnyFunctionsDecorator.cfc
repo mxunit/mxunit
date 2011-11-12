@@ -4,6 +4,9 @@
     	<cfset var methods = []>
     	<cfset var orig = getTarget().getRunnableMethods()>
     	<cfset var method = 1>
+
+    	<cflog text="Inside IgnoreFunnyFunctionsDecorator">
+
     	<cfloop from="1" to="#arrayLen(orig)#" index="method">
     		<cfif NOT findNoCase("funny", orig[method])>
     			<cfset arrayAppend(methods, orig[method])>
