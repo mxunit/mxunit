@@ -442,7 +442,7 @@
 
 		<!--- go lookup up inheritence tree, and move the metadata if neccessary --->
 		<cfscript>
-			if(!Len(arguments.methodName))
+			if(NOT Len(arguments.methodName))
 			{
 				while(StructKeyExists(metadata, "extends"))
 				{
