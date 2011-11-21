@@ -172,23 +172,6 @@
 		</cfscript>
 	</cffunction>
 
-
-	<cffunction name="getComponentPathx" access="remote" returntype="string" hint="Given a directory path, returns the corresponding CFC package" output="false">
-		<cfargument name="path" type="string" required="true" />
-		<cfargument name="refreshCache" type="boolean" required="false" default="false" />
-
-			<cfset var files = '' />
-			<cfset var package = '' />
-
-			<cfdirectory action="list" type="file" name="files" directory="#arguments.path#" filter="*.cfc" />
-
-			<cfif files.recordCount>
-				<cfset package = replace(normalizePath(files.directory), '/', '.', 'all') />
-			</cfif>
-
-			<cfreturn package />
-		</cffunction>
-
 	<cffunction name="normalizePath" access="public" returntype="string" output="false">
 		<cfargument name="path" type="string" required="true" />
 

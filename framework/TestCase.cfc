@@ -76,11 +76,9 @@
 		<cfargument name="aTestCase" type="TestCase" required="no" default="#this#" />
 
 		<cfscript>
-			var utils = "";
 			super.init();
 			this.metadata = getMetaData(aTestCase);
-			utils = createObject("component","ComponentUtils");
-			this.installRoot = utils.getComponentRoot();
+			this.installRoot = componentUtils.getComponentRoot();
 			return applyDecorators(aTestCase);
 		</cfscript>
 
@@ -215,7 +213,6 @@
 		<cfset var thisComponentMetadata = getMetadata(this) />
 		<cfset var i = "" />
 		<cfset var tmpParentObj = "" />
-		<cfset var cu = createObject("component", "ComponentUtils") />
 
 		<!--- now get the public methods from the actual component --->
 		<cfif StructKeyExists(thisComponentMetadata, "Functions")>
@@ -228,7 +225,7 @@
 		</cfif>
 
 		<!--- climb the parent tree until we hit a framework template (i.e. TestCase) --->
-		<cfif NOT cu.isFrameworkTemplate(thisComponentMetadata.Extends.Path)>
+		<cfif NOT componentUtils.isFrameworkTemplate(thisComponentMetadata.Extends.Path)>
 			<cfset tmpParentObj = createObject("component", thisComponentMetadata.Extends.Name) />
 			<cfset a_parentMethods = tmpParentObj.getRunnableMethods() />
 
@@ -493,7 +490,7 @@
 			var decoratorNames = 0;
 
 			//if already a decorator, kick out.
-			if(isInstanceOf(arguments.object, "mxunit.framework.TestDecorator"))
+			if(componentUtils.objectIsTypeOf(arguments.object, "mxunit.framework.TestDecorator"))
 			{
 				return arguments.object;
 			}

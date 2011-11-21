@@ -1,4 +1,4 @@
-<cfcomponent hint="Assertions for XML and well formed HTML" output="false">
+<cfcomponent hint="Assertions for XML and well formed HTML" output="false" extends="Assert">
 
 
  <cffunction name="assertXpath" access="public" returntype="any">
@@ -53,8 +53,7 @@ mssage to display when this assertion fails" default="The XPath expression,
     <cfargument name="data" type="any" required="true" hint="A string that needs to be parsed into an XML DOM Object.">
     <cfargument name="isUrl" type="boolean" required="false" default="false" hint="Flag that determines whether or not the data argument is a URL as opposed to a string.">
     <cfscript>
-     var util = createObject("component","ComponentUtils");
-     var root =  util.getComponentRoot();
+     var root =  componentUtils.getComponentRoot();
      var dom = xmlNew();
      var paths = arrayNew(1);
      var loader = "";

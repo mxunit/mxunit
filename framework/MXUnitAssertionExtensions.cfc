@@ -3,6 +3,8 @@
  --->
 <cfcomponent displayname="MXUnitAssertionExtensions" extends="Assert" output="false" hint="Extends core mxunit assertions.">
 
+	
+	
 	<cfparam name="request.__mxunitInheritanceTree__" type="string" default="" />
 
 	<cffunction name="assertIsXMLDoc" access="public" returntype="boolean">
@@ -98,14 +100,9 @@
 	<cffunction name="assertIsTypeOf" access="public" returntype="boolean" hint="returns true if 'type' argument matches the object's type or if the object is in the inheritance tree of the type.">
 		<cfargument name="o" required="yes" type="any" />
 		<cfargument name="type" required="yes" type="string" />
-
-		<cfset var md = getMetaData(o)>
-		<cfset var oType = md.name>
-		<cfset var ancestry = buildInheritanceTree(md) />
-
-		<cfset var message = "The object [#oType#] is not of type #arguments.type#. Searched inheritance tree: [#ancestry#]">
-		<cfif listFindNoCase(ancestry,arguments.type) eq 0>
-			<cfset fail(message)>
+		
+		<cfif NOT componentUtils.objectIsTypeOf( o, type )>
+			<cfset fail( "The object [#getMetadata(o).name#] is not of type #arguments.type#. Searched inheritance tree: [#componentUtils.buildInheritanceTree(getMetadata(o))#]" )>
 		</cfif>
 
 		<cfreturn true>
@@ -142,37 +139,6 @@
 		</cfif>
 
 		<cfreturn true />
-
-	</cffunction>
-
-	<cffunction name="buildInheritanceTree" access="public" returntype="string">
-		<cfargument name="metaData" type="struct" />
-		<cfargument name="accumulator" type="string" required="false" default=""/>
-
-		<cfscript>
-			var key = "";
-
-			if( structKeyExists(arguments.metadata,"name") AND listFindNoCase(accumulator,arguments.metaData.name) eq 0 ){
-				accumulator =  accumulator & arguments.metaData.name & ",";
-			}
-
-			if(structKeyExists(arguments.metaData,"extends")){
-				//why, oh why, is the structure different for interfaces vs. extends? For F**k's sake!
-				if( structKeyExists( metadata.extends, "name" ) ){
-					accumulator = buildInheritanceTree(metaData.extends, accumulator);
-				}else{
-					accumulator = buildInheritanceTree(metadata.extends[ structKeyList(metadata.extends) ], accumulator);
-				}
-			}
-
-			if(structKeyExists(arguments.metaData,"implements")){
-				for(key in arguments.metadata.implements){
-					accumulator = buildInheritanceTree(metaData.implements[ key ], accumulator);
-				}
-			}
-
-			return  accumulator;
-		</cfscript>
 
 	</cffunction>
 

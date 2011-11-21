@@ -5,7 +5,9 @@ Main component for performing assertions.
 
  --->
 <cfcomponent displayname="Assert"
-             hint="Main component for asserting state. You will not generally need to instantiate this component directly - the framework makes it available for your TestCases. Use this to see what assertions are available and note that it can easily be extended using the Assert.addDecortor() method or by editing the mxunit-config.xml file, following the examples therein.">
+             hint="Main component for asserting state. You will not instantiate this component directly - the framework makes it available for your TestCases. Use this to see what assertions are available and note that it can easily be extended using the Assert.addDecortor() method or by editing the mxunit-config.xml file, following the examples therein.">
+
+	<cfset variables.componentUtils = createObject("component", "componentUtils")>
 
 	<cfset variables.testStyle = "default">
 
@@ -32,6 +34,7 @@ Main component for performing assertions.
   <!--- Constructor;  named init instead of Assert because BlueDragon has a built-in
 assert function and thus mxunit won't run on BD unless we do this --->
   <cffunction name="init" access="remote" returntype="Assert" hint="Constructor">
+		
     <cfset addAssertDecorators() />
     <!---
     Leave this out for now ...
@@ -59,6 +62,7 @@ assert function and thus mxunit won't run on BD unless we do this --->
    <cfset var i= "">
 
    <cftry>
+   	
 
    <cfset decorator = createObject("component", arguments.decoratorName) />
 
