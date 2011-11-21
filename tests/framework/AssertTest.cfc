@@ -13,7 +13,7 @@
 			var expected = 'a QuicK BrOWN foX';
 			var actual = 'a QuicK BrOWN foX';
 			assertEqualsCase( expected , actual );
-		</cfscript> 
+		</cfscript>
 	</cffunction>
 
 
@@ -26,10 +26,10 @@
 			 fail('should not get here');
 			}
 			catch(mxunit.exception.AssertionFailedError e){
-			
+
 			}
-			
-		</cfscript> 
+
+		</cfscript>
 	</cffunction>
 
 
@@ -37,7 +37,7 @@
 		<cfscript>
 			var foo = [1,2,{foo='bar'}];
 			assert(true,"should pass");
-			
+
 			try{
 			  assert (false);
 			}
@@ -45,7 +45,7 @@
 			 //ok we're good
 			 // caught expected exception : assert(false)
 			}
-			
+
 			assert(1 eq 1);
 			try{
 			  assert (1 eq 0);
@@ -54,24 +54,24 @@
 			 //ok we're good
 			 // caught expected exception : assert(1 eq 0)
 			}
-			
+
 			try{
 			 assert (foo);
 			}
 			catch(Application e){
 			  // should not allow complex objects. But what's the exception type here, CF?
 			}
-			
+
 			try{
 			 assert ('some string');
 			}
 			catch(Expression e){
 			 // should not allow strings, either;
 			}
-			
+
 			//  assert (_MIN lt _MAX , "@see setUp() for system MIN and MAX values.");
-			
-		</cfscript> 
+
+		</cfscript>
 	</cffunction>
 
 
@@ -90,7 +90,7 @@
 			writeoutput(getStringValue(foo)) ;
 			exp = "test stringValue output from ComparatorTestData.cfc";
 			assertEquals(exp, getStringValue(myComponent3), "getStringValue(myComponent3) problem");
-		</cfscript> 
+		</cfscript>
 	</cffunction>
 
 
@@ -99,6 +99,7 @@
 		<cftry>
 			<!--- do something here to cause an error --->
 			<cfset assertEquals("message",1,2) />
+			<cfthrow message="We should have failed prior to this">
 			<cfcatch type="mxunit.exception.AssertionFailedError"><!--- we want this! ---></cfcatch>
 			<cfcatch type="any"><cfrethrow></cfcatch>
 		</cftry>
@@ -192,7 +193,7 @@
 	<cffunction name="testAssertEquals" access="public" returntype="void">
 		<cfscript>
 			assertEquals(myComponent4, myComponent3,"stringValue() implemented"); //
-		</cfscript> 
+		</cfscript>
 	</cffunction>
 
 
@@ -200,8 +201,8 @@
 		<cftry>
 			<cfset assertEquals("Please Excuse me sir","Please Excuse me madam") />
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfset assertEquals("Please Excuse me sir",this.expected) />
-				<cfset assertEquals("Please Excuse me madam",this.actual) />
+				<cfset assertEquals("Please Excuse me sir", getExpected()) />
+				<cfset assertEquals("Please Excuse me madam", getActual()) />
 			</cfcatch>
 		</cftry>
 	</cffunction>
@@ -211,13 +212,13 @@
 		<!--- trigger the assertion --->
 		<cfset assertEquals("one","one") />
 		<!--- now do the real assertions for this test --->
-		<cfset assertTrue(this.expected eq "","this.expected should have been empty but was #this.expected#") />
-		<cfset assertTrue(this.actual eq "", "this.actual should have been empty but was #this.actual#") />
+		<cfset assertTrue(getExpected() eq "","getExpected() should have been empty but was #getExpected()#") />
+		<cfset assertTrue(getActual() eq "", "getActual() should have been empty but was #getActual()#") />
 	</cffunction>
 
 
 	<cffunction name="testAssertTrue" access="public" returntype="void">
-		<cfscript>assertTrue(true,"This test should pass.");</cfscript> 
+		<cfscript>assertTrue(true,"This test should pass.");</cfscript>
 	</cffunction>
 
 
@@ -237,14 +238,14 @@
 			<cfscript>
 				assertEquals(myComponent1,myComponent2,"This should fail because toString() or stringValue() not implemented.");
 				assertEquals(1,2,"This should fail");
-			</cfscript> 
+			</cfscript>
 			<cfcatch type="mxunit.exception.AssertionFailedError" />
 		</cftry>
 	</cffunction>
 
 
 	<cffunction name="testFailure" access="public" returntype="void">
-		This tests an intentional failure. It should catch the exception correctly and return true. 
+		This tests an intentional failure. It should catch the exception correctly and return true.
 		<cftry>
 			<cfset fail("Did not catch AssertionFailedError") />
 			<cfcatch type="mxunit.exception.AssertionFailedError" />
@@ -384,6 +385,191 @@
 		</cftry>
 	</cffunction>
 
+	<cffunction name="assertStructEquals_succeeds_for_matching_nested_structs" returntype="void">
+		<cfset var nested = {one=1, 2="two" }>
+    	<cfset var struct1 = { one="one", two="two", three="3", nested = nested }>
+    	<cfset var struct2 = duplicate( struct1 )>
+    	<cfset assertEquals( struct1, struct2 )>
+    </cffunction>
+
+	<cffunction name="assertStructEquals_succeeds_for_matching_nested_structs_with_different_key_case" returntype="void">
+		<cfset var nested = {one=1, 2="two" }>
+    	<cfset var struct1 = { one="one", two="two", three="3", nested = nested }>
+    	<cfset var struct2 = structNew()>
+    	<cfset struct2["one"] = "one">
+    	<cfset struct2["two"] = "two">
+    	<cfset struct2["three"] = "3">
+    	<cfset struct2["nested"] = nested>
+    	<cfset assertEquals( struct1, struct2 )>
+    </cffunction>
+
+	<cffunction name="assertStructEquals_fails_for_mismatching_simple_structs" returntype="void">
+		<cfset var nested = {one=1, 2="too" }>
+    	<cfset var struct1 = { one="one", two="two", three="3", nested=nested }>
+    	<cfset var struct2 = duplicate( struct1 )>
+    	<cfset struct2.one = 1>
+    	<cfset struct2.nested["2"] = "two">
+
+    	<cftry>
+	    	<cfset assertEquals( struct1, struct2 )>
+		<cfcatch type="mxunit.exception.AssertionFailedError">
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+    </cffunction>
+
+    <cffunction name="assertStructEquals_fails_for_mismatching_nested_structs" returntype="void">
+    	<cfset var nested = {one=1, 2="two" }>
+    	<cfset var struct1 = { one="one", two="two", three="3", nested=nested }>
+    	<cfset var struct2 = duplicate( struct1 )>
+    	<cfset struct2.nested.one = "one">
+
+		<cftry>
+	    	<cfset assertEquals( struct1, struct2 )>
+		<cfcatch type="mxunit.exception.AssertionFailedError">
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+    </cffunction>
+
+	<cffunction name="assertQueryEquals_succeeds_for_equal_queries" returntype="void">
+    	<cfset var q1 = "">
+    	<cfset var q2 = "">
+
+<cf_querysim>
+q1
+col1,col2,col3,col4
+1|1.2|1.3|1.4
+2|2.2|2.3|2.4
+3|3.2|3.3|3.4
+</cf_querysim>
+
+<cf_querysim>
+q2
+col4,col2,col3,col1
+1.4|1.2|1.3|1
+2.4|2.2|2.3|2
+3.4|3.2|3.3|3
+</cf_querysim>
+
+	<cfset assertEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
+
+    </cffunction>
+
+	<cffunction name="assertQueryEquals_fails_for_mismatching_queries" returntype="void">
+		<cfset var queries = createUnequalQueries()>
+
+		<cftry>
+			<cfset assertEquals( queries.query1, queries.query2, "These queries should fail because they are not equal")>
+
+		<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+
+    </cffunction>
+
+    <cffunction name="assertEquals_passes_for_matching_arrays" output="false" access="public" returntype="any" hint="">
+		<cfset var expected = [1,2,3,4,5, "a", "b", "c", "d", "e"]>
+		<cfset var actual = [1,2,3,4,5,"a","b","c","d","e"]>
+		<cfset assertEquals( expected, actual, "These arrays should have been equal" )>
+    </cffunction>
+
+    <cffunction name="assertEquals_fails_for_longer_expected_array" output="false" access="public" returntype="any" hint="">
+		<cfset var expected = [1,2,3,4,5, "a", "b", "c", "d", "e", "f", "g"]>
+		<cfset var actual = [1,2,3,4,5,"a","b","c","d","e"]>
+		<cftry>
+			<cfset assertEquals( expected, actual, "These arrays should have been equal" )>
+
+		<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+    </cffunction>
+
+    <cffunction name="assertEquals_fails_for_longer_actual_array" output="false" access="public" returntype="any" hint="">
+		<cfset var expected = [1,2,3,4,5,"a","b","c","d","e"]>
+		<cfset var actual = [1,2,3,4,5, "a", "b", "c", "d", "e", "f", "g", {}]>
+		<cftry>
+			<cfset assertEquals( expected, actual, "These arrays should have been equal" )>
+
+			<cfthrow message="We should have failed prior to this">
+		<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
+
+    </cffunction>
+
+    <cffunction name="assertEquals_fails_for_array_with_mismatching_queries" output="false" access="public" returntype="any" hint="">
+    	<cfset var queries = createUnequalQueries()>
+    	<cfset var expected = [queries.query1, queries.query2]>
+    	<cfset var actual = [queries.query2, queries.query1]>
+
+    	<cftry>
+    		<cfset assertEquals( expected, actual, "These comparisons should fail because the queries at each array position do not match")>
+	    	<cfthrow message="We should have failed prior to this">
+    	<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+    	</cftry>
+
+    </cffunction>
+
+    <cffunction name="assertEquals_passes_for_array_with_matching_queries" output="false" access="public" returntype="any" hint="">
+    	<cfset var queries = createUnequalQueries()>
+    	<cfset var expected = [queries.query1, queries.query2]>
+    	<cfset var actual = [queries.query1, queries.query2]>
+
+    	<cfset assertEquals( expected, actual, "These comparisons should pass because the queries at each array position match")>
+    </cffunction>
+
+    <cffunction name="assertEquals_fails_for_array_with_mismatching_structs" output="false" access="public" returntype="any" hint="">
+    	<cfset var expected = [ 1,2,3, {one="one", two="two", three=["a", "b", "c"]} ]>
+    	<cfset var actual = [ 1,2,3, {one="one", two="two", three=["a", "b", "c", "d"]} ]>
+
+    	<cftry>
+    		<cfset assertEquals( expected, actual, "These comparisons should fail because the nested array inside of the nested struct did not match")>
+	    	<cfthrow message="We should have failed prior to this">
+    	<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+    	</cftry>
+
+    </cffunction>
+
+    <cffunction name="assertEquals_passes_for_array_with_matching_structs" output="false" access="public" returntype="any" hint="">
+    	<cfset var expected = [ 1,2,3, {one="one", two="two", three=["a", "b", "c"]} ]>
+    	<cfset var actual = [ 1,2,3, {two="two", three=["a", "b", "c"], one="one"} ]>
+
+    	<cfset assertEquals( expected, actual, "These comparisons should pass b/c the nested data are equal")>
+    </cffunction>
+
+	<cffunction name="assertEquals_fails_for_array_with_mismatching_arrays" output="false" access="public" returntype="any" hint="">
+    	<cfset var expected = [ [1,2,3], [4,5,6] ]>
+    	<cfset var actual = [ [1,2,4], [4,5,7] ]>
+    	<cftry>
+    		<cfset assertEquals( expected, actual, "These comparisons should fail because the nested arrays do not match")>
+	    	<cfthrow message="We should have failed prior to this">
+    	<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+    	</cftry>
+    </cffunction>
+
+	<cffunction name="assertEquals_passes_for_array_with_matching_arrays" output="false" access="public" returntype="any" hint="">
+    	<cfset var expected = [ [1,2,3], [4,5,6] ]>
+    	<cfset var actual = duplicate( expected )>
+    	<cfset assertEquals( expected, actual, "These comparisons should pass because the nested arrays match")>
+    </cffunction>
 
 	<cffunction name="testNormalizeArgumentsDefaultEquals">
 		<cfset var asserttype = "equals" />
@@ -477,6 +663,31 @@
 		</cftry>
 	</cffunction>
 
+	<cffunction name="createUnequalQueries" output="false" access="private" returntype="struct" hint="">
+		<cfset var q1 = "">
+		<cfset var q2 = "">
+		<cfset var result = "">
+<cf_querysim>
+q1
+col1,col2,col3,col4
+1|1.2|1.3|1.4
+2|2.2|2.3|2.4
+3|3.2|3.3|3.4
+</cf_querysim>
+
+<cf_querysim>
+q2
+col1,col2,col3,col4
+4|1.2|1.3|1.a
+6|2.2|2.3|2.b
+9|3.2|3.3|3.c
+10|3.6|3.0|3.d
+</cf_querysim>
+
+		<cfset result = {query1 = q1, query2 = q2}>
+		<cfreturn result>
+    </cffunction>
+
 	<!---End Specific Test Cases --->
 
 	<cffunction name="setUp" access="public" returntype="void">
@@ -492,7 +703,7 @@
 			myComponent4 = createObject("component","mxunit.tests.framework.fixture.ComparatorTestData");
 			_MIN = createObject("java","java.lang.Integer").MIN_VALUE;
 			_MAX = createObject("java","java.lang.Integer").MAX_VALUE;
-		</cfscript> 
+		</cfscript>
 	</cffunction>
 
 

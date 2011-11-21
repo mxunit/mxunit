@@ -43,12 +43,11 @@
 		<!--- How can we enforce creating a name? --->
 		<cfparam name="this.name" type="string" default="" />
 		<cfparam name="this.traceMessage" type="string" default="" />
-		<cfparam name="this.result" type="any" default="#createObject("component","TestResult")#" />
+		<cfparam name="this.result" type="any" default="#createObject("component", "TestResult")#" />
 		<cfparam name="this.metadata" type="struct" default="#getMetaData(this)#" />
 		<cfparam name="this.package" type="string" default="" />
 
 		<cfset setMockingFramework("") />
-
 		<cfset initDebug() />
 	</cffunction>
 
@@ -64,7 +63,7 @@
 	<cffunction name="createRequestScopeDebug" access="public" output="false">
 		<cfset request.debug = debug><!--- mixin the function --->
 		<cfset request.debugArrayWrapper = StructNew()>
-		<cfset request.debugArrayWrapper.debugArray = ArrayNew(1)>
+		<cfset request.debugArrayWrapper.debugArray = arrayNew(1)>
 	</cffunction>
 
 	<cffunction name="stopRequestScopeDebug" access="public" output="false">
@@ -74,17 +73,17 @@
 
 	<!--- get on with the show --->
 	<cffunction name="TestCase" returntype="any" access="remote">
-		<cfargument name="aTestCase" type="TestCase" required="yes" />
+		<cfargument name="aTestCase" type="TestCase" required="no" default="#this#" />
 
 		<cfscript>
 			var utils = "";
+			super.init();
 			this.metadata = getMetaData(aTestCase);
 			utils = createObject("component","ComponentUtils");
 			this.installRoot = utils.getComponentRoot();
-			super.init();
+			return applyDecorators(aTestCase);
 		</cfscript>
 
-		<cfreturn this />
 	</cffunction>
 
 	<cffunction name="toStringValue" access="public" returntype="string" hint="Returns the name of this TestCase">
@@ -105,6 +104,17 @@
 			TestCase(this);
 			testResult.startTest(this);
 		</cfscript>
+	</cffunction>
+
+	<cffunction name="invokeTestMethod" hint="invoke the test method on this case, returns any output. Generally useful for decorators to intercept"
+		access="public" returntype="string" output="false" >
+		<cfargument name="methodName" hint="the name of the method to invoke" type="string" required="Yes">
+		<cfargument name="args" hint="Optional set of arguments" type="struct" required="No" default="#StructNew()#">
+		<cfset var output = 0>
+		<cfsavecontent variable="output" >
+			<cfinvoke component="#this#" method="#arguments.methodName#" argumentcollection="#arguments.args#">
+		</cfsavecontent>
+		<cfreturn output />
 	</cffunction>
 
 	<!---
@@ -158,7 +168,7 @@
 		<cfargument name="output" type="string" required="false" default="jqGrid" hint="Output format: html,xml,junitxml,jqGrid "><!--- html,xml,junitxml,jqGrid --->
 
 		<cfscript>
-			TestCase(this);
+			TestCase(this); //don't remove this. its breaks things (no I don't know why)
 
 			this.result = runTest();
 
@@ -200,50 +210,50 @@
 	</cffunction>
 
 	<cffunction name="getRunnableMethods" hint="Gets an array of all runnable test methods for this test case. This includes anything in its inheritance hierarchy" access="public" returntype="array" output="false">
-		<cfset var a_methods = ArrayNew(1) />
-		<cfset var a_parentMethods = ArrayNew(1) />
+		<cfset var a_methods = arrayNew(1) />
+		<cfset var a_parentMethods = arrayNew(1) />
 		<cfset var thisComponentMetadata = getMetadata(this) />
 		<cfset var i = "" />
 		<cfset var tmpParentObj = "" />
-		<cfset var cu = createObject("component","ComponentUtils") />
+		<cfset var cu = createObject("component", "ComponentUtils") />
 
 		<!--- now get the public methods from the actual component --->
-		<cfif StructKeyExists(ThisComponentMetadata,"Functions")>
-			<cfloop from="1" to="#ArrayLen(ThisComponentMetadata.Functions)#" index="i">
-				<cfparam name="ThisComponentMetadata.Functions[#i#].access" default="public">
-				<cfif testIsAcceptable(ThisComponentMetadata.Functions[i])>
-					<cfset ArrayAppend(a_methods,ThisComponentMetadata.Functions[i].name)>
+		<cfif StructKeyExists(thisComponentMetadata, "Functions")>
+			<cfloop from="1" to="#arrayLen(thisComponentMetadata.Functions)#" index="i">
+				<cfparam name="thisComponentMetadata.Functions[#i#].access" default="public">
+				<cfif accept(thisComponentMetadata.Functions[i])>
+					<cfset arrayAppend(a_methods, thisComponentMetadata.Functions[i].name)>
 				</cfif>
 			</cfloop>
 		</cfif>
 
 		<!--- climb the parent tree until we hit a framework template (i.e. TestCase) --->
-		<cfif NOT cu.isFrameworkTemplate(ThisComponentMetadata.Extends.Path)>
-			<cfset tmpParentObj = createObject("component",ThisComponentMetadata.Extends.Name) />
+		<cfif NOT cu.isFrameworkTemplate(thisComponentMetadata.Extends.Path)>
+			<cfset tmpParentObj = createObject("component", thisComponentMetadata.Extends.Name) />
 			<cfset a_parentMethods = tmpParentObj.getRunnableMethods() />
 
-			<cfloop from="1" to="#ArrayLen(a_parentMethods)#" index="i">
+			<cfloop from="1" to="#arrayLen(a_parentMethods)#" index="i">
 				<!--- append this method from the parent only if the child didn't already add it --->
-				<cfif NOT listFindNoCase( ArrayToList(a_methods), a_parentMethods[i])>
-					<cfset ArrayAppend(a_methods,a_parentMethods[i]) />
+				<cfif NOT listFindNoCase(arrayToList(a_methods), a_parentMethods[i])>
+					<cfset arrayAppend(a_methods, a_parentMethods[i]) />
 				</cfif>
 			</cfloop>
 
 			<cfset tmpParentObj = "" />
-			<cfset a_parentMethods = ArrayNew(1) />
+			<cfset a_parentMethods = arrayNew(1) />
 		</cfif>
 
 		<cfreturn a_methods />
 	</cffunction>
 
-	<cffunction name="testIsAcceptable" access="package" hint="contains the logic for whether a test is a valid runnable method" returntype="boolean">
-		<cfargument name="TestStruct" type="struct" required="true" hint="Structure for a function coming from getmetadata"/>
+	<cffunction name="accept" access="package" hint="contains the logic for whether a test is a valid runnable method" returntype="boolean">
+		<cfargument name="testStruct" type="struct" required="true" hint="Structure for a function coming from getmetadata"/>
 		<cfset var isAcceptable = true>
 
-		<cfif ListFindNoCase("package,private",TestStruct.access)
-			 OR ListFindNoCase("setUp,tearDown,beforeTests,afterTests",TestStruct.name)
-			 OR reFindNoCase("_cffunccfthread",TestStruct.Name)
-			 OR ( (structKeyExists(TestStruct, "test") AND isBoolean(TestStruct.test) AND NOT TestStruct.test))>
+		<cfif listFindNoCase("package,private", testStruct.access)
+			 OR listFindNoCase("setUp,tearDown,beforeTests,afterTests", testStruct.name)
+			 OR reFindNoCase("_cffunccfthread", testStruct.Name)
+			 OR ( (structKeyExists(testStruct, "test") AND isBoolean(testStruct.test) AND NOT testStruct.test))>
 
 			<cfset isAcceptable = false>
 		</cfif>
@@ -264,41 +274,41 @@
 	</cffunction>
 
 	<cffunction name="injectMethod" output="false" access="public" returntype="void" hint="injects the method from giver into receiver. This is helpful for quick and dirty mocking">
-		<cfargument name="Receiver" type="any" required="true" hint="the object receiving the method"/>
-		<cfargument name="Giver" type="any" required="true" hint="the object giving the method"/>
+		<cfargument name="receiver" type="any" required="true" hint="the object receiving the method"/>
+		<cfargument name="giver" type="any" required="true" hint="the object giving the method"/>
 		<cfargument name="functionName" type="string" required="true" hint="the function to be injected from the giver into the receiver"/>
 		<cfargument name="functionNameInReceiver" type="string" required="false" default="#arguments.functionName#" hint="the function name that you will call. this is useful when you want to inject giver.someFunctionXXX but have it be called as someFunction in your receiver object">
 
 		<cfset var blender = createObject("component","ComponentBlender")>
 
-		<cfset blender._mixinAll(Receiver,blender,"_mixin,_copyToNewName")>
-		<cfset blender._mixinAll(Giver,blender,"_getComponentVariable")>
+		<cfset blender._mixinAll(receiver, blender, "_mixin,_copyToNewName")>
+		<cfset blender._mixinAll(giver, blender, "_getComponentVariable")>
 
-		<cfset receiver._copyToNewName(functionNameInReceiver,functionNameInReceiver & "__orig__",true)>
+		<cfset receiver._copyToNewName(functionNameInReceiver, functionNameInReceiver & "__orig__", true)>
 		<cfset receiver._mixin( propertyName = functionNameInReceiver,
 								property = Giver._getComponentVariable(functionName),
 								ignoreIfExisting = false )>
 	</cffunction>
 
 	<cffunction name="restoreMethod" output="false" access="public" returntype="void" hint="restores a previously overwritten method (via injectMethod) to its original state">
-    	<cfargument name="Receiver" type="any" required="true"/>
+    	<cfargument name="receiver" type="any" required="true"/>
 		<cfargument name="functionName" type="string" required="true"/>
 		<cfset var blender = createObject("component","ComponentBlender")>
-		<cfset blender._mixinAll(Receiver,blender,"_copyToNewName")>
-		<cfset receiver._copyToNewName (functionName & "__orig__",functionName,false)>
+		<cfset blender._mixinAll(receiver, blender, "_copyToNewName")>
+		<cfset receiver._copyToNewName(functionName & "__orig__", functionName,false)>
 	</cffunction>
 
 
 	<cffunction name="injectProperty" output="false" access="public" returntype="void" hint="injects properties into the receiving object">
-		<cfargument name="Receiver" type="any" required="true" hint="the object receiving the method"/>
+		<cfargument name="receiver" type="any" required="true" hint="the object receiving the method"/>
 		<cfargument name="propertyName" type="string" required="true" hint="the property to be overwritten"/>
 		<cfargument name="propertyValue" type="any" required="true" hint="the property value to be used">
 		<cfargument name="scope" type="string" required="false" default="" hint="the scope in which to set the property. Defaults to variables and this.">
 
 		<cfset var blender = createObject("component","ComponentBlender")>
 
-		<cfset blender._mixinAll(Receiver,blender,"_mixin,_mixinProperty")>
-		<cfset Receiver._mixinProperty(propertyName = arguments.propertyName,
+		<cfset blender._mixinAll(receiver, blender, "_mixin,_mixinProperty")>
+		<cfset receiver._mixinProperty(propertyName = arguments.propertyName,
 								property = arguments.propertyValue,
 								scope = arguments.scope)>
 	</cffunction>
@@ -316,7 +326,7 @@
 			<cfset variables.debugArrayWrapper = request.debugArrayWrapper>
 		</cfif>
 
-		<cfset arrayappend(variables.debugArrayWrapper.debugArray, arguments) />
+		<cfset arrayAppend(variables.debugArrayWrapper.debugArray, arguments) />
 	</cffunction>
 
 	<cffunction name="clearDebug" access="public" returntype="void" hint="Clears the debug array">
@@ -411,25 +421,47 @@
 
 	<!--- annotation stuff --->
 	<cffunction name="getAnnotation" access="public" returntype="Any" hint="Returns the value for an annotation, allowing for an mxunit namespace or not">
-		<cfargument name="methodName" type="Any" required="true" hint="The name of the test method" />
+		<cfargument name="methodName" type="Any" required="false" hint="The name of the test method. An empty string means a testCase annotation" default="" />
 		<cfargument name="annotationName" type="Any" required="true" hint="The name of the annotation" />
 		<cfargument name="defaultValue" type="Any" required="false" default="" hint="The value to return if no annotation is found" />
 
 		<cfset var returnVal = arguments.defaultValue />
-		<cfset var methodMetadata = "" />
-
-		<cfif structKeyExists(this,arguments.methodName)>
-			<cfset methodMetadata = getMetadata(this[arguments.methodName]) />
-
-			<cfif StructKeyExists(methodMetadata,"mxunit:" & arguments.annotationName)>
-				<cfset returnVal = methodmetadata["mxunit:" & arguments.annotationName] />
-			<cfelseif StructKeyExists(methodMetadata,arguments.annotationName)>
-				<cfset returnVal = methodmetadata[arguments.annotationName] />
+		<cfset var metadataTarget = this />
+		<cfset var metadata = "" />
+		<cfif len(arguments.methodName) gt 0>
+			<cfif not structKeyExists(this,arguments.methodName)>
+				<cfthrow type="mxunit.exception.methodNotFound"
+					message="An annotation of #arguments.annotationName# was requested for the #arguments.methodName# method, which does not exist."
+					detail="Check the name of the method." />
+			<cfelse>
+				<cfset metadataTarget = this[arguments.methodName] />
 			</cfif>
-		<cfelse>
-			<cfthrow type="mxunit.exception.methodNotFound"
-				message="An annotation of #arguments.annotationName# was requested for the #arguments.methodName# method, which does not exist."
-				detail="Check the name of the method." />
+		</cfif>
+
+		<cfset metadata = getMetadata(metadataTarget) />
+
+		<!--- go lookup up inheritence tree, and move the metadata if neccessary --->
+		<cfscript>
+			if(NOT Len(arguments.methodName))
+			{
+				while(StructKeyExists(metadata, "extends"))
+				{
+					if(StructKeyExists(metadata,"mxunit:" & arguments.annotationName) OR
+						StructKeyExists(metadata,arguments.annotationName)
+						)
+					{
+						break;
+					}
+
+					metadata = metadata.extends;
+				}
+			}
+        </cfscript>
+
+		<cfif StructKeyExists(metadata,"mxunit:" & arguments.annotationName)>
+			<cfset returnVal = metadata["mxunit:" & arguments.annotationName] />
+		<cfelseif StructKeyExists(metadata,arguments.annotationName)>
+			<cfset returnVal = metadata[arguments.annotationName] />
 		</cfif>
 
 		<cfreturn returnVal />
@@ -438,9 +470,7 @@
 	<cffunction name="expectException">
 		<cfargument name="expectedExceptionType" />
 		<cfargument name="expectedExceptionMessage" default="" />
-
-		<cfset this.expectedExceptionType = arguments.expectedExceptionType />
-		<cfset this.expectedExceptionMessage = arguments.expectedExceptionMessage />
+		<cfset structAppend( variables, arguments ) />
 	</cffunction>
 
 	 <cffunction name="orderedExpectation" access="public" hint="Method for mocking. Creates an OrderedExpectation object used for verify the order in which mocks have been called">
@@ -450,4 +480,61 @@
 		</cfscript>
 	</cffunction>
 
+	<cffunction name="getBaseTarget" hint="In case of decorators - return myself" access="public" returntype="any" output="false">
+		<cfreturn this/>
+	</cffunction>
+
+	<cffunction name="applyDecorators" hint="applies the chain of decorators, if it exists" access="public" returntype="any" output="false">
+		<cfargument name="object" hint="the object to check to see if it needs some decorators applied" type="any" required="Yes">
+		<cfscript>
+			var meta = getMetadata(object);
+			var decorator = 0;
+			var decoratorPath = 0;
+			var decoratorNames = 0;
+
+			//if already a decorator, kick out.
+			if(isInstanceOf(arguments.object, "mxunit.framework.TestDecorator"))
+			{
+				return arguments.object;
+			}
+        </cfscript>
+
+        <cfset decoratorNames = arguments.object.getAnnotation(annotationName="decorators") />
+		<cfset decoratorNames = listPrepend( decoratorNames, getRequiredDecoratorPaths() ) />
+
+		<cfloop list="#decoratorNames#" index="decoratorPath">
+			<cfset decorator = createObject("component", decoratorPath)/>
+			<cfset decorator.setTarget(object)/>
+			<cfset decorator.metadata = meta />
+			<cfset arguments.object = decorator/> <!--- flip it and reverse it. --->
+		</cfloop>
+
+		<cfreturn arguments.object>
+	</cffunction>
+
+	<cffunction name="getRequiredDecoratorPaths" output="false" access="public" returntype="any" hint="Returns a list of fully-qualified paths to framework-required decorators">
+    	<cfreturn "mxunit.framework.decorators.DataProviderDecorator">
+    </cffunction>
+
+    <cffunction name="setExpectedExceptionType" access="public">
+		<cfargument name="expectedExceptionType" type="string" required="true"/>
+		<cfset variables.expectedExceptionType = arguments.expectedExceptionType />
+	</cffunction>
+
+    <cffunction name="setExpectedExceptionMessage" access="public">
+		<cfargument name="expectedExceptionMessage" type="string" required="true"/>
+		<cfset variables.expectedExceptionMessage = arguments.expectedExceptionMessage />
+	</cffunction>
+
+    <cffunction name="getExpectedExceptionType" access="public">
+		<cfreturn variables.expectedExceptionType />
+	</cffunction>
+
+	<cffunction name="getExpectedExceptionMessage" access="public">
+		<cfreturn variables.expectedExceptionMessage />
+	</cffunction>
+
+	<cffunction name="getVariablesScope" access="public" hint="Front door into the Test's variables scope">
+		<cfreturn variables>
+	</cffunction>
 </cfcomponent>

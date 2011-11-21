@@ -50,7 +50,7 @@
 	 	proxy = mockee;
       	mocked.name = getMetaData(mockee).name;
 	 }
-	 
+
      proxy.snif = _$snif; //sniffer for variables scope
      proxyVars = proxy.snif();
 
@@ -158,9 +158,9 @@
  function onMissingMethod(missingMethodName,missingMethodArguments){
    var tempMock = chr(0);
    var temp = '';
-   
+
    missingMethodArguments = createObject('java','java.util.TreeMap').init(missingMethodArguments);
-   
+
    if( currentState == 'verifying'){
       verifier.doVerify(tempRule[1], missingMethodName, missingMethodArguments, tempRule[2], registry );
       _$setState('idle');

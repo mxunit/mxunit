@@ -1,4 +1,4 @@
-<cfcomponent name="mxunit.framework.RemoteFacade" hint="Main default interface into MXUnit framework from the MXUnit Ecplise Plugin.">
+<cfcomponent name="mxunit.framework.RemoteFacade" hint="Main default interface into MXUnit framework from the MXUnit Ecplise Plugin." wsversion="1">
 
 	<cfset cu = createObject("component","ComponentUtils")>
 	<cfset cache = createObject("component","RemoteFacadeObjectCache")>
@@ -44,7 +44,7 @@
 	<cffunction name="getObject" access="package" returntype="any">
 		<cfargument name="componentName" type="String" required="true">
 		<cfargument name="testRunKey" type="string" required="true" hint="the key returned from startTestRun; used for managing the pool of components">
-		<cfreturn cache.getObject(componentName,testRunKey)>
+		<cfreturn cache.getObject(componentName, testRunKey)>
 	</cffunction>
 
 	<cffunction name="endTestRun" access="remote" returntype="string" hint="ensures proper cleanup">
@@ -56,12 +56,12 @@
 		<cfargument name="componentName" type="String" required="true">
 		<cfargument name="methodNames" type="String" required="true" hint="pass empty string to run all methods. pass list of valid method names to run individual methods">
 		<cfargument name="TestRunKey" type="string" required="true" hint="the key returned from startTestRun; used for managing the pool of components">
-		<cfset var s_results = StructNew()>
+		<cfset var s_results = structNew()>
 		<cfset var key = "">
 		<cfset var suite = createObject("component","TestSuite")>
 		<cfset var testResult = "">
-
-		<cfset var obj = getObject(componentName,TestRunKey)>
+		<!--- the "baseTarget" is the actual test case, underneath its layers of test decorators. When we start the test case, we want the pure object, not the decorated object --->
+		<cfset var obj = getObject(componentName, TestRunKey).getBaseTarget()>
 		<cfset var componentPath = getMetadata(obj).path>
 
 		<cfset suite.enableRequestScopeDebugging()>
@@ -80,17 +80,17 @@
 	</cffunction>
 
 	<cffunction name="getComponentMethods" access="remote" returntype="array">
-		<cfargument name="ComponentName" required="true" type="string" hint="">
-		<cfset var methods = ArrayNew(1)>
+		<cfargument name="componentName" required="true" type="string" hint="">
+		<cfset var methods = arrayNew(1)>
 		<cfset var obj = "">
 		<!--- by doing this instead of letting it throw an error
 		we ensure that the error (most likely a parse error)
 		continues to show up when they run the test.  --->
 		<cftry>
-			<cfset obj = createObject("component",ComponentName)>
+			<cfset obj = createObject("component", ComponentName).TestCase()>
 			<cfset methods = obj.getRunnableMethods()>
 		<cfcatch>
-			<cfset ArrayAppend(methods, listLast(arguments.ComponentName,".") & " <ERROR: #cfcatch.Message#>")>
+			<cfset ArrayAppend(methods, listLast(arguments.ComponentName, ".") & " <ERROR: #cfcatch.Message#>")>
 		</cfcatch>
 		</cftry>
 
@@ -109,12 +109,12 @@
 	</cffunction>
 
 	<cffunction name="testResultToStructs" hint="turns the TestResult item into a struct for passing to eclipse. It will only ever process a single component under test, although I did build it to loop over the array of tests returned from the TestResult, although currently there is no condition under which that will ever be more than a single-element array" access="public">
-		<cfargument name="TestResult" required="true">
-		<cfargument name="ComponentPath" required="true" hint="the full filesystem path to the component under test">
+		<cfargument name="testResult" required="true">
+		<cfargument name="componentPath" required="true" hint="the full filesystem path to the component under test">
 
-		<cfset var s_results = StructNew()>
+		<cfset var s_results = structNew()>
 		<cfset var a_tests = TestResult.Results>
-		<cfset var s_test = StructNew()>
+		<cfset var s_test = structNew()>
 		<cfset var test = 1>
 		<cfset var tag = 1>
 		<cfset var i = 1>
@@ -126,9 +126,9 @@
 		<cfloop from="1" to="#ArrayLen(a_tests)#" index="test">
 			<cfset s_test = a_tests[test]>
 			<cfif not StructKeyExists(s_results,s_test.component)>
-				<cfset s_results[s_test.component] = StructNew()>
+				<cfset s_results[s_test.component] = structNew()>
 			</cfif>
-			<cfset s_results[s_test.component][s_test.TestName] = StructNew()>
+			<cfset s_results[s_test.component][s_test.TestName] = structNew()>
 			<cfset t = s_results[s_test.component][s_test.TestName]>
 
 			<cfif ArrayLen(s_test.debug)>
@@ -146,8 +146,8 @@
 			<cfset t.MESSAGE = "">
 			<cfset t.RESULT = s_test.TestStatus>
 			<cfset t.TIME = s_test.Time>
-			<cfset t.EXPECTED = s_test.Expected>
-			<cfset t.ACTUAL = s_test.Actual>
+			<cfset t.EXPECTED = s_test.expected>
+			<cfset t.ACTUAL = s_test.actual>
 			<!--- <cfset t.httprequestdata = getHTTPRequestData()> --->
 			<cfif not isSimpleValue(s_test.error)>
 				<cfset t.EXCEPTION = formatExceptionKey(s_test.error.type)>
@@ -161,8 +161,9 @@
 					<!---		 --->
 				<cfloop from="1" to="#ArrayLen(s_test.error.tagcontext)#" index="tag">
 					<cfif FileExists(s_test.error.tagcontext[tag].template)>
+						<cflog text=" #s_test.error.tagcontext[tag].template# #isFrameworkTest# OR NOT #cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)#" >
 						<cfif isFrameworkTest OR NOT cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)>
-							<cfset t.TAGCONTEXT[i] = StructNew()>
+							<cfset t.TAGCONTEXT[i] = structNew()>
 							<cfset t.TAGCONTEXT[i].FILE = s_test.error.tagcontext[tag].template>
 							<cfset t.TAGCONTEXT[i].LINE = s_test.error.tagcontext[tag].line>
 							<cfset i = i + 1>
