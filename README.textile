@@ -9,10 +9,9 @@ MXUnit Google Group (to get help): "http://groups.google.com/group/mxunit":http:
 
 h2. About this repository
 
-The main distribution branch is currently located at http://mxunit.googlecode.com/svn/mxunit/trunk/ (Subversion)
+This is the main distribution branch, formally located at http://mxunit.googlecode.com/svn/mxunit/trunk/ (Subversion)
 
-The presence of the MXUnit source at here Github does not indicate that MXUnit is _moving_ from Google Code to Github. This repository is at Github to help distribute MXUnit to as many people as possible (like those who prefer Git), and to work on MXUnit 2.0 in a collaborative Git environment. Please feel free to fork and hack.
-
+We have moved most, if not all, source from Google Code to git hub. So, you should find everything here you need.
 
 h2. Collaborating Guidelines
 
