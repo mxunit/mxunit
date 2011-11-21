@@ -3,13 +3,16 @@
 
 
 
-<!--- <cfset myStruct = {
+<cfset myStruct = {
         foo='bar',bar='123',bunko='banked'
           }>
 <cffunction name="dataproviderShouldAcceptStructs" mxunit:dataprovider="myStruct">
   <cfargument name="theData">
-  <cfset debug(theData.foo)	>
-</cffunction> --->
+  <cfset debug(theData)	>
+
+  	<cfset assertEquals( 1, structCount(theData), "This is a struct with 3 keys, so each iteration should contains a single key" )>
+
+</cffunction>
 
 
 <!--- Just run this test 100 times --->

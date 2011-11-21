@@ -28,20 +28,23 @@
 		<cfset var methodIndex = 1>
 		<cfset var currentTestSuiteName = "" />
 		<cfset var currentSuite = "" />
-
-		<cfloop collection="#allSuites#" item="currentTestSuiteName">
-			<cfset currentSuite = allSuites[currentTestSuiteName] />
-
+		<cfset var iterator = arguments.allSuites.keySet().iterator() />
+	
+		<cfloop condition="#iterator.hasNext()# eq true">
+			<cfset currentTestSuiteName = iterator.next() />
+			<cfset currentSuite = allSuites.get(currentTestSuiteName) />
+			
+			
 			<cfset testCase = createTestCaseFromComponentOrComponentName(currentSuite.ComponentObject) />
-
+			
 			<!--- set the MockingFramework if one has been set for the TestSuite --->
 			<cfif len(variables.MockingFramework)>
 				<cfset testCase.setMockingFramework(variables.MockingFramework) />
 			</cfif>
-
+			
 			<!--- Invoke prior to tests. Class-level setUp --->
 			<cfset testCase.beforeTests() />
-
+			
 			<cfif len(arguments.testMethod)>
 				<cfset runTestMethod(testCase, testMethod, results, currentTestSuiteName) />
 			<cfelse>
@@ -49,7 +52,7 @@
 					<cfset runTestMethod(testCase, currentSuite.methods[methodIndex], results, currentTestSuiteName) />
 				</cfloop>
 			</cfif>
-
+			
 			<!--- Invoke after tests. Class-level tearDown --->
 			<cfset testCase.afterTests()>
 		</cfloop>
@@ -77,11 +80,10 @@
 		<cfset var tickCountAtStart = getTickCount() />
 		<cfset var outputOfTest = "" />
 
-		<cfset testCase.expectedExceptionType = '' />
-		<cfset testCase.expectedExceptionMessage = '' />
+		<cfset testCase.setExpectedExceptionType( testCase.getAnnotation(methodName,"expectedException") ) />
+		<cfset testCase.setExpectedExceptionMessage('') />
 
 		<cftry>
-			<cfset testCase.expectedExceptionType = testCase.getAnnotation(methodName,"expectedException") />
 
 			<cfset results.startTest(methodName,currentTestSuiteName) />
 
@@ -94,9 +96,9 @@
 
 			<cfset testCase.setUp()/>
 
-			<cfset outputOfTest = runTest(testCase, methodName) />
+			<cfset outputOfTest = testCase.invokeTestMethod(methodName)>
 
-			<cfset assertExpectedExceptionTypeWasThrown(testCase.expectedExceptionType, testCase.expectedExceptionMessage) />
+			<cfset assertExpectedExceptionTypeWasThrown( testCase.getExpectedExceptionType(), testCase.getExpectedExceptionMessage() ) />
 
 			<cfset results.addSuccess('Passed') />
 
@@ -104,11 +106,12 @@
 			<cfset results.addContent(outputOfTest) />
 
 			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfset addFailureToResults(results=results,expected=testCase.expected,actual=testCase.actual,exception=cfcatch,content=outputOfTest)>
+				<cfset addFailureToResults(results=results, expected=testCase.getExpected(), actual=testCase.getActual(), exception=cfcatch, content=outputOfTest)>
 			</cfcatch>
 
 			<cfcatch type="any">
-				<cfset handleCaughtException(rootOfException(cfcatch), testCase.expectedExceptionType, testCase.expectedExceptionMessage, results, outputOfTest, testCase, cfcatch)>
+				<!---<cflog text="inside cfcatch. #cfcatch.message# #cfcatch.detail#   #testCase.getExpectedExceptionType()#, #testCase.getexpectedExceptionMessage()# ">--->
+				<cfset handleCaughtException(rootOfException(cfcatch), testCase.getExpectedExceptionType(), testCase.getExpectedExceptionMessage(), results, outputOfTest, testCase, cfcatch)>
 			</cfcatch>
 		</cftry>
 
@@ -131,25 +134,6 @@
 		<cfset results.addProcessingTime(getTickCount()-tickCountAtStart) />
 
 		<cfset results.endTest(methodName) />
-	</cffunction>
-
-	<cffunction name="runTest" access="private">
-		<cfargument name="testCase" />
-		<cfargument name="methodName"/>
-		<cfset var outputOfTest = "" />
-		<cfset var dpName = "" />
-		<cfsavecontent variable="outputOfTest">
-				<cfset dpName = testCase.getAnnotation(methodName,"dataprovider") />
-
-				<cfif len(dpName) gt 0>
-					<cfset testCase._$snif = _$snif />
-					<cfset dataProviderHandler.init(testCase._$snif()) />
-					<cfset dataProviderHandler.runDataProvider(testCase,methodName,dpName)>
-				<cfelse>
-					<cfinvoke component="#testCase#" method="#methodName#">
-				</cfif>
-		</cfsavecontent>
-		<cfreturn outputOfTest />
 	</cffunction>
 
 	<cffunction name="assertExpectedExceptionTypeWasThrown">

@@ -9,7 +9,7 @@
 			// grandparent
 			assertIsTypeOf(this,"mxunit.framework.Assert");
 			//last of the mohicans
-			assertIsTypeOf(this,"web-inf.cftags.component");
+			assertIsTypeOf(this,"WEB-INF.cftags.component");
 		</cfscript>
 	</cffunction>
 
@@ -292,7 +292,7 @@
 
 	<cffunction name="assertIsTypeOfPassesForInterfaces" returntype="void">
 
-		<cfset var component = createObject("fixture.interfaces.AComponent")>
+		<cfset var component = createObject("component","fixture.interfaces.AComponent")>
 
 		<cfset assertIsTypeOf( component, "mxunit.tests.framework.fixture.interfaces.AnInterface" )>
 		<cfset assertIsTypeOf( component, "mxunit.tests.framework.fixture.interfaces.OtherInterface" )>

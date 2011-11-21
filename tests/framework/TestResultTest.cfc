@@ -4,18 +4,8 @@
 
 <cffunction name="testGetInstallRoot">
   <cfscript>
-   var root = this.testResult.getInstallRoot("foo.bar.nanoo.mxunit.framework.TestResult");
-   assertEquals("/foo/bar/nanoo/mxunit/", root);
-
    root = this.testResult.getInstallRoot();
-   assertEquals("/mxunit/",root);
-
-   root = this.testResult.getInstallRoot("mxunit.mxunit.framework.TestCase");
-   assertEquals("/mxunit/mxunit/",root);
-
-   root = this.testResult.getInstallRoot("mxunit.framework.TestCase");
-   assertEquals("/mxunit/",root);
-
+   assertEquals("#getContextRoot()#/mxunit",root);
   </cfscript>
 </cffunction>
 
