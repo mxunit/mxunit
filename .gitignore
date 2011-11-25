@@ -4,6 +4,7 @@ settings.xml
 MXUnitInstallTest.cfc
 buildprops/antrunner.properties
 tests/testresults/
+*.iml
 
 /WEB-INF
 /doc
