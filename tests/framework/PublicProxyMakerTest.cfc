@@ -91,7 +91,7 @@
 	</cffunction>
 
 	<cffunction name="testMakePublicNonExistentMethod" mxunit:expectedException="Application">
-			<cfset this.maker.makePublic(this.objectWithPrivateMethod,"aPrivateMethodThatDoesNotExist")>
+		<cfset this.maker.makePublic(this.objectWithPrivateMethod,"aPrivateMethodThatDoesNotExist")>
 	</cffunction>
 
 	<cffunction name="testMakePublicNoThirdArg">
@@ -101,6 +101,20 @@
 		<cfset result = this.objectWithPrivateMethod.aPrivateMethod(arg1="one",arg2="two")>
 		<cfset assertEquals("one_two",result)>
 	</cffunction>
+	
+	<cffunction name="testMakePublicAddInts" returntype="void">    
+    	<cfset var result = "">
+    	<cfset this.maker.makePublic(this.objectWithPrivateMethod, "privateAddition")>
+    	<cfset result = this.objectWithPrivateMethod.privateAddition(2, 5)>
+    	<cfset assertEquals( 7, result )>
+    </cffunction>
+    
+	<cffunction name="testMakePublicComplexArgsWithDefaults" returntype="void">    
+    	<cfset var result = "">
+    	<cfset this.maker.makePublic(this.objectWithPrivateMethod, "privateStructAndArrayArgs")>
+    	<cfset result = this.objectWithPrivateMethod.privateStructAndArrayArgs()>
+    	<cfset assertEquals( {array=[]}, result )>
+    </cffunction>
 
 	<cffunction name="testMakePublicNoArgMethod">
 		<cfset var ret = "" />

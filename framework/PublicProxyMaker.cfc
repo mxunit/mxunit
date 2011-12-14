@@ -41,15 +41,16 @@
 
 		<cfset handleDirectoryCreate(dir)>
 
-		<!--- generate a CFC that contains a public method. this method will call the private method we want to call --->
-		<cfset s_argTags = constructArgumentsTags(methodStruct)>
+		<!--- NOTE: see https://github.com/mxunit/mxunit/issues/12 --->
+		<!---<cfset s_argTags = constructArgumentsTags(methodStruct)>--->
 
+		<!--- generate a CFC that contains a public method. this method will call the private method we want to call --->
 		<cfoutput>
 		<cfsavecontent variable="output">
 		<%cfcomponent extends="#md.name#"%>
 
 		<%cffunction name="#arguments.proxyMethodName#" access="public"%>
-			#s_argTags#
+			<!---#s_argTags#--->
 			<%cf#componentReturnTag# #renamedExistingMethod#(argumentCollection=arguments)%>
 		<%/cffunction%>
 

@@ -7,6 +7,19 @@
 		<cfargument name="sep" type="string" required="false" default="_">
 		<cfreturn arg1 & sep & arg2>
 	</cffunction>
+	
+	<cffunction name="privateAddition" output="false" access="private" returntype="any" hint="">    
+    	<cfargument name="val1" type="numeric" required="true"/>
+    	<cfargument name="val2" type="numeric" required="true"/>
+		<cfreturn val1 + val2>
+    </cffunction>
+    
+	<cffunction name="privateStructAndArrayArgs" output="false" access="private" returntype="any" hint="">    
+    	<cfargument name="val1" type="struct" required="false" default="#{}#"/>
+    	<cfargument name="val2" type="array" required="true" default="#[]#"/>
+		<cfset val1["array"] = val2>
+		<cfreturn val1>
+    </cffunction>
 
 	<cffunction name="aNoArgPrivateMethod" access="private" returntype="string">
 		<cfreturn "boo">
