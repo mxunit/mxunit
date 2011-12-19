@@ -233,6 +233,7 @@
 	--->
 	<cffunction name="getResultsOutput" returntype="any" hint="" access="public" output="false">
 		<cfargument name="mode" required="true" default="" />
+                <cfargument name="mxunit_root" required="false" default=""/>
 
 		<cfset arguments.mode = listLast(arguments.mode) />
 
@@ -266,7 +267,11 @@
 			</cfcase>
 
 			<cfdefaultcase>
-				<cfreturn getHTMLResults() />
+				<cfif len(argumenst.mxunit_root>
+					<cfreturn getHTMLResults(arguments.mxunit_root) />
+				<cfelse>
+					<cfreturn getHTMLResults() />
+				</cfif>					
 			</cfdefaultcase>
 		</cfswitch>
 	</cffunction>
