@@ -82,6 +82,7 @@
 
 		<cfset testCase.setExpectedExceptionType( testCase.getAnnotation(methodName,"expectedException") ) />
 		<cfset testCase.setExpectedExceptionMessage('') />
+		<cfset testCase.setTransactionAction( testCase.getAnnotation(methodName,"transaction") ) />
 
 		<cftry>
 
@@ -96,7 +97,21 @@
 
 			<cfset testCase.setUp()/>
 
-			<cfset outputOfTest = testCase.invokeTestMethod(methodName)>
+			<cfif Len(testCase.getTransactionAction())>
+				<cftransaction>
+					<cftry>
+						<cfset outputOfTest = testCase.invokeTestMethod(methodName)>
+					<cfcatch>
+						<cftransaction action="rollback">
+						<cfrethrow>
+					</cfcatch>
+					</cftry>
+					<cftransaction action="rollback">
+				</cftransaction>
+			<cfelse>
+				<cfset outputOfTest = testCase.invokeTestMethod(methodName)>
+			</cfif>
+			
 
 			<cfset assertExpectedExceptionTypeWasThrown( testCase.getExpectedExceptionType(), testCase.getExpectedExceptionMessage() ) />
 

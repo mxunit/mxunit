@@ -526,12 +526,21 @@
 		<cfset variables.expectedExceptionMessage = arguments.expectedExceptionMessage />
 	</cffunction>
 
+    <cffunction name="setTransactionAction" access="public">
+		<cfargument name="transactionAction" type="string" required="true"/>
+		<cfset variables.transactionAction = arguments.transactionAction />
+	</cffunction>
+
     <cffunction name="getExpectedExceptionType" access="public">
 		<cfreturn variables.expectedExceptionType />
 	</cffunction>
 
 	<cffunction name="getExpectedExceptionMessage" access="public">
 		<cfreturn variables.expectedExceptionMessage />
+	</cffunction>
+
+	<cffunction name="getTransactionAction" access="public">
+		<cfreturn variables.transactionAction />
 	</cffunction>
 
 	<cffunction name="getVariablesScope" access="public" hint="Front door into the Test's variables scope">
