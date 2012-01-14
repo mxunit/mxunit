@@ -8,11 +8,11 @@
     		var tests = [];
     		var test = "";
     		var BubbleSort = createObject("Component","mxunit.utils.BubbleSort");
-    		var sortedTests = [];
-    		var returnArray = [];
+    		var sortedTests = arrayNew(1);
+    		var returnArray = arrayNew(1);
 
     		for(i = 1; i LTE arrayLen(methods); i++){
-    			test = {};
+    			test = structNew();
     			test.order = getAnnotation(methods[i],"order");
     			test.name = methods[i];
 
