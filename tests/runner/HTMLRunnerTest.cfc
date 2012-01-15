@@ -3,11 +3,9 @@
   <cffunction name="testRunTestCase" access="public" returntype="void">
 	<cfset var content = "" />
    	<!--- just don't fail! --->
-	<cfsavecontent variable="content">
  	<cfscript>
       runner.run(test="mxunit.tests.framework.AssertTest",output="html");
     </cfscript>
-	</cfsavecontent>
   </cffunction>
 
 
