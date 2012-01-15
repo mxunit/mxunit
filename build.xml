@@ -198,7 +198,7 @@
 		<propertyfile file="${version.file}" comment="Build version info">
 			<entry key="build.date" type="date" value="now" pattern="MM/dd/yyyy" />
 			<entry key="build.major" type="int" operation="=" value="2" />
-			<entry key="build.minor" type="int" operation="=" value="0" />
+			<entry key="build.minor" type="int" operation="=" value="1" />
 			<entry key="build.notation" operation="=" value="" />
 			<entry key="build.versiondescription" operation="=" value="Release" />
 			<!-- this is autoincremented -->
