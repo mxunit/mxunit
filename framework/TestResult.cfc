@@ -233,7 +233,8 @@
 	--->
 	<cffunction name="getResultsOutput" returntype="any" hint="" access="public" output="false">
 		<cfargument name="mode" required="true" default="" />
-
+		<cfargument name="mxunit_root" required="false" default=""/>
+		  
 		<cfset arguments.mode = listLast(arguments.mode) />
 
 		<cfswitch expression="#arguments.mode#">
@@ -266,7 +267,7 @@
 			</cfcase>
 
 			<cfdefaultcase>
-				<cfreturn getHTMLResults() />
+				<cfreturn getHTMLResults(arguments.mxunit_root) />
 			</cfdefaultcase>
 		</cfswitch>
 	</cffunction>
@@ -284,9 +285,13 @@
 		Call this method to return preformatted HTML.
 	--->
 	<cffunction name="getHTMLResults" returnType="string" output="false">
+		<cfargument name="mxunit_root" type="string" required="false" default=""/>
 		<cfset var htmlresult = createObject("component", "HtmlTestResult").HTMLTestResult(this) />
-
-		<cfreturn htmlresult.getHtmlresults() />
+		<cfif len(arguments.mxunit_root)>
+			<cfreturn htmlresult.getHtmlresults(arguments.mxunit_root) />
+		<cfelse>
+			<cfreturn htmlresult.getHtmlresults() />
+		</cfif>
 	</cffunction>
 
 	<!---
