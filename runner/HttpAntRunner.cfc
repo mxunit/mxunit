@@ -1,5 +1,5 @@
 <cfcomponent output="true">
-  <cfsetting enablecfoutputonly="true" showdebugoutput="false">
+  <cfsetting enablecfoutputonly="false" showdebugoutput="false">
 
   <cffunction name="run" access="remote" output="true" returntype="void" hint="Generates and prints HTML, JUnit style XML, or XML data based on a directory of tests.">
     <cfargument name="type" type="string" hint="Specifies the type to run: TestCase(testcase) or Directory Path (dir)" required="true" />
