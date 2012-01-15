@@ -15,6 +15,7 @@
 		<cfdump var="#scopes#">
 		<cfset assertTrue(true,"true")>
 	</cffunction>
+	
 	<cffunction name="testTwo"  returntype="void" hint="">
 		<cfset var q = QueryNew("one,two")>
 		<cfset debug("#StructNew()#")>
