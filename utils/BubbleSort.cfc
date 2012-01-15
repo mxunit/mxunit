@@ -19,8 +19,19 @@
 				for(x = 1; x lte len - 1; x = x + 1){
 
 					if(isNumber){
-						value1 = (isNumeric(theArray[x + 1][theKey])) ? lsParseNumber(theArray[x + 1][theKey]) :  9999;	
-						value2 = (isNumeric(theArray[x][theKey])) ? lsParseNumber(theArray[x][theKey]) : 9999;
+						if(isNumeric(theArray[x + 1][theKey])){
+							value1 = lsParseNumber(theArray[x + 1][theKey]);
+						}
+						else{
+							value1 = 9999;
+						}
+						
+						if(isNumeric(theArray[x][theKey])){
+							value2 =  lsParseNumber(theArray[x][theKey]);
+						}
+						else{
+							value2 = 9999;
+						}
 					}
 					else{
 						value1 = theArray[x + 1][theKey];
