@@ -9,14 +9,15 @@
 	</cffunction>
 	
 	<cffunction name="privateAddition" output="false" access="private" returntype="any" hint="">    
-    	<cfargument name="val1" type="numeric" required="true"/>
-    	<cfargument name="val2" type="numeric" required="true"/>
+    	<cfargument name="val1" type="numeric" required="true">
+    	<cfargument name="val2" type="numeric" required="true">
 		<cfreturn val1 + val2>
     </cffunction>
     
 	<cffunction name="privateStructAndArrayArgs" output="false" access="private" returntype="any" hint="">    
-    	<cfargument name="val1" type="struct" required="false" default="#{}#"/>
-    	<cfargument name="val2" type="array" required="true" default="#[]#"/>
+    	<cfargument name="val1" type="struct" required="false" default="#structNew()#"/>
+    	<cfargument name="val2" type="array" required="true" default="#arrayNew(1)#"/>
+		
 		<cfset val1["array"] = val2>
 		<cfreturn val1>
     </cffunction>
