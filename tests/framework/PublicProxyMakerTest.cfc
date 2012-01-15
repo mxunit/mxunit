@@ -111,9 +111,10 @@
     
 	<cffunction name="testMakePublicComplexArgsWithDefaults" returntype="void">    
     	<cfset var result = "">
+    	<cfset var expected = {array=[]}>
     	<cfset this.maker.makePublic(this.objectWithPrivateMethod, "privateStructAndArrayArgs")>
     	<cfset result = this.objectWithPrivateMethod.privateStructAndArrayArgs()>
-    	<cfset assertEquals( {array=[]}, result )>
+    	<cfset assertEquals( expected, result )>
     </cffunction>
 
 	<cffunction name="testMakePublicNoArgMethod">
