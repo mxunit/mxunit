@@ -81,26 +81,16 @@
   <cffunction name="testAssertSameArray">
 
     <cfscript>
-    try{
-     assertSame(ar,ar,"Should catch exception because an array is being passed in");
-    }
-    catch(mxunit.exception.CannotCompareArrayReferenceException e){
-     //no worries
-    }
+		//use native array to test, as cf arrays pass by value.
+		assertSame(nativeArr,nativeArr,"Arrays should be the same");
     </cfscript>
 
   </cffunction>
 
   <cffunction name="testAssertNotSameArray">
     <cfscript>
-    try{
-     assertNotSame(ar,ar2,"Should catch exception because an array is being passed in");
-    }
-    catch(mxunit.exception.CannotCompareArrayReferenceException e){
-     //no worries
-    }
+		assertNotSame(ar,ar2,"Arrays should not be the same");
     </cfscript>
-
   </cffunction>
 
 
@@ -212,6 +202,8 @@
     ar[1] = 'foo';
     ar2 = arrayNew(1);
     ar2[1] = 'foo';
+
+	nativeArr = createObject("java", "java.util.ArrayList").init();
 
     s = structNew();
     s.foo = 'bar';
