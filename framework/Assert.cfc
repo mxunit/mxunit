@@ -389,10 +389,7 @@ assert function and thus mxunit won't run on BD unless we do this --->
       var system = createObject("java", "java.lang.System");
       var expect = system.identityHashCode(arguments.expected);
       var act = system.identityHashCode(arguments.actual);
-      //Arrays are passed by value in CF ...
-      if(isArray(arguments.expected) or isArray(arguments.actual)){
-      throwWrapper("mxunit.exception.CannotCompareArrayReferenceException","Cannot compare array references in ColdFusion","Arrays in ColdFusion are passed by value. To compare instances, you may wrap the array in a struct and compare those.");
-      }
+
       if(expect eq act){
         return;
       }
@@ -411,10 +408,6 @@ assert function and thus mxunit won't run on BD unless we do this --->
       var system = createObject("java", "java.lang.System");
       var expect = system.identityHashCode(arguments.expected);
       var act = system.identityHashCode(arguments.actual);
-      //Arrays are passed by value in CF ...
-      if(isArray(arguments.expected) or isArray(arguments.actual)){
-        throwWrapper("mxunit.exception.CannotCompareArrayReferenceException","Cannot compare array references in ColdFusion","Arrays in ColdFusion are passed by value. To compare instances, you may wrap the array in a struct and compare those.");
-      }
       if(not expect eq act){
         return;
       }
