@@ -78,31 +78,72 @@
    </cfscript>
   </cffunction>
 
-  <cffunction name="testAssertSameArray">
+	<cffunction name="testAssertSameArray">
+		<cfscript>
+			var local = {};
 
-    <cfscript>
-    try{
-     assertSame(ar,ar,"Should catch exception because an array is being passed in");
-    }
-    catch(mxunit.exception.CannotCompareArrayReferenceException e){
-     //no worries
-    }
-    </cfscript>
+			if(variables.arraysPassByValue)
+			{
+				local.check = false;
+				try
+				{
+					assertSame(ar,ar,"Should catch exception because an array is being passed in");
+				}
+				catch(mxunit.exception.CannotCompareArrayReferenceException e)
+				{
+					//no worries
+					local.check = true;
+				}
 
-  </cffunction>
+				assertTrue(local.check, "Exception should be thrown");
+			}
+			else
+			{
+				assertSame(arr, arr);
+			}
 
-  <cffunction name="testAssertNotSameArray">
-    <cfscript>
-    try{
-     assertNotSame(ar,ar2,"Should catch exception because an array is being passed in");
-    }
-    catch(mxunit.exception.CannotCompareArrayReferenceException e){
-     //no worries
-    }
-    </cfscript>
+			//test native arrays
+			local.native = createObject("java", "java.util.ArrayList").init();
+			local.native2 = local.native;
 
-  </cffunction>
+			local.native[1] = "foo";
 
+			assertSame(local.native, local.native2);
+		</cfscript>
+	</cffunction>
+
+	<cffunction name="testAssertNotSameArray">
+		<cfscript>
+			var local = {};
+
+			if(variables.arraysPassByValue)
+			{
+				local.check = false;
+				try
+				{
+					assertSame(ar,ar2,"Should catch exception because an array is being passed in");
+				}
+				catch(mxunit.exception.CannotCompareArrayReferenceException e)
+				{
+					//no worries
+					local.check = true;
+				}
+
+				assertTrue(local.check, "Exception should be thrown");
+			}
+			else
+			{
+				assertNotsame(ar, ar2);
+			}
+
+			local.native = createObject("java", "java.util.ArrayList").init();
+			local.native2 = local.native.clone();
+
+			local.native[1] = "foo";
+
+			assertNotSame(local.native, local.native2);
+		</cfscript>
+	</cffunction>
 
    <cffunction name="testAssertSame">
     <cfscript>

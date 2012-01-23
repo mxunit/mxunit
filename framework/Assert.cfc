@@ -35,7 +35,15 @@ Main component for performing assertions.
 assert function and thus mxunit won't run on BD unless we do this --->
   <cffunction name="init" access="remote" returntype="Assert" hint="Constructor">
 		
-    <cfset addAssertDecorators() />
+	<cfscript>
+		//do a feature check for pass by value.
+		var arr1 = [];
+		var arr2 = arr1;
+		var System = createObject("java", "java.lang.System");
+		variables.arraysPassByValue = System.identityHashCode(arr1) != System.identityHashCode(arr2);
+
+		addAssertDecorators();
+	</cfscript>
     <!---
     Leave this out for now ...
     <cfscript>
@@ -390,7 +398,7 @@ assert function and thus mxunit won't run on BD unless we do this --->
       var expect = system.identityHashCode(arguments.expected);
       var act = system.identityHashCode(arguments.actual);
       //Arrays are passed by value in CF ...
-      if(isArray(arguments.expected) or isArray(arguments.actual)){
+      if(isPassByValueArray(arguments.expected) or isPassByValueArray(arguments.actual)){
       throwWrapper("mxunit.exception.CannotCompareArrayReferenceException","Cannot compare array references in ColdFusion","Arrays in ColdFusion are passed by value. To compare instances, you may wrap the array in a struct and compare those.");
       }
       if(expect eq act){
@@ -412,7 +420,7 @@ assert function and thus mxunit won't run on BD unless we do this --->
       var expect = system.identityHashCode(arguments.expected);
       var act = system.identityHashCode(arguments.actual);
       //Arrays are passed by value in CF ...
-      if(isArray(arguments.expected) or isArray(arguments.actual)){
+      if(isPassByValueArray(arguments.expected) or isPassByValueArray(arguments.actual)){
         throwWrapper("mxunit.exception.CannotCompareArrayReferenceException","Cannot compare array references in ColdFusion","Arrays in ColdFusion are passed by value. To compare instances, you may wrap the array in a struct and compare those.");
       }
       if(not expect eq act){
@@ -478,7 +486,25 @@ assert function and thus mxunit won't run on BD unless we do this --->
   </cffunction>
 
 
+	<cffunction name="isPassByValueArray" hint="Checks to see if this is an array that will pass by value" access="private" returntype="boolean" output="false">
+		<cfargument name="value" hint="an object" type="any" required="true">
+		<!---
+			Adobe ColdFusion arrays pass by value.
+			Railo passes by reference
+			OpenBD? apparently can sometimes.
+		--->
+		<cfscript>
+			var className = 0;
 
+			if(NOT variables.arraysPassByValue OR NOT isArray(arguments.value))
+			{
+				return false;
+			}
 
+			className = arguments.value.getClass().getName();
+
+			return className contains "coldfusion." OR className contains ".nary";
+		</cfscript>
+	</cffunction>
 
 </cfcomponent>
