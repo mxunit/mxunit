@@ -35,15 +35,14 @@ Main component for performing assertions.
 assert function and thus mxunit won't run on BD unless we do this --->
   <cffunction name="init" access="remote" returntype="Assert" hint="Constructor">
 		
-    <cfset addAssertDecorators() />
-
-
 	<cfscript>
 		//do a feature check for pass by value.
 		var arr1 = [];
 		var arr2 = arr1;
 		var System = createObject("java", "java.lang.System");
 		variables.arraysPassByValue = System.identityHashCode(arr1) != System.identityHashCode(arr2);
+
+		addAssertDecorators();
 	</cfscript>
     <!---
     Leave this out for now ...
