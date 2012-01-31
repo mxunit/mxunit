@@ -1,11 +1,10 @@
+.*
+!.gitignore
 settings.xml
-.settings/
-.project
 MXUnitInstallTest.cfc
 buildprops/antrunner.properties
 tests/testresults/
 *.iml
-
 /WEB-INF
 /doc
 /dist
