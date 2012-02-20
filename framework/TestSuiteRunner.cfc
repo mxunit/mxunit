@@ -94,7 +94,7 @@
 				<cfset testCase.createRequestScopeDebug() />
 			</cfif>
 
-			<cfset testCase.setUp()/>
+			<cfset testCase.setUp(methodName = methodName)/>
 
 			<cfset outputOfTest = testCase.invokeTestMethod(methodName)>
 
@@ -116,7 +116,7 @@
 		</cftry>
 
 		<cftry>
-			<cfset testCase.tearDown() />
+			<cfset testCase.tearDown(methodName = methodName) />
 
 			<cfcatch type="any">
 				<cfset results.addError(cfcatch)>

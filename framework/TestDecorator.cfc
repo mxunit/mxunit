@@ -23,11 +23,11 @@
 	</cffunction>
 
 	<cffunction name="setUp" returntype="void" access="public" hint="">
-		<cfreturn getTarget().setUp() />
+		<cfreturn getTarget().setUp( argumentCollection = arguments ) />
 	</cffunction>
 
 	<cffunction name="tearDown" returntype="void" access="public">
-		<cfreturn getTarget().tearDown() />
+		<cfreturn getTarget().tearDown( argumentCollection = arguments ) />
 	</cffunction>
 
 	<cffunction name="createRequestScopeDebug" access="public" output="false">

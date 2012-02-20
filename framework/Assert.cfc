@@ -295,9 +295,9 @@ assert function and thus mxunit won't run on BD unless we do this --->
 
 
   <cffunction name="assertEqualsCase" access="public" returntype="void" hint="Core assertion that compares the values the EXPECTED and ACTUAL parameters. Throws mxunit.exception.AssertionFailedError. This is case sensitive.">
-    <cfargument name="expected" type="any" required="yes" hint="The expected object to compare."  />
-    <cfargument name="actual"   type="any" required="yes" hint="The actual object to compare."  />
-	  <cfargument name="message"  type="string" required="no" default="" hint="Optional custom message to display if comparison fails." />
+	<cfargument name="expected" type="any" required="yes" hint="The expected object to compare."  />
+	<cfargument name="actual"   type="any" required="yes" hint="The actual object to compare."  />
+	<cfargument name="message"  type="string" required="no" default="" hint="Optional custom message to display if comparison fails." />
 
 	  <cfset var expectedStringValue = "">
 	  <cfset var actualStringValue = "">
@@ -316,6 +316,23 @@ assert function and thus mxunit won't run on BD unless we do this --->
 		  }
 		  failNotEquals(expectedStringValue, actualStringValue, arguments.message, true); //last arg is caseSensitive flag
     </cfscript>
+  </cffunction>
+  
+  <cffunction name="assertNotEqualsCase" output="false" access="public" returntype="any" hint="Fails only if the expected and actual result in a case-sensitive match">  
+  	<cfargument name="expected" type="any" required="yes" hint="The expected object to compare."  />
+	<cfargument name="actual"   type="any" required="yes" hint="The actual object to compare."  />
+	<cfargument name="message"  type="string" required="no" default="" hint="Optional custom message to display if comparison fails." />
+	
+	<cfset var expectedStringValue = "">
+	<cfset var actualStringValue = "">
+	<cfset arguments = normalizeArguments("equals", arguments)>
+	<cfset expectedStringValue = getStringValue(arguments.expected, true)>
+	<cfset actualStringValue = getStringValue(arguments.actual, true)>
+	
+	<!---if we have a case sensitive match --->
+	<cfif compare(expectedStringValue, actualStringValue) eq 0>
+		<cfset failEquals(expectedStringValue, actualStringValue, arguments.message, true)> <!---last arg is caseSensitive flag--->
+	</cfif>
   </cffunction>
 
   	<cffunction name="assertQueryEquals" access="public" output="false" returntype="void" description="compares 2 queries, cell by cell, and fails if differences exist">

@@ -107,7 +107,12 @@
 		<cfset var testName = ListLast(arguments.test,".")>
 		<cfset var thisExclude = "">
 
-		<cfif NOT reFindNoCase("^test",testName) AND NOT reFindNoCase("test$",testName)>
+		<!--- 	
+				TestSomething
+				SomethingTest
+				AboutSomething
+		 --->
+		<cfif NOT reFindNoCase("^(test|about)",testName) AND NOT reFindNoCase("test$",testName)>
 			<cfreturn false>
 		</cfif>
 		<cfif not len(excludes)>
