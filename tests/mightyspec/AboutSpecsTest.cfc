@@ -26,10 +26,6 @@ component extends="mxunit.framework.Spec" {
 			debug("look, ma!");
 		});
 		
-		it( "is a TestCase", function(){
-			assertIsTypeOf( this, "mxunit.framework.TestCase" );
-		});
-		
 	});
 
 	describe("Spec Expectations", function(){

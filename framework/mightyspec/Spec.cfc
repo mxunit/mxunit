@@ -129,9 +129,8 @@ component extends="mxunit.framework.TestCase" {
 		}
 		
 		var context = getSpecContextFromFullSpecName( methodName );
-		
 		if( structKeyExists( context.annotations, annotationName ) ){
-			writeLog("w00000000000000000t");
+			writeLog("Returning annotation value for annotation #annotationName#. Value is #serializeJson(context.annotations[annotationName])#");
 			return context.annotations[ annotationName ];
 		}
 		return defaultValue;
@@ -155,6 +154,11 @@ component extends="mxunit.framework.TestCase" {
 	
 	function invokeTestMethod( methodName, args="#{}#" ){
 		return executeSpec( methodname, args );
+	}
+	
+	function getMethodFromTestCase( methodName ){
+		var context = getSpecContextFromFullSpecName( methodName );
+		return context.code;
 	}
 	
 	function onMissingMethod( missingMethodName, missingMethodArguments ){

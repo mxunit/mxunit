@@ -534,4 +534,9 @@
 	<cffunction name="getVariablesScope" access="public" hint="Front door into the Test's variables scope">
 		<cfreturn variables>
 	</cffunction>
+	
+	<cffunction name="getMethodFromTestCase" output="false" access="public" returntype="any" hint="">    
+    	<cfargument name="methodName" type="string" required="true"/>
+		<cfreturn this[methodName]>
+    </cffunction>
 </cfcomponent>

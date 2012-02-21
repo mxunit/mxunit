@@ -49,4 +49,11 @@ component extends="mxunit.framework.Spec" {
 		}).withDataProvider(arrayDP);
 	});
 	
+	describe("This will expect an exception", function(){
+		request.fixtureDataProviderCount = 0;
+		it( "should throw an expected error", function(){
+			throw(type="BetterThrowAnError")
+		}).withExpectedException("BetterThrowAnError");
+	});
+	
 }  

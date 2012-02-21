@@ -17,7 +17,7 @@ for each member of the data provider
 
 		<cfset var dpName = getAnnotation(methodName, "dataprovider")/>
 		<cfset var outputOfTest = "">
-		<cfif len(dpName)>
+		<cfif NOT isSimpleValue(dpName) OR len(dpName)>
 			<!---<cflog text="inside dataproviderdecorator....  running dataprovider named #dpName#">--->
 
 			<cfset variables.context = getVariablesScope() />
@@ -40,7 +40,11 @@ for each member of the data provider
 		<cfset var provider = ''/>
 
 		<cftry>
-			<cfset provider = context[arguments.dataprovider]/>
+			<cfif NOT isSimpleValue(arguments.dataProvider) OR isNumeric(arguments.dataProvider)>
+				<cfset provider = arguments.dataProvider/>
+			<cfelse>
+				<cfset provider = context[arguments.dataprovider]/>
+			</cfif>	
 		<cfcatch type="coldfusion.runtime.UndefinedElementException">
 			<!--- Make sure simple numeric data passes, which would not be in variables scope --->
 			<cfif not isNumeric(dataProvider)>
@@ -50,21 +54,21 @@ for each member of the data provider
 		</cftry>
 
 		<cfif isQuery(provider)>
-			<cfset runQueryDataProvider(methodName, dataProvider)>
+			<cfset runQueryDataProvider(methodName, provider)>
 		<cfelseif isArray(provider)>
-			<cfset runArrayDataProvider(methodName, dataProvider)>
+			<cfset runArrayDataProvider(methodName, provider)>
 		<cfelseif isStruct(provider)>
-			<cfset runStructDataProvider(methodName, dataProvider)>
+			<cfset runStructDataProvider(methodName, provider)>
 		<cfelseif isNumeric(provider) or isNumeric(dataProvider)>
-			<cfset runNumericDataProvider(methodName, dataProvider)>
+			<cfset runNumericDataProvider(methodName, provider)>
 		<cfelseif fileExists(provider)>
-			<cfset runFileDataProvider(methodName, dataProvider)>
+			<cfset runFileDataProvider(methodName, provider)>
 		<cfelseif fileExists(expandPath(provider))>
 			<cfset runFileDataProvider(methodName, expandPath(provider))>
 		<cfelseif isSimpleValue(provider)>
-			<cfset runListDataProvider(methodName, dataProvider)>
+			<cfset runListDataProvider(methodName, provider)>
 		<cfelseif isStruct(provider)>
-			<cfset runStructDataProvider(methodName, dataProvider)>
+			<cfset runStructDataProvider(methodName, provider)>
 
 		<cfelse>
 			<cfthrow type="mxunit.exception.InvalidDataProviderException"
@@ -75,13 +79,11 @@ for each member of the data provider
 
 	<cffunction name="runStructDataProvider" access="public">
 		<cfargument name="methodName" type="any" required="true"/>
-		<cfargument name="dataProvider" type="any" required="true" hint="Name of a query"/>
+		<cfargument name="dataProvider" type="any" required="true" hint="A Struct"/>
 
 		<cfscript>
 			var method = getMethod(arguments.methodName);
 			var structName = '';
-			var structObject = '';
-			var key = '';
 			var item = 1;
 			var args = structNew();
 			var temp = structNew();
@@ -93,23 +95,18 @@ for each member of the data provider
 			         detail="Usage: <cffunction mxunit:dataprovider ...> <cfargument name=""theStruct"" />">
 		</cfif>
 
-		<cfscript>
-			structName = getMetaData(method).parameters[1].name;
-			structObject = context[dataProvider];
-			//args[structName] = structObject;
-		</cfscript>
-
-		<cfloop collection="#structObject#" item="item">
+		<cfset structName = getMetaData(method).parameters[1].name>
+		<cfloop collection="#dataProvider#" item="item">
 			<cfset temp = structNew() />
-			     <cfset temp[item] = structObject[item]>
-			     <cfset args[structName] = temp>
-			     <cfset _$invoke(methodName, args)>
+			<cfset temp[item] = dataProvider[item]>
+			<cfset args[structName] = temp>
+			<cfset _$invoke(methodName, args)>
 		</cfloop>
 	</cffunction>
 
 	<cffunction name="runNumericDataProvider" access="public">
 		<cfargument name="methodName" type="any" required="true"/>
-		<cfargument name="dataProvider" type="any" required="true" hint="Name of a query"/>
+		<cfargument name="dataProvider" type="any" required="true" hint="A number"/>
 
 		<cfscript>
 			var method = getMethod(arguments.methodName);
@@ -124,18 +121,11 @@ for each member of the data provider
 			         detail="Usage: <cffunction mxunit:dataprovider ...> <cfargument name=""index"" />");
 			}
 			idxName = getMetaData(method).parameters[1].name;
-			try
-			{
-				count = context[dataProvider];//account for variable names vs. raw int values
-			}
-			catch(any e)
-			{
-				count = dataProvider;
-			}
+			
 			args[idxName] = 0;
-			for(i = 1; i LTE count; i = i + 1)
+			for(index = 1; index LTE dataProvider; index = index + 1)
 			{
-				args[idxName] = i;
+				args[idxName] = index;
 				_$invoke(arguments.methodName, args);
 			}
 		</cfscript>
@@ -144,7 +134,7 @@ for each member of the data provider
 
 	<cffunction name="runListDataProvider" access="public">
 		<cfargument name="methodName" type="any" required="true"/>
-		<cfargument name="dataProvider" type="any" required="true" hint="Name of a query"/>
+		<cfargument name="dataProvider" type="string" required="true" hint="A List"/>
 
 		<cfscript>
 			var method = getMethod(arguments.methodName);
@@ -161,9 +151,8 @@ for each member of the data provider
 			         detail="Usage: <cffunction mxunit:dataprovider ...> <cfargument name=""listItem"" />");
 			}
 			listItemName = getMetaData(method).parameters[1].name;
-			listObject = context[dataProvider];
 			args[listItemName] = '';
-			toArray = listToArray(listObject, ",;:/\");
+			toArray = listToArray(dataProvider, ",;:/\");
 			listLength = arrayLen(toArray);
 			if(listLength eq 0)
 				_$throw(message="List DataProvider #dataProvider# did not contain any elements");
@@ -178,7 +167,7 @@ for each member of the data provider
 
 	<cffunction name="runArrayDataProvider" access="public">
 		<cfargument name="methodName" type="any" required="true"/>
-		<cfargument name="dataProvider" type="any" required="true" hint="Name of an array"/>
+		<cfargument name="dataProvider" type="any" required="true" hint="An array"/>
 
 		<cfscript>
 			var method = getMethod(arguments.methodName);
@@ -195,12 +184,11 @@ for each member of the data provider
 			         detail="Usage: <cffunction mxunit:dataprovider ...> <cfargument name=""arrayName"" /><cfargument name=""index"" />");
 			}
 			itemName = params[1].name;//could make optional
-			arrayObject = context[dataProvider];
-			if(ArrayLen(arrayObject) eq 0)
+			if(arrayLen(dataProvider) eq 0)
 				_$throw(message="Array DataProvider #dataProvider# did not contain any elements");
-			for(i = 1; i LTE ArrayLen(arrayObject); i = i + 1)
+			for(i = 1; i LTE arrayLen(dataProvider); i = i + 1)
 			{
-				args[itemName] = arrayObject[i];
+				args[itemName] = dataProvider[i];
 				args[index] = i;
 				_$invoke(arguments.methodName, args);
 			}
@@ -217,11 +205,10 @@ for each member of the data provider
 
 	<cffunction name="runQueryDataProvider" access="public" hint="runner for DataProvider-driven tests">
 		<cfargument name="methodName" type="any" required="true"/>
-		<cfargument name="dataProvider" type="any" required="true" hint="Name of a query"/>
+		<cfargument name="dataProvider" type="any" required="true" hint="A Query"/>
 
 		<cfscript>
 			var localQuery = '';
-			var tempQ = '';
 
 			//NOTE: was duplicating query, but probably is not needed
 			//as were are not altering the query object, but the cursor
@@ -256,7 +243,7 @@ for each member of the data provider
 		<cfargument name="dataProvider" type="any" required="true" hint="Name of a file"/>
 
 		<cfscript>
-			var providerFile = context[dataProvider];
+			var providerFile = dataProvider;
 			var extension = listLast(providerFile, ".");
 			var poi = createObject("component", "mxunit.framework.POIUtility").init();
 			var csv = createObject("component", "mxunit.framework.CSVUtility");
@@ -332,10 +319,7 @@ for each member of the data provider
 
 	<cffunction name="getMethod" access="private">
 		<cfargument name="methodName" type="string" required="true"/>
-		<cfscript>
-			var target = getBaseTarget();
-			return target[arguments.methodName];
-        </cfscript>
+		<cfreturn getBaseTarget().getMethodFromTestCase(methodName)>
 	</cffunction>
 
 </cfcomponent>
