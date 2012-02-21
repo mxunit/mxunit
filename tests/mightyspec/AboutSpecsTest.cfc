@@ -90,7 +90,8 @@ component extends="mxunit.framework.Spec" {
 	describe("Spec Annotations", function(){
 		
 		it( "should honor dataproviders", function(){
-			fail("not yet implemented");
+			expect( request.fixtureDataProviderCount ).toEqual(4);//because I know the internal DP is 4 elements
+			debug(request);
 		});
 		
 		it( "should honor expectedException", function(){

@@ -496,7 +496,7 @@
 			}
         </cfscript>
 
-        <cfset decoratorNames = arguments.object.getAnnotation(annotationName="decorators") />
+        <cfset decoratorNames = arguments.object.getAnnotation(methodName="", annotationName="decorators") />
 		<cfset decoratorNames = listPrepend( decoratorNames, getRequiredDecoratorPaths() ) />
 
 		<cfloop list="#decoratorNames#" index="decoratorPath">

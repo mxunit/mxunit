@@ -39,4 +39,14 @@ component extends="mxunit.framework.Spec" {
 
 	});
 	
+	arrayDP = [1,2,3,4];
+	
+	describe("This will use a dataprovider", function(){
+		request.fixtureDataProviderCount = 0;
+		it( "should run this one time for each dataprovider element", function(element=0){
+			debug(arguments.element);
+			request.fixtureDataProviderCount++;
+		}).withDataProvider(arrayDP);
+	});
+	
 }  

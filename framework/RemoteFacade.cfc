@@ -161,7 +161,8 @@
 					<!---		 --->
 				<cfloop from="1" to="#ArrayLen(s_test.error.tagcontext)#" index="tag">
 					<cfif FileExists(s_test.error.tagcontext[tag].template)>
-						<cflog text=" #s_test.error.tagcontext[tag].template# #isFrameworkTest# OR NOT #cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)#" >
+						
+
 						<cfif isFrameworkTest OR NOT cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)>
 							<cfset t.TAGCONTEXT[i] = structNew()>
 							<cfset t.TAGCONTEXT[i].FILE = s_test.error.tagcontext[tag].template>

@@ -3,6 +3,7 @@ component extends="mxunit.framework.TestCase" {
 	specs = {};
 	runnableMethods = [];
 	currentDescriptionContext = "";
+	currentSpecContext = "";
 	variables.actual = "";
 	variables.expected = "";
 	
@@ -32,30 +33,48 @@ component extends="mxunit.framework.TestCase" {
 		}
 
 		variables.currentDescriptionContext = "";
+		variables.currentSpecContext = "";
+		return this;
 	}
 
 	function it( should, code ){
-		writeLog("inside it: should = #should#");
+		//writeLog("inside it: should = #should#");
+		variables.currentSpecContext = should;
 		arrayAppend( runnableMethods, "#variables.currentDescriptionContext# : #should#");
-		specs[ variables.currentDescriptionContext ][should] = code;
+		specs[ variables.currentDescriptionContext ][should] = { code = code, annotations = {} };
+		return this;
 	}
 	
 	function executeSpec( methodName, args="#{}#" ){
-		writeLog( "executing spec #methodName#" );
-		var desc = trim(listFirst( methodName, ":" ));
-		var spec = trim(listLast( methodName, ":" ));
-		var fn = variables.specs[ desc ][ spec ];
+		//writeLog( "executing spec #methodName#" );
+		var context = getSpecContextFromFullSpecName( methodName );
+		var fn = context.code;
 		var outputOfTest = "";
 
 		savecontent variable="outputOfTest"{
-			debug(variables.specs[desc]);
-			debug(spec);
 			fn();
 		}
 		return outputOfTest;
 	}
 	
-	/* Add 'expectation' behaviors */
+	private function getCurrentDescriptionContext(){
+		writeLog("looking at currentDescriptionContext #variables.currentDescriptionContext#");
+		return specs[ variables.currentDescriptionContext ];
+	}
+	
+	private function getCurrentSpecContext(){
+		var descContext = getCurrentDescriptionContext(); 
+		writeLog("looking at currentSpecContext #variables.currentSpecContext#");
+		return descContext[ variables.currentSpecContext ];
+	}
+	
+	private function getSpecContextFromFullSpecName( methodName ){
+		var desc = trim(listFirst( methodName, ":" ));
+		var spec = trim(listLast( methodName, ":" ));
+		return variables.specs[ desc ][ spec ];
+	}
+	
+	/* expectations */
 	
 	function expect( value ){
 		variables.actual = value;
@@ -95,14 +114,28 @@ component extends="mxunit.framework.TestCase" {
 		assertNotEquals( getActual(), expected, message );
 	}
 	
-	/* TestCase overrides */
+	/* TestCase overrides which essentially Adapt a Spec into a TestCase */
 	
-	function getAnnotation( methodName, annotationname, defaultValue="" ){
-		//TODO: implement
-		return defaultValue;
+	package function withAnnotation( annotationName, annotationValue ){
+		var context = getCurrentSpecContext();
+		context.annotations[ annotationName ] = annotationValue;
+		
+		return this;
 	}
 	
-	//TODO: DataProviders! Test Decorators. ExpectedException. What else?
+	function getAnnotation( methodName="", annotationname, defaultValue="" ){
+		if( methodName eq "" ){
+			return super.getAnnotation( argumentCollection = arguments );
+		}
+		
+		var context = getSpecContextFromFullSpecName( methodName );
+		
+		if( structKeyExists( context.annotations, annotationName ) ){
+			writeLog("w00000000000000000t");
+			return context.annotations[ annotationName ];
+		}
+		return defaultValue;
+	}
 	
 	function beforeTests(){
 		beforeAll();
@@ -125,7 +158,17 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	function onMissingMethod( missingMethodName, missingMethodArguments ){
+		
+		if( missingMethodName.startsWith("with") ){
+			return onMissingWithMethod( argumentCollection = arguments );
+		}
+		
 		throw( "Spec.onMissingMethod: Unknown method #missingMethodName#" );
+	}
+	
+	private function onMissingWithMethod(missingMethodName, missingMethodArguments){
+		var annotationName = mid(missingMethodName, 5, len(missingMethodName) - 4);
+		return withAnnotation( annotationName, missingMethodArguments[1] );
 	}
 
 }
