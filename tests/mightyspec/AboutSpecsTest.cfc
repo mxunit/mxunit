@@ -10,12 +10,16 @@ component extends="mxunit.framework.Spec" {
 	
 	describe("Specs are TestCases", function(){
 		
+		var anObject = createObject("component", "fixture.AComponent");
+		
 		it( "can use makePublic", function(){
-			fail("not yet implemented");
+			makePublic(anObject, "privateMethod");
+			expect(anObject.privateMethod("hello")).toEqual("hello");
 		});
 		
 		it( "can use injectMethod", function(){
-			fail("not yet implemented");
+			injectMethod(anObject, this, "override", "methodOne");
+			expect(anObject.methodOne()).toEqual("overridden");
 		});
 		
 		it( "can use debug", function(){
@@ -23,7 +27,7 @@ component extends="mxunit.framework.Spec" {
 		});
 		
 		it( "is a TestCase", function(){
-			fail("not yet implemented");
+			assertIsTypeOf( this, "mxunit.framework.TestCase" );
 		});
 		
 	});
@@ -100,14 +104,15 @@ component extends="mxunit.framework.Spec" {
 	});
 	
 	describe("Spec Scoping Behavior", function(){
+		var insideSpecScopingBehavior = "insideSSB";
 		
 		it( "should have access to component functions", function(){
-			fail("not yet implemented");
+			var result = aFunctionInASpec( "hello world" );
+			expect(result).toBe("hello world");
 		});
 		
 		it( "should have access to description variables", function(){
-			debug(local);
-			fail("not yet implemented");
+			expect(insideSpecScopingBehavior).toBe("insideSSB");
 		});
 		
 		var someVar = 5;
@@ -117,7 +122,7 @@ component extends="mxunit.framework.Spec" {
 			debug(local);
 			debug(someVar);
 			debug(someOtherVar);
-			fail("not yet implemented");
+			expect(someArg).toEqual(someVar);
 		});
 		
 	});
@@ -142,5 +147,13 @@ component extends="mxunit.framework.Spec" {
 		});
 		
 	});
+	
+	function aFunctionInASpec(input = ""){
+		return input;
+	}
+	
+	function override(){
+		return "overridden";
+	}
 	
 }  
