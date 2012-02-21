@@ -15,6 +15,8 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	/* BDD equivalents of setup/teardown, etc */
+	function beforeAll(){}
+	function afterAll(){}
 	function before(){}
 	function after(){}
 
@@ -102,12 +104,20 @@ component extends="mxunit.framework.TestCase" {
 	
 	//TODO: DataProviders! Test Decorators. ExpectedException. What else?
 	
+	function beforeTests(){
+		beforeAll();
+	}
+	
 	function setUp(){
 		before( argumentCollection=arguments );
 	}
 	
 	function tearDown(){
 		after( argumentCollection=arguments );
+	}
+	
+	function afterTests(){
+		afterAll();
 	}
 	
 	function invokeTestMethod( methodName, args="#{}#" ){

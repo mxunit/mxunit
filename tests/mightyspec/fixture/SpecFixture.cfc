@@ -1,11 +1,24 @@
 component extends="mxunit.framework.Spec" {
 
+	request.specFixtureBeforeAllCount = 0;
+	request.specFixtureBeforeCount = 0;
+	request.specFixtureAfterCount = 0;
+	request.specFixtureAfterAllCount = 0;
+	
+	function beforeAll(){
+		request.specFixtureBeforeAllCount++;
+	}
+	
 	function before(){
-		variables.lastBeforeMethodName = arguments.methodName;
+		request.specFixtureBeforeCount++;
 	}
 	
 	function after(arguments){
-		variables.lastAfterMethodName = arguments.methodName;
+		request.specFixtureAfterCount++;
+	}
+
+	function afterAll(){
+		request.specFixtureAfterAllCount++;
 	}
 
 	describe("This Fixture", function(){

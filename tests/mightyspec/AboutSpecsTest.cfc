@@ -1,11 +1,11 @@
 component extends="mxunit.framework.Spec" {
 
-	function before(){
-		variables.lastBeforeMethodName = arguments.methodName;
-	}
-	
-	function after(){
-		variables.lastAfterMethodName = arguments.methodName;
+	function beforeAll(){
+		fixtureSuite = createObject("component", "mxunit.framework.TestSuite");
+		var fixtureSpec = createObject("component", "fixture.SpecFixture");
+		fixtureSuite.addAll( "mxunit.tests.mightyspec.fixture.SpecFixture", fixtureSpec);
+		fixtureResult = fixtureSuite.run();
+		fixtureRunnableMethods = fixtureSpec.getRunnableMethods();
 	}
 	
 	describe("Specs are TestCases", function(){
@@ -124,20 +124,21 @@ component extends="mxunit.framework.Spec" {
 	
 	describe("Spec Before and After", function(){
 		
-		it( "should run beforeSpecs() once per Component", function(){
-			fail("not yet implemented");
+		 
+		it( "should run beforeAll() once per Component", function(){
+			expect(request.specFixtureBeforeAllCount).toEqual(1);
 		});
 		
-		it( "should run afterSpecs() once per Component", function(){
-			fail("not yet implemented");
+		it( "should run afterAll() once per Component", function(){
+			expect(request.specFixtureAfterAllCount).toEqual(1);
 		});
 		
 		it( "should run before() once per spec", function(){
-			fail("not yet implemented");
+			expect(request.specFixtureBeforeCount).toEqual(arrayLen(fixtureRunnableMethods));
 		});
 		
 		it( "should run after() once per spec", function(){
-			fail("not yet implemented");
+			expect(request.specFixtureAfterCount).toEqual(arrayLen(fixtureRunnableMethods));
 		});
 		
 	});
