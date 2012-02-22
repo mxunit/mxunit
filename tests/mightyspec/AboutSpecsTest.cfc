@@ -91,11 +91,12 @@ component extends="mxunit.framework.Spec" {
 		});
 		
 		it( "should honor expectedException", function(){
-			fail("not yet implemented");		
-		});
+			throw(type="MyCustomException");	
+		}).withExpectedException("MyCustomException");
 		
 		it( "should honor setExpectedException() function", function(){
-			fail("not yet implemented");
+			expectException("AnotherCustomException");
+			throw(type="AnotherCustomException");
 		});
 
 	});
@@ -135,11 +136,11 @@ component extends="mxunit.framework.Spec" {
 			expect(request.specFixtureAfterAllCount).toEqual(1);
 		});
 		
-		it( "should run before() once per spec", function(){
+		it( "should run beforeEach() once per spec", function(){
 			expect(request.specFixtureBeforeCount).toEqual(arrayLen(fixtureRunnableMethods));
 		});
 		
-		it( "should run after() once per spec", function(){
+		it( "should run afterEach() once per spec", function(){
 			expect(request.specFixtureAfterCount).toEqual(arrayLen(fixtureRunnableMethods));
 		});
 		

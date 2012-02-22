@@ -9,11 +9,11 @@ component extends="mxunit.framework.Spec" {
 		request.specFixtureBeforeAllCount++;
 	}
 	
-	function before(){
+	function beforeEach(){
 		request.specFixtureBeforeCount++;
 	}
 	
-	function after(arguments){
+	function afterEach(arguments){
 		request.specFixtureAfterCount++;
 	}
 

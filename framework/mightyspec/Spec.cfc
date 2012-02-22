@@ -18,8 +18,8 @@ component extends="mxunit.framework.TestCase" {
 	/* BDD equivalents of setup/teardown, etc */
 	function beforeAll(){}
 	function afterAll(){}
-	function before(){}
-	function after(){}
+	function beforeEach(){}
+	function afterEach(){}
 
 
 	function describe( name, expectations="" ){
@@ -38,7 +38,6 @@ component extends="mxunit.framework.TestCase" {
 	}
 
 	function it( should, code ){
-		//writeLog("inside it: should = #should#");
 		variables.currentSpecContext = should;
 		arrayAppend( runnableMethods, "#variables.currentDescriptionContext# : #should#");
 		specs[ variables.currentDescriptionContext ][should] = { code = code, annotations = {} };
@@ -46,7 +45,6 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	function executeSpec( methodName, args="#{}#" ){
-		//writeLog( "executing spec #methodName#" );
 		var context = getSpecContextFromFullSpecName( methodName );
 		var fn = context.code;
 		var outputOfTest = "";
@@ -58,13 +56,11 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	private function getCurrentDescriptionContext(){
-		writeLog("looking at currentDescriptionContext #variables.currentDescriptionContext#");
 		return specs[ variables.currentDescriptionContext ];
 	}
 	
 	private function getCurrentSpecContext(){
 		var descContext = getCurrentDescriptionContext(); 
-		writeLog("looking at currentSpecContext #variables.currentSpecContext#");
 		return descContext[ variables.currentSpecContext ];
 	}
 	
@@ -92,26 +88,26 @@ component extends="mxunit.framework.TestCase" {
 	
 	function toBe( expected, message = "" ){
 		if( isObject( getActual() ) && isObject( expected ) ){
-			assertSame( getActual(), expected, message );		
+			assertSame( expected, getActual(), message );		
 		} else {
-			assertEqualsCase( getActual(), expected, message );
+			assertEqualsCase( expected, getActual(), message );
 		}
 	}
 	
 	function toNotBe( expected, message = "" ){
 		if( isObject( getActual() ) && isObject( expected ) ){
-			assertNotSame( getActual(), expected, message );		
+			assertNotSame( expected, getActual(), message );		
 		} else {
-			assertNotEqualsCase( getActual(), expected, message );
+			assertNotEqualsCase( expected, getActual(), message );
 		}
 	}
 	
 	function toEqual( expected, message = ""  ){
-		assertEquals( getActual(), expected, message );
+		assertEquals( expected, getActual(), message );
 	}
 	
 	function toNotEqual( expected, message = ""  ){
-		assertNotEquals( getActual(), expected, message );
+		assertNotEquals( expected, getActual(), message );
 	}
 	
 	/* TestCase overrides which essentially Adapt a Spec into a TestCase */
@@ -130,7 +126,6 @@ component extends="mxunit.framework.TestCase" {
 		
 		var context = getSpecContextFromFullSpecName( methodName );
 		if( structKeyExists( context.annotations, annotationName ) ){
-			writeLog("Returning annotation value for annotation #annotationName#. Value is #serializeJson(context.annotations[annotationName])#");
 			return context.annotations[ annotationName ];
 		}
 		return defaultValue;
@@ -141,11 +136,11 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	function setUp(){
-		before( argumentCollection=arguments );
+		beforeEach( argumentCollection=arguments );
 	}
 	
 	function tearDown(){
-		after( argumentCollection=arguments );
+		afterEach( argumentCollection=arguments );
 	}
 	
 	function afterTests(){
