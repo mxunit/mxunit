@@ -7,7 +7,7 @@ component extends="mxunit.framework.TestCase" {
 	variables.actual = "";
 	variables.expected = "";
 	
-	function getSpecs(){
+	public struct function getSpecs(){
 		return specs;
 	}
 	
@@ -30,7 +30,7 @@ component extends="mxunit.framework.TestCase" {
 	   });
 	   
 	*/
-	function describe( name, definitions="" ){
+	public Spec function describe( name, definitions="" ){
 		if( isClosure( arguments.definitions ) ){
 			specs[name] = {};
 			variables.currentDescriptionContext = arguments.name;
@@ -51,7 +51,7 @@ component extends="mxunit.framework.TestCase" {
 		@should describes the specification
 		@code is a function closure implementing the expectations for the spec
 	*/
-	function it( should, code ){
+	public Spec function it( String should, code ){
 		variables.currentSpecContext = should;
 		arrayAppend( runnableMethods, "#variables.currentDescriptionContext# : #should#");
 		specs[ variables.currentDescriptionContext ][should] = { code = code, annotations = {} };
@@ -75,67 +75,111 @@ component extends="mxunit.framework.TestCase" {
 		);
 	
 	*/
-	package function withAnnotation( annotationName, annotationValue ){
+	package Spec function withAnnotation( annotationName, annotationValue ){
 		var context = getCurrentSpecContext();
 		context.annotations[ annotationName ] = annotationValue;
 		
 		return this;
 	}
 	
-	/* expectations you use in your specs */
-	
-	function expect( value ){
-		variables.actual = value;
-		return this;
-	}
-	
-	function toBeTrue( message = "" ){
-		assertTrue( getActual(), message );
-	}
-	
-	function toBeFalse( message = "" ){
-		assertFalse( getActual(), message );
-	}
-	
-	function toBe( expected, message = "" ){
-		if( isObject( getActual() ) && isObject( expected ) ){
-			assertSame( expected, getActual(), message );		
-		} else {
-			assertEqualsCase( expected, getActual(), message );
-		}
-	}
-	
-	function toNotBe( expected, message = "" ){
-		if( isObject( getActual() ) && isObject( expected ) ){
-			assertNotSame( expected, getActual(), message );		
-		} else {
-			assertNotEqualsCase( expected, getActual(), message );
-		}
-	}
-	
-	function toEqual( expected, message = ""  ){
-		assertEquals( expected, getActual(), message );
-	}
-	
-	function toNotEqual( expected, message = ""  ){
-		assertNotEquals( expected, getActual(), message );
-	}
-	
-	/* BDD equivalents of setup/teardown, etc */
+	/* Equivalents of setup/teardown, etc */
 	function beforeAll(){}
 	function afterAll(){}
 	function beforeEach(){}
 	function afterEach(){}
 	
+	/* expectations you use in your specs */
 	
-	/* Internal functions and TestCase overrides which Adapt a Spec into a TestCase */
+	public Spec function expect( value ){
+		variables.actual = value;
+		return this;
+	}
+	
+	public Spec function toEqual( expected, message = "" ){
+		assertEquals( expected, getActual(), message );
+		return this;
+	}
+
+	public Spec function toNotEqual( expected, message = "" ){
+		assertNotEquals( expected, getActual(), message );
+		return this;
+	}
+	
+	public Spec function toBeTrue( message = "" ){
+		assertTrue( getActual(), message );
+		return this;
+	}
+
+	public Spec function toBeFalse( message = "" ){
+		assertFalse( getActual(), message );
+		return this;
+	}
+	
+	public Spec function toBe( expected, message = "" ){
+		if( isObject( getActual() ) && isObject( expected ) ){
+			assertSame( expected, getActual(), message );		
+		} else {
+			assertEqualsCase( expected, getActual(), message );
+		}
+		return this;
+	}
+	
+	public Spec function toNotBe( expected, message = "" ){
+		if( isObject( getActual() ) && isObject( expected ) ){
+			assertNotSame( expected, getActual(), message );		
+		} else {
+			assertNotEqualsCase( expected, getActual(), message );
+		}
+		return this;
+	}
+	
+	public Spec function toBeTypeOf( String type ){
+		assertIsTypeOf( getActual(), type );
+		return this;
+	}
+
+	public Spec function toBeExactTypeOf( String type ){
+		assertIsExactTypeOf( getActual(), type );
+		return this;
+	}
+	
+	
+	public Spec function toBeAnXMLDoc( message = "" ){
+		return _assertTruth( assertIsXMLDoc, message );
+	}
+
+	public Spec function toBeAnArray( message = "" ){
+		return _assertTruth( assertIsArray, message );
+	}
+
+	public Spec function toBeAStruct( message = "" ){
+		return _assertTruth( assertIsStruct, message );
+	}
+
+	public Spec function toBeAQuery( message = "" ){
+		return _assertTruth( assertIsQuery, message );
+	}
+	
+	public Spec function toBeAnObject( message = "" ){
+		return _assertTruth( assertIsObject, message );
+	}
+	
+	public Spec function toBeEmpty( message = "" ){
+		return _assertTruth( assertIsEmpty, message );
+	}
+	
+	private function _assertTruth( fn, message = "" ){
+		fn( getActual(), message );
+		return this;
+	}
+	
 	private function executeSpec( methodName, args="#{}#" ){
 		var context = getSpecContextFromFullSpecName( methodName );
-		var fn = context.code;
+		var thisSpecCode = context.code;
 		var outputOfTest = "";
 
 		savecontent variable="outputOfTest"{
-			fn();
+			thisSpecCode();
 		}
 		return outputOfTest;
 	}
@@ -171,20 +215,20 @@ component extends="mxunit.framework.TestCase" {
 		afterAll();
 	}
 		
-	function getRunnableMethods(){
+	public array function getRunnableMethods(){
 		return runnableMethods;
 	}
 	
-	function invokeTestMethod( methodName, args="#{}#" ){
+	public function invokeTestMethod( methodName, args="#{}#" ){
 		return executeSpec( methodname, args );
 	}
 	
-	function getMethodFromTestCase( methodName ){
+	public function getMethodFromTestCase( methodName ){
 		var context = getSpecContextFromFullSpecName( methodName );
 		return context.code;
 	}
 	
-	function getAnnotation( methodName="", annotationname, defaultValue="" ){
+	public Any function getAnnotation( methodName="", annotationname, defaultValue="" ){
 		if( methodName eq "" ){
 			return super.getAnnotation( argumentCollection = arguments );
 		}
@@ -197,8 +241,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	function onMissingMethod( missingMethodName, missingMethodArguments ){
-		
-		if( missingMethodName.startsWith("with") ){
+		if( lcase(missingMethodName).startsWith("with") ){
 			return onMissingWithMethod( argumentCollection = arguments );
 		}
 		

@@ -34,6 +34,10 @@ component extends="mxunit.framework.Spec" {
 			expect("case").toEqual("case", "This should pass because they are the same case");
 			expect("case").toEqual("Case", "This should pass even if they are not the same case");
 			expect("case").toEqual("CASE", "This should pass even if they are not the same case");
+			expect(1).toEqual(1);
+			expect(true).toEqual(true);
+			expect([1,2,3]).toEqual([1,2,3]);
+			expect({one="one", two="2", three="thr33"}).toEqual({one="one", two="2", three="thr33"});
 		});
 		
 		it( "should assert exact equality with toBe()", function(){
@@ -77,8 +81,21 @@ component extends="mxunit.framework.Spec" {
 		});
 		
 		it( "should have access to mxunit assertion extensions", function(){
-			assertIsArray([]);
-			assertIsStruct({});
+			expect([1,'a',2.0]).toBeAnArray();
+			expect({f=1, 2:3, b:'42', game="Ender's"}).toBeAStruct();
+			
+			var q = queryNew('hi');
+			expect(q).toBeAQuery();
+			
+			expect(this).toBeAnObject();
+			
+			expect([]).toBeEmpty();
+			expect({}).toBeEmpty();
+			expect("").toBeEmpty();
+			expect(q).toBeEmpty();
+			
+			expect(this).toBeTypeOf("mxunit.framework.Spec");
+			expect(this).toBeExactTypeOf("mxunit.tests.mightyspec.AboutSpecsTest");
 		});
 
 	});

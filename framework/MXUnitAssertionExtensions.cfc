@@ -2,11 +2,7 @@
  Extends the base Assertions ... assertEquals and AssertTrue ...
  --->
 <cfcomponent displayname="MXUnitAssertionExtensions" extends="Assert" output="false" hint="Extends core mxunit assertions.">
-
 	
-	
-	<cfparam name="request.__mxunitInheritanceTree__" type="string" default="" />
-
 	<cffunction name="assertIsXMLDoc" access="public" returntype="boolean">
 		<cfargument name="xml" required="yes" type="any" />
 		<cfargument name="message" required="no" default="The test result is not a valid ColdFusion XML DOC object." type="string">
@@ -66,6 +62,16 @@
 		<cfreturn true>
 
 	</cffunction>
+	
+	<cffunction name="assertIsObject" access="public" returntype="boolean">
+		<cfargument name="object" required="yes" type="any" />
+		<cfargument name="message" type="string" required="false" default="The test result is not a valid ColdFusion OBJECT."/>
+
+		<cfset assertTrue(isObject(arguments.object),arguments.message)>
+
+		<cfreturn true>
+
+	</cffunction>
 
 	<cffunction name="assertIsEmptyStruct" access="public" returntype="boolean">
 		<cfargument name="struct" required="yes" type="any" />
@@ -77,14 +83,22 @@
 
 	</cffunction>
 
-	<cffunction name="assertIsEmpty" access="public" returntype="boolean">
-		<cfargument name="o" required="yes" type="String" />
-		<cfargument name="message" type="string" required="false" default="The test result is NOT EMPTY. It is [#o#]"/>
+	<cffunction name="assertIsEmpty" access="public">
+		<cfargument name="value" required="yes" type="any" />
+		<cfargument name="message" type="string" required="false" default=""/>
 
-		<cfset assertEquals("",o,arguments.message)>
-
-		<cfreturn true>
-
+		<cfif isStruct(value)>
+			<cfset assertIsEmptyStruct( value, message )>
+		<cfelseif isArray(value)>
+			<cfset assertIsEmptyArray( value, message )>
+		<cfelseif isQuery(value)>
+			<cfset assertIsEmptyQuery( value, message )>
+		<cfelse>
+			<cfif arguments.message eq "">
+				<cfset arguments.message = "The test result is NOT EMPTY. It is [#value#]">
+			</cfif>
+			<cfset assertEquals( "", value, arguments.message )>
+		</cfif>
 	</cffunction>
 
 	<cffunction name="assertIsDefined" access="public" returntype="boolean">
