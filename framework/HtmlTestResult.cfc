@@ -139,7 +139,9 @@
 							<a id="bug" href="#toggledUrl#" rel="tipsy" title="#bugMessage#"><img border="0" height="24" align="absmiddle" src="#mxunit_root#/images/bug_green.gif"></a>
 						</div>
 
-						<div id="sparkcontainer" rel="tipsy" title="#this.testRuns# tests in #this.totalExecutionTime#ms. Success ratio #int(this.sucessRatio*100)#%">
+						<cfset sparkTitle = "#this.testRuns# tests in #this.totalExecutionTime#ms. Success ratio #int(this.sucessRatio*100)#%">
+						
+						<div id="sparkcontainer" rel="tipsy" title="#sparkTitle#">
 							<span class="mxunittestsparks">
 								Replace this in HTMLTestResult <cfscript>
 									//generate data for sparkline
@@ -160,6 +162,8 @@
 
 						<div class="clear"><!-- clear --></div>
 					</div>
+					
+					<div>#sparkTitle#</div>
 
 					<cfloop from="1" to="#ArrayLen(this.testResults)#" index="i">
 						<!--- Check if we are on a new component --->

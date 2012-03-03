@@ -84,7 +84,7 @@
 	</cffunction>
 
 	<cffunction name="assertIsEmpty" access="public">
-		<cfargument name="value" required="yes" type="any" />
+		<cfargument name="value" required="false" type="any" default="" />
 		<cfargument name="message" type="string" required="false" default=""/>
 
 		<cfif isStruct(value)>

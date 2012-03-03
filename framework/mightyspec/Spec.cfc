@@ -174,17 +174,6 @@ component extends="mxunit.framework.TestCase" {
 		return this;
 	}
 	
-	private function executeSpec( methodName, args="#{}#" ){
-		var context = getSpecContextFromFullSpecName( methodName );
-		var thisSpecCode = context.code;
-		var outputOfTest = "";
-
-		savecontent variable="outputOfTest"{
-			thisSpecCode();
-		}
-		return outputOfTest;
-	}
-	
 	private function getCurrentDescriptionContext(){
 		return specs[ variables.currentDescriptionContext ];
 	}
@@ -200,6 +189,7 @@ component extends="mxunit.framework.TestCase" {
 		return variables.specs[ desc ][ spec ];
 	}
 	
+	/*These overrides adapt a Spec into TestCase*/
 	function beforeTests(){
 		beforeAll();
 	}
@@ -221,7 +211,14 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public function invokeTestMethod( methodName, args="#{}#" ){
-		return executeSpec( methodname, args );
+		var context = getSpecContextFromFullSpecName( methodName );
+		var thisSpecCode = context.code;
+		var outputOfTest = "";
+
+		savecontent variable="outputOfTest"{
+			thisSpecCode();
+		}
+		return outputOfTest;
 	}
 	
 	public function getMethodFromTestCase( methodName ){
