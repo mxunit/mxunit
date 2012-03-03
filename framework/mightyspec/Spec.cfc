@@ -97,6 +97,7 @@ component extends="mxunit.framework.TestCase" {
 	
 	public Spec function toEqual( expected, message = "" ){
 		assertEquals( expected, getActual(), message );
+		
 		return this;
 	}
 
