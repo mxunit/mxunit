@@ -21,6 +21,24 @@
 	<cffunction name="afterTests" returntype="void" access="public">
 		<cfreturn getTarget().afterTests() />
 	</cffunction>
+	
+	<cffunction name="enableBeforeTests" returntype="void" access="public">
+		<cfreturn getTarget().enableBeforeTests() />
+	</cffunction>
+	
+	<cffunction name="disableBeforeTests" returntype="void" access="public">
+		<cfreturn getTarget().disableBeforeTests() />
+	</cffunction>
+	
+	<cffunction name="enableAfterTests" returntype="void" access="public">
+		<cfreturn getTarget().enableAfterTests() />
+	</cffunction>
+	
+	<cffunction name="disableAfterTests" returntype="void" access="public">
+		<cfreturn getTarget().disableAfterTests() />
+	</cffunction>
+	
+	
 
 	<cffunction name="setUp" returntype="void" access="public" hint="">
 		<cfreturn getTarget().setUp() />

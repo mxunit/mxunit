@@ -34,6 +34,34 @@
 	--->
 	<cffunction name="tearDown" returntype="void" access="public">
 	</cffunction>
+	
+	<!--- Variables to keep track of before/after runs --->
+	<cfset enableBeforeTests()>
+	<cfset enableAfterTests()>
+	
+	<cffunction name="disableBeforeTests" output="false">
+		<cfset variables.beforeTestsEnabled = false>
+	</cffunction>
+	
+	<cffunction name="enableBeforeTests" output="false">
+		<cfset variables.beforeTestsEnabled = true>
+	</cffunction>
+	
+	<cffunction name="okToRunBeforeTests" output="false" access="public" returntype="boolean" hint="">    
+    	<cfreturn variables.beforeTestsEnabled>
+    </cffunction>
+	
+	<cffunction name="disableAfterTests" output="false">
+		<cfset variables.afterTestsEnabled = false>
+	</cffunction>
+	
+	<cffunction name="enableAfterTests" output="false">
+		<cfset variables.afterTestsEnabled = true>
+	</cffunction>
+	
+	<cffunction name="okToRunAfterTests" output="false" access="public" returntype="boolean" hint="">    
+    	<cfreturn variables.afterTestsEnabled>
+    </cffunction>
 
 	<!--- constructor --->
 	<cfset initProperties() />
