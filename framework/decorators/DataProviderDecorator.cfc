@@ -40,7 +40,7 @@ for each member of the data provider
 		<cfset var provider = ''/>
 
 		<cftry>
-			<cfset provider = getProvider(dataProvider) />
+			<cfset provider = context[arguments.dataprovider]/>
 		<cfcatch type="coldfusion.runtime.UndefinedElementException">
 			<!--- Make sure simple numeric data passes, which would not be in variables scope --->
 			<cfif not isNumeric(dataProvider)>
@@ -95,7 +95,7 @@ for each member of the data provider
 
 		<cfscript>
 			structName = getMetaData(method).parameters[1].name;
-			structObject = getProvider(dataProvider);
+			structObject = context[dataProvider];
 			//args[structName] = structObject;
 		</cfscript>
 
@@ -126,7 +126,7 @@ for each member of the data provider
 			idxName = getMetaData(method).parameters[1].name;
 			try
 			{
-				count = getProvider(dataProvider);//account for variable names vs. raw int values
+				count = context[dataProvider];//account for variable names vs. raw int values
 			}
 			catch(any e)
 			{
@@ -161,7 +161,7 @@ for each member of the data provider
 			         detail="Usage: <cffunction mxunit:dataprovider ...> <cfargument name=""listItem"" />");
 			}
 			listItemName = getMetaData(method).parameters[1].name;
-			listObject = getProvider(dataProvider);
+			listObject = context[dataProvider];
 			args[listItemName] = '';
 			toArray = listToArray(listObject, ",;:/\");
 			listLength = arrayLen(toArray);
@@ -195,7 +195,7 @@ for each member of the data provider
 			         detail="Usage: <cffunction mxunit:dataprovider ...> <cfargument name=""arrayName"" /><cfargument name=""index"" />");
 			}
 			itemName = params[1].name;//could make optional
-			arrayObject = getProvider(dataProvider);
+			arrayObject = context[dataProvider];
 			if(ArrayLen(arrayObject) eq 0)
 				_$throw(message="Array DataProvider #dataProvider# did not contain any elements");
 			for(i = 1; i LTE ArrayLen(arrayObject); i = i + 1)
@@ -232,7 +232,7 @@ for each member of the data provider
 			}
 			else
 			{
-				localQuery = getProvider(dataProvider);
+				localQuery = variables.context[dataProvider];
 			}
 			localQuery = duplicate(localQuery);//we MUST do this; otherwise, the query cannot be reused
 			if(not isQuery(localQuery))
@@ -256,7 +256,7 @@ for each member of the data provider
 		<cfargument name="dataProvider" type="any" required="true" hint="Name of a file"/>
 
 		<cfscript>
-			var providerFile = getProvider(dataProvider);
+			var providerFile = context[dataProvider];
 			var extension = listLast(providerFile, ".");
 			var poi = createObject("component", "mxunit.framework.POIUtility").init();
 			var csv = createObject("component", "mxunit.framework.CSVUtility");
@@ -312,8 +312,6 @@ for each member of the data provider
 		</cfscript>
 
 	</cffunction>
-	
-	
 
 	<cffunction name="_$throw">
 		<cfargument name="type" required="false"
@@ -334,22 +332,10 @@ for each member of the data provider
 
 	<cffunction name="getMethod" access="private">
 		<cfargument name="methodName" type="string" required="true"/>
-		<cfreturn getBaseTarget()[arguments.methodName]>
-	</cffunction>
-	
-	<cffunction name="getProvider" access="private">
-		<cfargument name="path" type="string" hint="dot-noted path to the data to pull from the context" />
-		<cfset var keys = listToArray(path, ".") />
-		<cfset var data = context />
-		<cfset var i = 1 />
-		<cfloop from="1" to="#arraylen(keys)#" index="i">
-			<cfif structKeyExists(data, keys[i])>
-				<cfset data = data[keys[i]] />
-			<cfelse>
-				<cfset _$throw() />
-			</cfif>
-		</cfloop>
-		<cfreturn data />
+		<cfscript>
+			var target = getBaseTarget();
+			return target[arguments.methodName];
+        </cfscript>
 	</cffunction>
 
 </cfcomponent>
