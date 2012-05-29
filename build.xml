@@ -126,7 +126,7 @@
 	<target name="package" depends="clean,getVersion,genApiDocs" description="--> packages the appropriate files into the deployment-ready zip file. use this for testing; otherwise, use publish">
 		<echo message="building ${zipfile}. basedir is  ${basedir}" />
 		<zip destfile="${zipfile}" casesensitive="false">
-			<zipfileset dir="${basedir}" includes="*.*,ant/,buildprops/,eclipse/,doc/,framework/,generator/,images/,PluginDemoTests/,resources/,runner/,samples/,tests/,lib/ant-contrib**" excludes=".settings/,.git/,.gitignore,MXUnitInstallTest.cfc,**/testresults/,**/stats/,**/junithtml/,.project,.deployment,**/unames.properties,tests/tmp/,ftp.listing,**/*.db,**/copysnippets.properties,**/copydictionary**,**/*.bak,buildprops/nightlyversion.properties,buildprops/testresultsmail.html,settings.xml,README.html,README.textile,README-toc.xml,**/.gitignore" prefix="mxunit" casesensitive="false" />
+			<zipfileset dir="${basedir}" includes="*.*,ant/,buildprops/,eclipse/,doc/,framework/,generator/,images/,PluginDemoTests/,resources/,runner/,samples/,tests/,lib/ant-contrib**,utils/" excludes=".settings/,.git/,.gitignore,MXUnitInstallTest.cfc,**/testresults/,**/stats/,**/junithtml/,.project,.deployment,**/unames.properties,tests/tmp/,ftp.listing,**/*.db,**/copysnippets.properties,**/copydictionary**,**/*.bak,buildprops/nightlyversion.properties,buildprops/testresultsmail.html,settings.xml,README.html,README.textile,README-toc.xml,**/.gitignore" prefix="mxunit" casesensitive="false" />
 		</zip>
 	</target>
 	
