@@ -125,6 +125,36 @@
 		<cfset setTestSTyle("cfunit")>
 		<cfset assertTrue("false ain't true, sucka",false)>
 	</cffunction>
+	
+	<cffunction name="appendMock"  returntype="string">
+	 <cfargument name="val">
+	 <cfreturn "xx" >
+	</cffunction>
+	
+	<cffunction name="append"  returntype="string">
+	 <cfargument name="val">
+	 <cfreturn "xx" >
+	</cffunction>
+
+	<cffunction name="testSomethingElse3" access="public" returntype="void">
+		<cfset var mycomp = createObject("component" ,"SomeObject") />
+		<cfset debug(mycomp) />
+		<cfset debug(mycomp.append("")) />
+		
+		<cfset assertEquals("foo ", mycomp.append(""))>
+		<cfset assertEquals("foo bar", mycomp.append("bar"))>
+		
+		
+		<cfset injectMethod(mycomp,this,"appendMock","append") />
+		<cfset assertEquals("xx", mycomp.append("bar"))>
+		
+
+		<cfset restoreMethod(mycomp, "append" ) />
+		
+		<cfset assertEquals("foo bar", mycomp.append("bar"))>
+		
+		
+	</cffunction>
 
 
 </cfcomponent>

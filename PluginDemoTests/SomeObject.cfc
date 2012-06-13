@@ -20,4 +20,14 @@
 		<cfset request.debug("and some more!")>
 	</cffunction>
 	
+	<cffunction name="append">
+		<cfargument name="stuff">
+		<cfreturn "foo #stuff#">
+	</cffunction>
+	
+	<cffunction name="append2">
+		<cfargument name="stuff">
+		<cfreturn "foo #stuff#">
+	</cffunction>
+	
 </cfcomponent>
