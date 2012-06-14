@@ -1,8 +1,8 @@
 <cfcomponent name="mxunit.framework.RemoteFacade" hint="Main default interface into MXUnit framework from the MXUnit Ecplise Plugin." wsversion="1">
 
-	<cfset cu = createObject("component","ComponentUtils")>
-	<cfset cache = createObject("component","RemoteFacadeObjectCache")>
-	<cfset ConfigManager = createObject("component","ConfigManager")>
+	<cfset cu = createObject("component","mxunit.framework.ComponentUtils")>
+	<cfset cache = createObject("component","mxunit.framework.RemoteFacadeObjectCache")>
+	<cfset ConfigManager = createObject("component","mxunit.framework.ConfigManager")>
 
 	<cffunction name="ping" output="false" access="remote" returntype="boolean" hint="returns true">
 		<cfreturn true>
@@ -21,11 +21,11 @@
 	</cffunction>
 
 	<cffunction name="getFrameworkVersion" output="false" access="remote" returntype="String" hint="returns the current framework version in form of major.minor.buildnum">
-		<cfreturn createObject("component","VersionReader").getVersionInfo().VersionNumber>
+		<cfreturn createObject("component","mxunit.framework.VersionReader").getVersionInfo().VersionNumber>
 	</cffunction>
 
 	<cffunction name="getFrameworkDate" output="false" access="remote" returntype="Date" hint="returns the current framework version date in form of mm/dd/yyyy">
-		<cfreturn createObject("component","VersionReader").getVersionInfo().VersionDate>
+		<cfreturn createObject("component","mxunit.framework.VersionReader").getVersionInfo().VersionDate>
 	</cffunction>
 
 	<cffunction name="startTestRun" access="remote" returntype="string">
@@ -58,7 +58,7 @@
 		<cfargument name="TestRunKey" type="string" required="true" hint="the key returned from startTestRun; used for managing the pool of components">
 		<cfset var s_results = structNew()>
 		<cfset var key = "">
-		<cfset var suite = createObject("component","TestSuite")>
+		<cfset var suite = createObject("component","mxunit.framework.TestSuite")>
 		<cfset var testResult = "">
 		<!--- the "baseTarget" is the actual test case, underneath its layers of test decorators. When we start the test case, we want the pure object, not the decorated object --->
 		<cfset var obj = getObject(componentName, TestRunKey).getBaseTarget()>
