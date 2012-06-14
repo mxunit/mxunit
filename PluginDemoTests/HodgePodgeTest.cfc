@@ -10,6 +10,7 @@
 		<!--- to be safe, since i know i'm monkeying with abandon up in this mofo --->
 		<cfset setTestStyle("default")>
 	</cffunction>
+	
 
 
 	<cffunction name="testOK">
@@ -136,10 +137,8 @@
 	 <cfreturn "xx" >
 	</cffunction>
 
-	<cffunction name="testSomethingElse3" access="public" returntype="void">
+	<cffunction name="testRestoreMethod" access="public" returntype="void">
 		<cfset var mycomp = createObject("component" ,"SomeObject") />
-		<cfset debug(mycomp) />
-		<cfset debug(mycomp.append("")) />
 		
 		<cfset assertEquals("foo ", mycomp.append(""))>
 		<cfset assertEquals("foo bar", mycomp.append("bar"))>
@@ -150,7 +149,7 @@
 		
 
 		<cfset restoreMethod(mycomp, "append" ) />
-		
+		<cfset debug(mycomp.append('bar'))>
 		<cfset assertEquals("foo bar", mycomp.append("bar"))>
 		
 		
