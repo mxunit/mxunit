@@ -528,7 +528,7 @@
 		<cfset decoratorNames = listPrepend( decoratorNames, getRequiredDecoratorPaths() ) />
 
 		<cfloop list="#decoratorNames#" index="decoratorPath">
-			<cfset decorator = createObject("component", decoratorPath)/>
+			<cfset decorator = createObject("component", trim(decoratorPath))/>
 			<cfset decorator.setTarget(object)/>
 			<cfset decorator.metadata = meta />
 			<cfset arguments.object = decorator/> <!--- flip it and reverse it. --->
