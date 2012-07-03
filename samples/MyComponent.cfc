@@ -8,7 +8,7 @@
 </cffunction>
 
 
-<cffunction name="append" access="public" returntype="string`">
+<cffunction name="append" access="public" returntype="string">
  <cfargument name="val">
  <cfreturn "MY VALUE  ... " & val >
 </cffunction>
