@@ -1,5 +1,5 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false"
-	mxunit:decorators="mxunit.tests.framework.fixture.decorators.StoreTestNameDecorator,mxunit.tests.framework.fixture.decorators.IgnoreFunnyFunctionsDecorator">
+	mxunit:decorators="mxunit.tests.framework.fixture.decorators.StoreTestNameDecorator, mxunit.tests.framework.fixture.decorators.IgnoreFunnyFunctionsDecorator">
 
 	<cffunction name="testDecoratorWrappingTest" hint="test to see if the decorator gets called and places the name of the test in the request scope"
 				access="public" returntype="void" output="false">
