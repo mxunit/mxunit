@@ -49,6 +49,25 @@
 
 	<cffunction name="endTestRun" access="remote" returntype="string" hint="ensures proper cleanup">
 		<cfargument name="TestRunKey" type="string" required="true" hint="the key returned from startTestRun; used for managing the pool of components">
+		
+		<!---run all components' afterTests() --->
+		<cfset var pool = cache.getSuitePool()>
+		<cfset var componentName = "">
+		<cfset var testCase = "">
+		
+		<cfif structKeyExists( pool, testRunKey )>
+			<cfloop collection="#pool[testRunKey].components#" item="componentName">
+				<cftry>
+					<cfset testCase = pool[testRunKey].components[componentName]>
+					<cfset testCase.enableAfterTests()>
+					<cfset testCase.afterTests()>
+				
+				<cfcatch>
+					<cflog text="MXUnit afterTests() Exception from Eclipse Remote Facade. Component Name: #componentName#. Error: #cfcatch.message#; #cfcatch.detail#">
+				</cfcatch>
+				</cftry>
+			</cfloop>
+		</cfif>
 		<cfreturn cache.endTestRun(TestRunKey)>
 	</cffunction>
 
@@ -67,7 +86,10 @@
 		<cfset suite.enableRequestScopeDebugging()>
 
 		<cfset actOnTestCase(obj)>
-
+		
+		<!--- disable afterTests... we'll run them all during endTestRun --->
+		<cfset obj.disableAfterTests()>
+		
 		<cfif len(methodNames)>
 			<cfset suite.add(componentName, methodNames, obj)>
 		 <cfelse>
@@ -161,7 +183,7 @@
 					<!---		 --->
 				<cfloop from="1" to="#ArrayLen(s_test.error.tagcontext)#" index="tag">
 					<cfif FileExists(s_test.error.tagcontext[tag].template)>
-						<cflog text=" #s_test.error.tagcontext[tag].template# #isFrameworkTest# OR NOT #cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)#" >
+						<!---<cflog text=" #s_test.error.tagcontext[tag].template# #isFrameworkTest# OR NOT #cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)#" >--->
 						<cfif isFrameworkTest OR NOT cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)>
 							<cfset t.TAGCONTEXT[i] = structNew()>
 							<cfset t.TAGCONTEXT[i].FILE = s_test.error.tagcontext[tag].template>

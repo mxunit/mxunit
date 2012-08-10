@@ -10,6 +10,7 @@
 		<!--- to be safe, since i know i'm monkeying with abandon up in this mofo --->
 		<cfset setTestStyle("default")>
 	</cffunction>
+	
 
 
 	<cffunction name="testOK">
@@ -124,6 +125,34 @@
 	<cffunction name="testAssertTrueCFUnitStyleFailure">
 		<cfset setTestSTyle("cfunit")>
 		<cfset assertTrue("false ain't true, sucka",false)>
+	</cffunction>
+	
+	<cffunction name="appendMock"  returntype="string">
+	 <cfargument name="val">
+	 <cfreturn "xx" >
+	</cffunction>
+	
+	<cffunction name="append"  returntype="string">
+	 <cfargument name="val">
+	 <cfreturn "xx" >
+	</cffunction>
+
+	<cffunction name="testRestoreMethod" access="public" returntype="void">
+		<cfset var mycomp = createObject("component" ,"SomeObject") />
+		
+		<cfset assertEquals("foo ", mycomp.append(""))>
+		<cfset assertEquals("foo bar", mycomp.append("bar"))>
+		
+		
+		<cfset injectMethod(mycomp,this,"appendMock","append") />
+		<cfset assertEquals("xx", mycomp.append("bar"))>
+		
+
+		<cfset restoreMethod(mycomp, "append" ) />
+		<cfset debug(mycomp.append('bar'))>
+		<cfset assertEquals("foo bar", mycomp.append("bar"))>
+		
+		
 	</cffunction>
 
 
