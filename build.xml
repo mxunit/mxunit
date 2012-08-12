@@ -103,6 +103,10 @@
 	-->
 	<target name="publish" depends="runTests,incrementVersion,package,upload,updatewebsite,publishTestResults" description="--> packages into a zip and uploads to google code" />
 
+	<target name="publishGitRelease" depends="runTests,incrementVersion,package">
+		<gitPushBuildChanges remoteName="upstream" branchName="master"/>
+		<gitTag remoteName="upstream" tagName="v${build.version}" message="Version ${build.version}" />
+	</target>
 	<!--
 		=================================
 			Target: publishNightly
@@ -190,11 +194,6 @@
 		=================================
 	-->
 	<target name="incrementVersion" depends="init">
-		<!-- 
-		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
-			<update dir="buildprops" />
-		</svn>
-		 -->
 		<propertyfile file="${version.file}" comment="Build version info">
 			<entry key="build.date" type="date" value="now" pattern="MM/dd/yyyy" />
 			<entry key="build.major" type="int" operation="=" value="2" />
@@ -204,11 +203,6 @@
 			<!-- this is autoincremented -->
 			<entry key="build.buildnum" type="int" operation="+" value="1" />
 		</propertyfile>
-		<!-- 
-		<svn username="${gc.username}" password="${gc.password}" svnkit="true">
-			<commit dir="buildprops" message="" />
-		</svn>
-		 -->
 		<property file="${version.file}" />
 
 		<echoproperties prefix="build" />
@@ -479,11 +473,14 @@
 	<macrodef name="gitTag">
 		<attribute name="remoteName" default="origin"/>
 		<attribute name="tagName"/>
+		<attribute name="message" default="Auto-tag from build"/>
 		<sequential>
 			<git command="tag" dir=".">
 				<args>
 					<arg value="-f"/>
 					<arg value="'@{tagName}'"/>
+					<arg value="-m"/>
+					<arg value="'@{message}'"/>
 				</args>
 			</git>
 			<git command="push" dir=".">
