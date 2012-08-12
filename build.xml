@@ -104,7 +104,7 @@
 	<target name="publish" depends="runTests,incrementVersion,package,upload,updatewebsite,publishTestResults" description="--> packages into a zip and uploads to google code" />
 
 	<target name="publishGitRelease" depends="runTests,incrementVersion,package">
-		<gitPushBuildChanges remoteName="upstream" branchName="master"/>
+		<gitPushBuildChanges remoteName="origin" branchName="master"/>
 		<gitTag remoteName="origin" tagName="v${build.version}" message="Version ${build.version}" />
 	</target>
 	<!--
