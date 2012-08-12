@@ -1,0 +1,3 @@
+[submodule "ant-common"]
+	path = ant-common
+	url = git@github.com:mxunit/ant-common.git
