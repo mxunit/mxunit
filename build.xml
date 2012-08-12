@@ -105,7 +105,7 @@
 
 	<target name="publishGitRelease" depends="runTests,incrementVersion,package">
 		<gitPushBuildChanges remoteName="upstream" branchName="master"/>
-		<gitTag remoteName="upstream" tagName="v${build.version}" message="Version ${build.version}" />
+		<gitTag remoteName="origin" tagName="v${build.version}" message="Version ${build.version}" />
 	</target>
 	<!--
 		=================================
