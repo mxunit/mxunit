@@ -34,7 +34,7 @@ Main component for performing assertions.
   <!--- Constructor;  named init instead of Assert because BlueDragon has a built-in
 assert function and thus mxunit won't run on BD unless we do this --->
   <cffunction name="init" access="remote" returntype="Assert" hint="Constructor">
-		
+
 	<cfscript>
 		//do a feature check for pass by value.
 		var arr1 = [];
@@ -70,7 +70,7 @@ assert function and thus mxunit won't run on BD unless we do this --->
    <cfset var i= "">
 
    <cftry>
-   	
+
 
    <cfset decorator = createObject("component", arguments.decoratorName) />
 
@@ -329,6 +329,9 @@ assert function and thus mxunit won't run on BD unless we do this --->
 		<cfif not compareResult.success>
 			<cfset debug(compareResult)>
 			<cfset assertEquals( compareResult.Query1MismatchValues, compareResult.Query2MismatchValues, "Expected queries to match but they did not. See debug output for a visual display of the differences. #compareResult.Message#. #arguments.message#" )>
+			<cfif NOT compareResult.queryIsComparable>
+				<cfset assertEquals( expected.columnlist, actual.columnlist, "Query columns do not match. Query is not comparable.")>
+			</cfif>
 		</cfif>
     </cffunction>
 

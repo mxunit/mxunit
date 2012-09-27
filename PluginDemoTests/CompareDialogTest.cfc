@@ -18,6 +18,11 @@
 		<cfset assertQueryEquals(queries.one, queries.two)>
 	</cffunction>
 
+	<cffunction name="queryMismatchingColumns">
+   	 	<cfset var queries = makeQueries()>
+		<cfset assertQueryEquals(queries.one, queries.three)>
+    </cffunction>
+
 	<cffunction name="structCompareDifferences">
 		<cfset var s = makeStructures()>
 		<cfset assertStructEquals(s.one, s.two)>
@@ -49,6 +54,7 @@
 	<cffunction name="makeQueries" access="private">
 			<cfset var q = "">
 			<cfset var q2 = "">
+			<cfset var q3 = "">
 			<cfset var s = structnew()>
 			<cfoutput>
 			<cf_querysim>
@@ -63,9 +69,16 @@
 			1|2|3.1|4
 			11|22|33|4.4
 			</cf_querysim>
+			<cf_querysim>
+			q3
+			on3,two,three,four,five
+			1|2|3.1|4
+			11|22|33|4.4
+			</cf_querysim>
 			</cfoutput>
 			<cfset s.one = q>
 			<cfset s.two = q2>
+			<cfset s.three = q3>
 			<cfreturn s>
 	</cffunction>
 

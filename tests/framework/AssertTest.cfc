@@ -454,8 +454,38 @@ col4,col2,col3,col1
 3.4|3.2|3.3|3
 </cf_querysim>
 
-	<cfset assertEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
+		<cfset assertEquals( q1, q2, "These queries should have been equal even though they were created with columns in a different order")>
 
+    </cffunction>
+
+    <cffunction name="assertQueryEquals_fails_for_mismatching_column_queries" output="false" access="public" returntype="any" hint="">
+ 		<cfset var q1 = "">
+    	<cfset var q2 = "">
+
+<cf_querysim>
+q1
+col1,col2,col3,col4
+1|1.2|1.3|1.4
+2|2.2|2.3|2.4
+3|3.2|3.3|3.4
+</cf_querysim>
+
+<cf_querysim>
+q2
+col4,col2,col3,col11
+1.4|1.2|1.3|1
+2.4|2.2|2.3|2
+3.4|3.2|3.3|3
+</cf_querysim>
+
+		<cftry>
+			<cfset assertEquals( q1, q2, "These queries should fail because they have mismatching columns")>
+			<cfthrow message="Should not get to here">
+		<cfcatch type="mxunit.exception.AssertionFailedError" >
+			<!--- we want this failure --->
+			<cfset debug(cfcatch)>
+		</cfcatch>
+		</cftry>
     </cffunction>
 
 	<cffunction name="assertQueryEquals_fails_for_mismatching_queries" returntype="void">
@@ -463,7 +493,7 @@ col4,col2,col3,col1
 
 		<cftry>
 			<cfset assertEquals( queries.query1, queries.query2, "These queries should fail because they are not equal")>
-
+			<cfthrow message="Should not get to here">
 		<cfcatch type="mxunit.exception.AssertionFailedError" >
 			<!--- we want this failure --->
 			<cfset debug(cfcatch)>
@@ -483,7 +513,7 @@ col4,col2,col3,col1
 		<cfset var actual = [1,2,3,4,5,"a","b","c","d","e"]>
 		<cftry>
 			<cfset assertEquals( expected, actual, "These arrays should have been equal" )>
-
+			<cfthrow message="Should not get to here">
 		<cfcatch type="mxunit.exception.AssertionFailedError" >
 			<!--- we want this failure --->
 			<cfset debug(cfcatch)>
