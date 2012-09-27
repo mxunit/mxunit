@@ -174,14 +174,14 @@
 			<directory remoteMethod="run" path="${webroot}/mxunit/tests/runner" packageName="mxunit.tests.runner" componentPath="mxunit.tests.runner" recurse="false" includes="*.cfc" excludes="" />
 		</mxunittask>
 
-		<!-- create nice pretty report -->
+		<!-- create nice pretty report 
 		<junitreport todir="${junit.out.dir.html}">
 			<fileset dir="${output.dir}">
 				<include name="*.xml" />
 			</fileset>
 
 			<report format="frames" todir="${junit.out.dir.html}" styledir="${style.dir}" />
-		</junitreport>
+		</junitreport>-->
 
 		<fail if="testsfailed" message="Failing the build because tests failed" />
 	</target>
