@@ -30,7 +30,7 @@
 			if( NOT mismatches.ColumnListsMatch ){
 				mismatches.message = "Column lists do not match. ";
 				mismatches.success = false;
-				return mistmatches;
+				return mismatches;
 			}
 
 			for( row = 1; row LTE query1RecordCount; row=row+1 ){
