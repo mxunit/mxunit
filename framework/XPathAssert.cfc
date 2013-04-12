@@ -34,11 +34,11 @@ mssage to display when this assertion fails" default="The XPath expression,
        </cfif>
 	
        <cfset results = xmlSearch(dom,arguments.xpath)>
-       <cfif len(arguments.text) gt 0>
-         <cfset assertEquals(arguments.text, results[1].xmlText, message) />
-       </cfif>
        <cfif arrayLen(results) lt 1>
          <cfset fail(message) />
+       </cfif>
+       <cfif len(arguments.text) gt 0>
+         <cfset assertEquals(arguments.text, results[1].xmlText, message) />
        </cfif>
 	
        <cfreturn results />
