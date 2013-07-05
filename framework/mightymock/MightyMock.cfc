@@ -159,7 +159,14 @@
    var tempMock = chr(0);
    var temp = '';
 
-   missingMethodArguments = createObject('java','java.util.TreeMap').init(missingMethodArguments);
+   /*
+    * Ensure we maintain key order using a TreeMap. Furthermore
+    * make sure we are doing case insensitive key comparisons.
+    */
+   var map = createObject("java", "java.util.TreeMap").init(createObject("java", "java.lang.String").CASE_INSENSITIVE_ORDER);
+   map.putAll(missingMethodArguments);
+
+   missingMethodArguments = map;
 
    if( currentState == 'verifying'){
       verifier.doVerify(tempRule[1], missingMethodName, missingMethodArguments, tempRule[2], registry );
