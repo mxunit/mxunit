@@ -130,7 +130,7 @@
 			var properties = '';
 
 			for(prop in collection){
-				if( isSimpleValue(collection[prop]) ){
+				if(!isNull(collection[prop]) && isSimpleValue(collection[prop]) ){
 					 properties = properties & '<property name="#ucase(prop)#" value="#xmlFormat(collection[prop])#" />';
 				}else{
 					properties = properties & '<property name="#ucase(prop)#" value="Complex Data Type...Not Displaying" />';
