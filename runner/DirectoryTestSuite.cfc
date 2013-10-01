@@ -41,7 +41,7 @@
 		<cfreturn testResult>
 	</cffunction>
 
-	<cffunction name="getTests" access="private" output="false">
+	<cffunction name="getTests" access="public" output="false">
 		<cfargument name="directory" required="true" hint="directory of tests to run">
 		<cfargument name="componentPath" required="true" hint="the component path to put in front of all tests found (i.e. 'com.blah')">
 		<cfargument name="recurse" required="false" default="true" type="boolean" hint="whether to recurse down the directory tree">
