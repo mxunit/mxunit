@@ -43,7 +43,7 @@
 					arrayAppend(tempArray,arguments.method);
 
 					structUpdate(this.tempStruct, "methods", tempArray);
-					this.tesSuites.put(arguments.componentName, this.tempStruct);
+					this.testSuites.put(arguments.componentName, this.tempStruct);
 				} else{
 					//Begin a new test Suite
 					this.testSuite.put(arguments.componentName, this.tempStruct);
