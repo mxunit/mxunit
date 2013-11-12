@@ -29,6 +29,7 @@
 		<cfset var currentTestSuiteName = "" />
 		<cfset var currentSuite = "" />
 		<cfset var iterator = arguments.allSuites.keySet().iterator() />
+		<cfset var runTest = true />
 	
 		<cfloop condition="#iterator.hasNext()# eq true">
 			<cfset currentTestSuiteName = iterator.next() />
@@ -43,22 +44,36 @@
 			</cfif>
 			
 			<!--- Invoke prior to tests. Class-level setUp --->
+			<cfset runTest = true />
 			<cfif testCase.okToRunBeforeTests()>
-				<cfset testCase.beforeTests() />
+				<cftry>
+					<cfset testCase.beforeTests() />
+					<cfcatch type="any">
+						<cfset results.addError(cfcatch)>
+						<cfset runTest = false />
+					</cfcatch>
+				</cftry>
 				<cfset testCase.disableBeforeTests()>
 			</cfif>
-			
-			<cfif len(arguments.testMethod)>
-				<cfset runTestMethod(testCase, testMethod, results, currentTestSuiteName) />
-			<cfelse>
-				<cfloop from="1" to="#arrayLen(currentSuite.methods)#" index="methodIndex">
-					<cfset runTestMethod(testCase, currentSuite.methods[methodIndex], results, currentTestSuiteName) />
-				</cfloop>
+			<cfif runTest>
+				<cfif len(arguments.testMethod)>
+					<cfset runTestMethod(testCase, testMethod, results, currentTestSuiteName) />
+				<cfelse>
+					<cfloop from="1" to="#arrayLen(currentSuite.methods)#" index="methodIndex">
+						<cfset runTestMethod(testCase, currentSuite.methods[methodIndex], results, currentTestSuiteName) />
+					</cfloop>
+				</cfif>
 			</cfif>
 			
 			<!--- Invoke after tests. Class-level tearDown --->
 			<cfif testCase.okToRunAfterTests()>
-				<cfset testCase.afterTests() />
+				<cftry>
+					<cfset testCase.afterTests() />
+		
+					<cfcatch type="any">
+						<cfset results.addError(cfcatch)>
+					</cfcatch>
+				</cftry>
 				<cfset testCase.disableAfterTests()>
 			</cfif>
 		</cfloop>
