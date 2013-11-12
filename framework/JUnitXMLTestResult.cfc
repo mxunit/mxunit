@@ -108,7 +108,7 @@
 				if( listFindNoCase("Failed",testResults.testStatus)){
 					this.resultsXML = this.resultsXML & '<failure message="#xmlformat(testResults.error.message)#"><![CDATA[#generateStacktrace(testResults.error)#]]></failure>';
 				} else if( listFindNoCase("Error",testResults.testStatus)) {
-					this.resultsXML = this.resultsXML & '<error message="#testResults.error.type#"><![CDATA[#generateStacktrace(testResults.error)#]]></error>';
+					this.resultsXML = this.resultsXML & '<error message="#testResults.error.type#: #xmlFormat(testResults.error.message)#"><![CDATA[#generateStacktrace(testResults.error)#]]></error>';
 				}
 
 				this.resultsXML = this.resultsXML & '</testcase>';
