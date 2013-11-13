@@ -159,6 +159,7 @@
 						</div>
 
 						<div class="clear"><!-- clear --></div>
+						<div id="cfeclipsecall" style="display:none;"></div>
 					</div>
 
 					<cfloop from="1" to="#ArrayLen(this.testResults)#" index="i">
@@ -243,7 +244,10 @@
 							<cfset line = arguments.ErrorCollection.TagContext[i].line />
 							<tr>
 								<td>
-									#template# (<a href="txmt://open/?url=file://#template#&line=#line#" title="Open this in TextMate">#line#</a>)
+									<cfif i eq 1>#arguments.ErrorCollection.TagContext[i].codePrintHTML#<br /><br /></cfif>
+									#template# (#line#:
+									<a href="txmt://open/?url=file://#template#&line=#line#" title="Open this in TextMate">TM</a>
+									<a href="javascript:void(0)" onclick="$('##cfeclipsecall').load('/cfeclipsecall.cfm?cfe=#replace(template,"\","/","all")#|#line#')" title="Open this in CFEclipe">CFE</a>)
 								</td>
 							</tr>
 						</cfloop>
