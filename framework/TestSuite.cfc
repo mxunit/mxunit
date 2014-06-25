@@ -28,7 +28,6 @@
 		<cfargument name="componentObject" type="Any" required="no" default="" />
 
 		<cfscript>
-			var newStruct = {};
 			try{
 				this.tempStruct = structNew();
 				this.tempStruct.ComponentObject = arguments.ComponentObject;
@@ -46,14 +45,10 @@
 					this.testSuites.put(arguments.componentName, this.tempStruct);
 				} else{
 					//Begin a new test Suite
-					this.testSuite.put(arguments.componentName, this.tempStruct);
+					//TODO: Grab all the methods that begin with the string 'test' ...
+					this.tempStruct.methods = listToArray(arguments.method);
 
-					//Grab all the methods that begin with the string 'test' ...
-					tests = listToArray(arguments.method);
-
-					newStruct.methods = tests;
-
-					this.testSuites.put(arguments.componentName,newStruct);
+					this.testSuites.put(arguments.componentName,this.tempStruct);
 				}
 			} catch (Exception e) {
 				writeoutput(e.getMessage());
