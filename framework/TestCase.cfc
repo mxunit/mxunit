@@ -306,6 +306,12 @@
 
 		<cfset var blender = createObject("component","ComponentBlender")>
 
+		<cfif NOT isObject(receiver)>
+			<cfthrow type="mxunit.exception.invalidArgument"
+				message="The receiver for injectMethod must be an object but is of type #getMetadata(receiver).getName()#."
+				detail="Pass an object as the first argument to injectMethod()." />
+		</cfif>
+
 		<cfset blender._mixinAll(receiver, blender, "_mixin,_copyToNewName")>
 		<cfset blender._mixinAll(giver, blender, "_getComponentVariable")>
 
