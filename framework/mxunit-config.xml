@@ -15,6 +15,21 @@
   --> 
   <config-element type="userConfig" name="componentRoot" value="mxunit" override="false" /> 
 
+  <!-- 
+  	installRoot:
+  	
+  	This allow MXUnit Install Root to be configured. For situations where you have mxunit in a context and
+  	the static content is shared among other contexts... For example, you have mxunit in each of your 
+  	applications. When you browse to myapp/tests/mytest.cfc?method=runtestremote. mxunit will load
+  	the html output / static resoruces of the test results from /myapp/mxunit (by default). You could create a new context
+  	named '/myMXUnitContext' that has the mxunit code (and is mapped by the mxunit mapping). You would
+  	tell mxunit to use your special shared context by uncommenting out the following code. Then when you
+  	run myapp/tests/myTest.cfc?method=runtestremote, it will pull static resources from /myMXUnitContext
+  	instead of your apps mxunit code. This allows you to have mxunit installed in one place on the server.
+  
+  	<config-element type="userConfig" name="installRoot" value="/myMXUnitContext" />
+  --> 
+
 
   <!-- 
   Assertion extensions. Enable or disable auto-loading at runtime.
