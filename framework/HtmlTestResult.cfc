@@ -72,8 +72,10 @@
 		<cfset var temp = "" />
 
 		<cfsavecontent variable="result">
+			<cfoutput>
 			<cfset printResources(mxunit_root,test_title) />
-			<cfoutput>#trim(getRawHtmlResults(mxunit_root))#</cfoutput>
+			#trim(getRawHtmlResults(mxunit_root))#
+			</cfoutput>
 		</cfsavecontent>
 
 		<cfreturn result>
