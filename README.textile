@@ -2,7 +2,7 @@ h1. MXUnit
 
 A test framework for CFML (ColdFusion).
 
-Main website "http://mxunit.org":http://mxunit.org
+Main website "http://cfeclipse.org/mxunit":http://cfeclipse.org/mxunit
 Docs, etc: "http://wiki.mxunit.org/":http://wiki.mxunit.org/
 MXUnit Google Group (to get help): "http://groups.google.com/group/mxunit":http://groups.google.com/group/mxunit
  

@@ -15,7 +15,7 @@ In Eclipse:
 
 1) Help -- Software Updates -- Find and Install
 2) Select the "Search for new features" radio button. Click Next
-3) click the "New Remote Site" button. Add the url "http://mxunit.org/update". give it any name.
+3) click the "New Remote Site" button. Add the url "http://cfeclipse.org/mxunit/update". give it any name.
 4) Click through. It'll download the plugin and install it. It will prompt you to restart eclipse.
 5) When eclipse is installed, the MXUnit view will be available in Window -- Show View -- Other -- MXUnit
 

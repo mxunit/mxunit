@@ -256,7 +256,7 @@
 		<!-- reinit the web app; this causes the version.properties file to be reread into the application scope -->
 		<loadresource property="homepage">
 			<!--${http.reinit} undefined: to do: talk to marc -->
-			<url url="http://mxunit.org/index.cfm?reinit=true" />
+			<url url="http://cfeclipse.org/mxunit/index.cfm?reinit=true" />
 		</loadresource>
 	</target>
 

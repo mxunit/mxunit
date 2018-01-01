@@ -186,7 +186,7 @@
 						<!---<cflog text=" #s_test.error.tagcontext[tag].template# #isFrameworkTest# OR NOT #cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)#" >--->
 						<cfif isFrameworkTest OR NOT cu.isFrameworkTemplate(s_test.error.tagcontext[tag].template)>
 							<cfset t.TAGCONTEXT[i] = structNew()>
-							<cfset t.TAGCONTEXT[i].FILE = s_test.error.tagcontext[tag].template>
+							<cfset t.TAGCONTEXT[i].FILE = expandPath(s_test.error.tagcontext[tag].template)>
 							<cfset t.TAGCONTEXT[i].LINE = s_test.error.tagcontext[tag].line>
 							<cfset i = i + 1>
 						</cfif>

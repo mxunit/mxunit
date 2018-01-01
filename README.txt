@@ -1,6 +1,6 @@
  MXUnit is a unit test framework for CFML. 
  
- Main website: http://mxunit.org
+ Main website: http://cfeclipse.org/mxunit
  
  Docs, etc: http://wiki.mxunit.org
  

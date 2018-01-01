@@ -36,7 +36,7 @@
 	   //queryUtil = loader.create("nux.xom.xquery.XQueryUtils").init();
 
 	   //can also use inputstream ...?
-	  // doc = builder.build("http://mxunit.org");
+	  // doc = builder.build("http://cfeclipse.org/mxunit");
 	   doc = builder.build(bais);
 	   // Maybe we can skip the cf dom parser altogether ....
 	   xpath = "/html/body/h1";
