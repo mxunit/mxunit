@@ -25,11 +25,16 @@
 		<cfscript>
 			var root = expandPath("/");
 			var mxunit = 0;
-
+			var cm = createObject("component","ConfigManager").ConfigManager();
+			var elements = [];
 			//shortcut of the usual case of a virtualhost / alias on the web root
 			if(fileExists(expandPath("/mxunit/framework/mxunit-config.xml")))
 			{
-				return getContextRoot() &  "/mxunit";
+				elements = cm.getConfigElement("userConfig","installRoot");
+				if (arrayLen(elements) eq 0) 
+					return getContextRoot() &  "/mxunit";
+				else
+					return elements[1].xmlAttributes["value"];
 			}
 		</cfscript>
 

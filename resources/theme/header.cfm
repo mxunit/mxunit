@@ -51,7 +51,7 @@
 					<li><a class="menu_item" href="<cfoutput>#pathBase#</cfoutput>doc/" title="Local API Documentation">Local API</a></li>
 					<li><a class="menu_item" href="http://wiki.mxunit.org/" title="Documentation, Tutorials, etc.">Docs</a></li>
 					<li><a class="menu_item" href="<cfoutput>#pathBase#</cfoutput>samples/samples.cfm" title="Sample tests">Samples</a></li>
-					<li><a class="menu_item" href="http://mxunit.org/blog" title="MXUnit Blog">Blog</a></li>
+					<li><a class="menu_item" href="http://cfeclipse.org/mxunit/blog" title="MXUnit Blog">Blog</a></li>
 					<li><a class="menu_item" href="<cfoutput>#pathBase#</cfoutput>runner/index.cfm" title="Simple HTML Test Runner">Test Runner</a></li>
 					<li><a class="menu_item" href="<cfoutput>#pathBase#</cfoutput>generator/index.cfm" title="Generate tests from existing code">Stub Generator</a></li>
 					<li><a class="menu_item" href="http://groups.google.com/group/mxunit/topics" title="MXUnit Google Group">Help</a></li>

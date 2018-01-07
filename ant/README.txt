@@ -1,8 +1,5 @@
 01-25-08  Using Ant with MXUnit.
 
-Source is available here: http://mxunit.googlecode.com/svn/org.mxunit.ant.idea/
-Get the updated ANT doc here: http://wiki.mxunit.org/display/default/Ant+Task+Doc
-
 Overview:
 Used best for running groups of tests, test suites, and directories of
 tests. Writes test results in XML, JUnitXML, or HTML to a specified

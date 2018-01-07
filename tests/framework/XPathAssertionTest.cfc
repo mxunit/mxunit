@@ -25,7 +25,7 @@
    <cffunction name="testFindMXUnitInTitle">
     <cfscript>
       //addAssertDecorator("mxunit.framework.XPathAssert");
-      a = assertXpath('/html/head/title', "http://mxunit.org", "MXUnit - Unit Test Framework and Eclipse Plugin for Adobe ColdFusion");
+      a = assertXpath('/html/head/title', "http://cfeclipse.org/mxunit", "MXUnit - Unit Test Framework and Eclipse Plugin for Adobe ColdFusion");
      </cfscript>
   </cffunction>
 
