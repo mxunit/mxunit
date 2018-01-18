@@ -45,14 +45,15 @@
 
    --->
 
-	<cffunction name="printResources" access="public" output="true" hint="Prints CSS and JavaScript refs for stylizing">
+	<cffunction name="printResources" access="public" output="false" hint="Prints CSS and JavaScript refs for stylizing">
  		<cfargument name="mxunit_root" required="no" default="./mxunit" hint="Location in the webroot where MXUnit is installed." />
 		<cfargument name="test_title" required="false" default="MXUnit Test Results" offhint="An HTML title to display for this test" />
-			<cfcontent type="text/html">
-			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/theme/styles.css">
-			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/jquery/tablesorter/green/style.css">
-			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/theme/results.css">
-			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/jquery/tipsy/stylesheets/tipsy.css">
+		<cfset var out = "" />
+		<cfoutput><cfsavecontent variable="out" >
+			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/theme/styles.css"></link>
+			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/jquery/tablesorter/green/style.css"></link>
+			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/theme/results.css"></link>
+			<link rel="stylesheet" type="text/css" href="#mxunit_root#/resources/jquery/tipsy/stylesheets/tipsy.css"></link>
 
 			<script type="text/javascript" src="#mxunit_root#/resources/jquery/jquery.min.js"></script>
 			<script type="text/javascript" src="#mxunit_root#/resources/jquery/jquery-ui.min.js"></script>
@@ -60,8 +61,10 @@
 			<script type="text/javascript" src="#mxunit_root#/resources/jquery/tablesorter/jquery.tablesorter.js"></script>
 			<script type="text/javascript" src="#mxunit_root#/resources/jquery/tipsy/javascripts/jquery.tipsy.js"></script>
 			<script type="text/javascript" src="#mxunit_root#/resources/jquery/jquery.runner.js"></script>
-
-      <title>#test_title#</title>
+		
+			<title>#test_title#</title>
+		</cfsavecontent></cfoutput>
+		<cfreturn out />
 	</cffunction>
 
 	<cffunction name="getHtmlResults" access="public" returntype="string" output="false" hint="Returns a stylized HTML representation of the TestResult">
@@ -70,12 +73,15 @@
 
 		<cfset var result = "" />
 		<cfset var temp = "" />
-
+		
+		<cfcontent type="text/html"/>
 		<cfsavecontent variable="result">
-			<cfoutput>
-			<cfset printResources(mxunit_root,test_title) />
-			#trim(getRawHtmlResults(mxunit_root))#
-			</cfoutput>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+			<html><head>
+			<cfoutput>#printResources(mxunit_root,test_title)#</cfoutput>
+			</head><body>
+			<cfoutput>#trim(getRawHtmlResults(mxunit_root))#</cfoutput>
+			</body></html>
 		</cfsavecontent>
 
 		<cfreturn result>
@@ -126,7 +132,7 @@
 							</li>
 						</ul>
 
-						<!--- brain no working, but this does --->
+						<!-- brain no working, but this does -->
 						<cfif find('debug=true',cgi.QUERY_STRING)>
 							<cfset toggledUrl = cgi.SCRIPT_NAME & '?' & replace(cgi.QUERY_STRING,'debug=true','debug=false') />
 							<cfset bugMessage = 'Run without debug output.' />
@@ -162,7 +168,6 @@
 						</div>
 
 						<div class="clear"><!-- clear --></div>
-						<div id="cfeclipsecall" style="display:none;"></div>
 					</div>
 
 					<cfloop from="1" to="#ArrayLen(this.testResults)#" index="i">
@@ -247,10 +252,7 @@
 							<cfset line = arguments.ErrorCollection.TagContext[i].line />
 							<tr>
 								<td>
-									<cfif i eq 1>#arguments.ErrorCollection.TagContext[i].codePrintHTML#<br /><br /></cfif>
-									#template# (#line#:
-									<a href="txmt://open/?url=file://#template#&line=#line#" title="Open this in TextMate">TM</a>
-									<a href="javascript:void(0)" onclick="$('##cfeclipsecall').load('/cfeclipsecall.cfm?cfe=#replace(template,"\","/","all")#|#line#')" title="Open this in CFEclipe">CFE</a>)
+									#template# (<a href="txmt://open/?url=file://#template#&line=#line#" title="Open this in TextMate">#line#</a>)
 								</td>
 							</tr>
 						</cfloop>
