@@ -2,7 +2,7 @@
  
  Main website: http://cfeclipse.org/mxunit
  
- Docs, etc: http://wiki.mxunit.org
+ Docs and examples: https://github.com/mxunit/mxunit/wiki
  
  Bugs and enhancements: http://jira.mxunit.org
  
