@@ -2,7 +2,8 @@
 	The implements attribute is essentially ignored by CFMX 7 and 8, but
 	this class does implement run(), the main contract in Test.cfc.
 --->
-<cfcomponent displayname="TestCase" extends="Assert" hint="Composite parent of all TestCases. Extend this class to build and run tests within the MXUnit framework.">
+<cfcomponent displayname="TestCase" output="false" extends="Assert" hint="Composite parent of all TestCases. Extend this class to build and run tests within the MXUnit framework.">
+	<cfsetting enablecfoutputonly="true">
 	<!---
 		Invoked prior to any test methods and run once per TestCase.
 
@@ -34,32 +35,32 @@
 	--->
 	<cffunction name="tearDown" returntype="void" access="public">
 	</cffunction>
-	
+
 	<!--- Variables to keep track of before/after runs --->
 	<cfset enableBeforeTests()>
 	<cfset enableAfterTests()>
-	
+
 	<cffunction name="disableBeforeTests" output="false">
 		<cfset variables.beforeTestsEnabled = false>
 	</cffunction>
-	
+
 	<cffunction name="enableBeforeTests" output="false">
 		<cfset variables.beforeTestsEnabled = true>
 	</cffunction>
-	
-	<cffunction name="okToRunBeforeTests" output="false" access="public" returntype="boolean" hint="">    
+
+	<cffunction name="okToRunBeforeTests" output="false" access="public" returntype="boolean" hint="">
     	<cfreturn variables.beforeTestsEnabled>
     </cffunction>
-	
+
 	<cffunction name="disableAfterTests" output="false">
 		<cfset variables.afterTestsEnabled = false>
 	</cffunction>
-	
+
 	<cffunction name="enableAfterTests" output="false">
 		<cfset variables.afterTestsEnabled = true>
 	</cffunction>
-	
-	<cffunction name="okToRunAfterTests" output="false" access="public" returntype="boolean" hint="">    
+
+	<cffunction name="okToRunAfterTests" output="false" access="public" returntype="boolean" hint="">
     	<cfreturn variables.afterTestsEnabled>
     </cffunction>
 
@@ -192,47 +193,63 @@
 		<cfargument name="testMethod" type="string" required="no" default="" hint="A single test to run. If not specified, all tests are run." />
 		<cfargument name="debug" type="boolean" required="false" default="false" hint="Flag to indicate whether or not to dump the test results to the screen.">
 		<cfargument name="output" type="string" required="false" default="jqGrid" hint="Output format: html,xml,junitxml,jqGrid "><!--- html,xml,junitxml,jqGrid --->
+		<cfset var content = "">
+        <cfset var contentType = "">
+        <cfsilent>
+	        <cfsavecontent variable="content"><cfoutput>
+			<cfscript>
+				TestCase(this); //don't remove this. its breaks things (no I don't know why)
 
-		<cfscript>
-			TestCase(this); //don't remove this. its breaks things (no I don't know why)
+				this.result = runTest();
 
-			this.result = runTest();
+				switch(arguments.output){
+				case 'rawhtml':
+						contentType = "text/html";
+						writeoutput(this.result.getRawHtmlresults());
+					break;
 
-			switch(arguments.output){
-			case 'rawhtml':
-					writeoutput(this.result.getRawHtmlresults());
-				break;
+				case 'xml':
+						contentType = "text/xml";
+						writeoutput(this.result.getXmlresults());
+					break;
 
-			case 'xml':
-					writeoutput(this.result.getXmlresults());
-				break;
+				case 'junitxml':
+						contentType = "application/xml";
+						writeoutput(this.result.getJUnitXmlresults());
+					break;
 
-			case 'junitxml':
-					writeoutput(this.result.getJUnitXmlresults());
-				break;
+				case 'json':
+						contentType = "application/json";
+						writeoutput(this.result.getJSONResults());
+					break;
 
-			case 'json':
-					writeoutput(this.result.getJSONResults());
-				break;
+				case 'query':
+						dump(this.result.getQueryresults());
+					break;
 
-			case 'query':
-					dump(this.result.getQueryresults());
-				break;
+				case 'text':
+						contentType = "text/plain";
+						writeoutput( trim(this.result.getTextresults(this.name)));
+					break;
 
-			case 'text':
-					writeoutput( trim(this.result.getTextresults(this.name)));
-				break;
+				default:
+						contentType = "text/html";
+						writeoutput(this.result.getHtmlresults());
+					break;
+				}
+			</cfscript>
 
-			default:
-					writeoutput(this.result.getHtmlresults());
-				break;
-			}
-		</cfscript>
+			<cfif arguments.debug>
+				<p>&nbsp;</p>
+				<cfdump var="#this.result.getResults()#" label="Raw Results Dump" />
+			</cfif>
 
-		<cfif arguments.debug>
-			<p>&nbsp;</p>
-			<cfdump var="#this.result.getResults()#" label="Raw Results Dump" />
-		</cfif>
+			</cfoutput></cfsavecontent>
+			<cfset content = trim(content)>
+		</cfsilent>
+		<cfheader name="Content-type" value="#contentType#">
+		<cfoutput>#content#</cfoutput>
+		<cfreturn>
 	</cffunction>
 
 	<cffunction name="getRunnableMethods" hint="Gets an array of all runnable test methods for this test case. This includes anything in its inheritance hierarchy" access="public" returntype="array" output="false">
