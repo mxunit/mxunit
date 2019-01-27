@@ -177,7 +177,9 @@
 							</cfif>
 							<cfset classname = this.testResults[i].component>
 							<!--- printing incorrect results for MXUnitInstallTest.cfc - could be engine bug --->
-							<cfset classtesturl = CGI.CONTEXT_PATH & "/" & Replace(this.testResults[i].component, ".", "/", "all") & ".cfc?method=runtestremote&amp;output=html">
+							<!--- Fix From: https://groups.google.com/d/msg/mxunit/RJsxWNf3xKk/1P1vm6ZmaMgJ --->
+							<cfset local.context = CGI.CONTEXT_PATH is not "" ? CGI.CONTEXT_PATH & "/" : "">
+							<cfset classtesturl = local.context & Replace(listLast(this.testResults[i].component, "."), ".", "/", "all") & ".cfc?method=runtestremote&amp;output=html">
 
 							<h3><a href="#classtesturl#" title="Run all tests in #this.testResults[i].component#">#this.testResults[i].component#</a></h3>
 
