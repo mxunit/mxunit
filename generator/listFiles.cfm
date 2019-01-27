@@ -8,8 +8,8 @@
 
 <cfscript>
 	// take care of checkboxes
-	cfparam( "form.recurse" , "false" );
-	cfparam( "form.overwrite" , "false" );
+	cfparam( name="form.recurse" , default="false" );
+	cfparam( name="form.overwrite" , default="false" );
 	
 	// fix paths
 	form.rootDirectory = replace(form.rootDirectory,"\","/","ALL");
