@@ -43,7 +43,7 @@
 								class = replaceNoCase( class , "/" , "." , "all" );
 								
 								// invoke it so we can read metadata
-								obj = createObject( "component" , class ); // note that we don't invoke any methods
+								obj = createObject( "component" , "mxunit." & class ); // note that we don't invoke any methods
 								md = getMetaData( obj );
 								md.path = replace(md.path,"\","/","All");								
 							</cfscript>					
